@@ -1,23 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<NoWarn>$(NoWarn);CS8618</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contexts\" />
-    <Folder Include="Entities\" />
-    <Folder Include="IRepositories\" />
-    <Folder Include="DTO\" />
-    <Folder Include="ViewModel\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Contexts\" />
+		<Folder Include="IRepositories\" />
+		<Folder Include="ViewModel\" />
+		<Folder Include="Repositories\" />
+		<Folder Include="wwwroot\" />
+	</ItemGroup>
 
 </Project>
