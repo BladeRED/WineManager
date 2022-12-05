@@ -125,11 +125,12 @@ namespace WineManager.Contexts
                 Temperature = 12,
                 UserId = 2
             };
-
-
+            modelBuilder.Entity<User>().HasData(new List<User> { u1, u2, u3, u4 });
+            modelBuilder.Entity<Bottle>().HasData(new List<Bottle> { b1, b2, b3, b4, b5, b6 });
+            modelBuilder.Entity<Drawer>().HasData(new List<Drawer> { d1, d2 });
+            modelBuilder.Entity<Cave>().HasData(new List<Cave> { c1, c2 });
 
             base.OnModelCreating(modelBuilder);
-
         }
     }
 }
