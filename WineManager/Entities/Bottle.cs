@@ -13,7 +13,7 @@
         public string? DrawerPosition { get; set; }
 
         //Navigation properties //
-        public int DrawerId { get; set; }
+        public int? DrawerId { get; set; }
         public Drawer? Drawer { get; set; }
         public int? UserId { get; set; }
         public User User { get; set; }
