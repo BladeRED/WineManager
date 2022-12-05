@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Drawing;
 
-namespace BottleManager.Repositories
+namespace BottleManager.Contexts
 {
     public class WineManagerContext : DbContext
     {
@@ -11,6 +11,11 @@ namespace BottleManager.Repositories
         public DbSet<Bottle> Bottles { get; set; }
         public DbSet<Drawer> Drawers { get; set; }
         public DbSet<Cave> Caves { get; set; }
+
+        public WineManagerContext() { }
+        public WineManagerContext(DbContextOptions<WineManagerContext> option) : base(option)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
