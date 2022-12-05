@@ -8,8 +8,8 @@
 
         // Navigation properties //
 
-        public List<Bottle> Bottles { get; set; }
-        public Cave Cave { get; set; }
-        public User User { get; set; }
+        public List<Bottle>? Bottles { get; set; }
+        public Cave? Cave { get; set; }
+        public User? User { get; set; }
     }
 }
