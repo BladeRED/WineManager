@@ -23,7 +23,6 @@
 		<Folder Include="Contexts\" />
 		<Folder Include="IRepositories\" />
 		<Folder Include="ViewModel\" />
-		<Folder Include="Repositories\" />
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
