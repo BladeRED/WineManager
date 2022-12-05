@@ -1,4 +1,6 @@
-﻿namespace WineManager.IRepositories
+﻿using WineManager.DTO;
+
+namespace WineManager.IRepositories
 {
     public interface IUserRepository
     {
