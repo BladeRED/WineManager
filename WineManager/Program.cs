@@ -2,6 +2,8 @@ using WineManager.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using WineManager.IRepositories;
+using WineManager.Repositories;
 
 namespace WineManager
 {
@@ -32,6 +34,12 @@ namespace WineManager
             {
                 o.UseSqlServer(builder.Configuration.GetConnectionString("WineManagerDbCS"));
             });
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ICaveRepository, CaveRepository>();
+            builder.Services.AddScoped<IDrawerRepository, DrawerRepository>();
+            builder.Services.AddScoped<IBottleRepository, BottleRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
