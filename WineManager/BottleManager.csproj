@@ -13,7 +13,6 @@
   <ItemGroup>
     <Folder Include="Contexts\" />
     <Folder Include="IRepositories\" />
-    <Folder Include="DTO\" />
     <Folder Include="ViewModel\" />
     <Folder Include="Repositories\" />
     <Folder Include="wwwroot\" />
