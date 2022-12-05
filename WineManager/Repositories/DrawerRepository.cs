@@ -31,7 +31,7 @@ namespace WineManager.Repositories
 
         public async Task<Drawer> GetByIdUserAsync(int userId)
         {
-            return await WineManagerContext.Drawers.Include(p => p.User).FirstOrDefaultAsync(p => p.UserId == userId);
+            return await WineManagerContext.Drawers.Include(p => p.UserId).FirstOrDefaultAsync(p => p.UserId == userId);
         }
         /// <summary>
         /// Get drawer from Id drawer

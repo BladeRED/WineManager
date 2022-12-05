@@ -31,7 +31,7 @@ namespace WineManager.Repositories
         
         public async Task<Cave> GetByIdUserAsync(int userId)
         {
-            return await WineManagerContext.Caves.Include(p => p.User).FirstOrDefaultAsync(p => p.UserId == userId);
+            return await WineManagerContext.Caves.Include(p => p.UserId).FirstOrDefaultAsync(p => p.UserId == userId);
         }
         /// <summary>
         /// Get cave from Id cave
