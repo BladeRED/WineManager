@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BottleManager.Entities
+namespace WineManager.Entities
 {
     public class User
     { 

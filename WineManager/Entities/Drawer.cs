@@ -1,4 +1,4 @@
-﻿namespace BottleManager.Entities
+﻿namespace WineManager.Entities
 {
     public class Drawer
     {

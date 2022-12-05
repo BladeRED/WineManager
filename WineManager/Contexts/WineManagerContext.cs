@@ -1,9 +1,9 @@
-﻿using BottleManager.Entities;
+﻿using WineManager.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Drawing;
 
-namespace BottleManager.Contexts
+namespace WineManager.Contexts
 {
     public class WineManagerContext : DbContext
     {

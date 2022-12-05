@@ -1,6 +1,6 @@
-﻿using BottleManager.Entities;
+﻿using WineManager.Entities;
 
-namespace BottleManager.DTO
+namespace WineManager.DTO
 {
     public class DrawerDto
     {

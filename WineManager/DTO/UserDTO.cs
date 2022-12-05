@@ -1,4 +1,4 @@
-﻿namespace BottleManager.DTO
+﻿namespace WineManager.DTO
 {
     public class UserDto
     {

@@ -1,4 +1,4 @@
-using BottleManager.Contexts;
+using WineManager.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
