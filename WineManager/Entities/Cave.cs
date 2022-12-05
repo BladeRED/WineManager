@@ -2,8 +2,6 @@
 {
     public class Cave
     {
-
-
         public int CaveId { get; set; } 
         public string CaveType { get; set;}
         public string Family { get; set;}
