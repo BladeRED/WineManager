@@ -15,9 +15,9 @@ namespace BottleManager.Entities
 
         // Navigation properties //
 
-        List<Bottle>? Bottles { get; set; }
-        List<Cave>? Caves { get; set; }
-        List<Drawer>? Drawers { get; set; }
+        public List<Bottle>? Bottles { get; set; }
+        public List<Cave>? Caves { get; set; }
+        public List<Drawer>? Drawers { get; set; }
 
         public User()
         {
