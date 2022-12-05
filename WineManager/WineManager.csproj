@@ -20,8 +20,8 @@
 
 
 	<ItemGroup>
-		<Folder Include="Contexts\" />
 		<Folder Include="IRepositories\" />
+		<Folder Include="Repositories\" />
 		<Folder Include="ViewModel\" />
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
