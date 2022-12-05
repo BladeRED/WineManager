@@ -18,11 +18,13 @@
 
         List<Cave>? Caves { get; set; }
 
+        List<Drawer>? Drawers { get; set; }
+
         public User()
         {
         }
 
-        public User(int userId, string name, string email, DateTime birthDate, string password, List<Bottle> bottles, List<Cave> caves)
+        public User(int userId, string name, string email, DateTime birthDate, string password, List<Bottle>? bottles, List<Cave>? caves, List<Drawer>? drawers)
         {
             UserId = userId;
             Name = name;
@@ -31,6 +33,7 @@
             Password = password;
             Bottles = bottles;
             Caves = caves;
+            Drawers = drawers;
         }
     }
 }
