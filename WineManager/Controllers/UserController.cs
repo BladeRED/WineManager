@@ -95,8 +95,6 @@ namespace WineManager.Controllers
             var userDto = await userRepository.GetUserWithCavesAsync(id);
 
             return Ok(userDto);
-
-
         }
 
 
