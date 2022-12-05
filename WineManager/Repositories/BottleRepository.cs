@@ -41,7 +41,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Bottle> GetBottleWithUserAsync(int id)
         {
-            return await context.Bottles.Include(p => p.User).FirstOrDefaultAsync(p => p.BottleId == id);
+            return await context.Bottles.Include(p => p.UserId).FirstOrDefaultAsync(p => p.BottleId == id);
         }
 
         /// <summary>
