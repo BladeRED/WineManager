@@ -25,6 +25,8 @@ namespace WineManager
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 o.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
+
+            // Adding the context for migration //
             
             builder.Services.AddDbContext<WineManagerContext>(o =>
             {
