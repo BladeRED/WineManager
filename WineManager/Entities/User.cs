@@ -14,9 +14,9 @@
 
         string Password { get; set; }   
 
-        List<Bottle> Bottles { get; set; }
+        List<Bottle>? Bottles { get; set; }
 
-        List<Cave> Caves { get; set; }
+        List<Cave>? Caves { get; set; }
 
         public User()
         {
