@@ -24,10 +24,10 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="UserId">Id Drawer</param>
         /// <returns></returns>
-        Task<Cave> GetByIdDrawerAsync(int DrawerId);
+        Task<Cave> GetWithDrawerAsync(int CaveId);
 
         /// <summary>
-        /// Get cave from Id user
+        /// Get cave from Id drawer
         /// </summary>
         /// <param name="UserId">Id User</param>
         /// <returns></returns>

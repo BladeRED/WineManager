@@ -40,9 +40,9 @@ namespace WineManager.Repositories
         /// <param name="drawerId">Id User</param>
         /// <returns></returns>
 
-        public async Task<Cave> GetByIdDrawerAsync(int drawerId)
+        public async Task<Cave> GetWithDrawerAsync(int caveId)
         {
-            return await WineManagerContext.Caves.Include(p => p.DrawerId).FirstOrDefaultAsync(p => p.UserId == drawerId);
+            return await WineManagerContext.Caves.Include(p => p.Drawers).FirstOrDefaultAsync(p => p.DrawerId == drawerId);
         }
 
         /// <summary>
