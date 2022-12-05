@@ -12,6 +12,5 @@
         public string DrawerPosition { get; set; }
         public Drawer? Drawer { get; set; }
         public User User { get; set; }
-
     }
 }
