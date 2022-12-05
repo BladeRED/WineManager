@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<Folder Include="Contexts\" />
+		<Folder Include="DTO\" />
 		<Folder Include="IRepositories\" />
 		<Folder Include="ViewModel\" />
 		<Folder Include="Repositories\" />
