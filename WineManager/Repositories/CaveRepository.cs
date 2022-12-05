@@ -35,14 +35,14 @@ namespace WineManager.Repositories
         }
 
         /// <summary>
-        /// Get cave from Id drawer
+        /// Get Drawer from Id Cave
         /// </summary>
-        /// <param name="drawerId">Id User</param>
+        /// <param name="caveId">Id Drawer</param>
         /// <returns></returns>
 
-        public async Task<Cave> GetByIdDrawerAsync(int drawerId)
+        public async Task<Cave> GetWithDrawerAsync(int caveId)
         {
-            return await WineManagerContext.Caves.Include(p => p.DrawerId).FirstOrDefaultAsync(p => p.UserId == drawerId);
+            return await WineManagerContext.Caves.Include(p => p.Drawers).FirstOrDefaultAsync(p => p.CaveId == caveId);
         }
 
         /// <summary>
