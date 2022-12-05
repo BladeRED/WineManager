@@ -1,4 +1,5 @@
 ﻿[*.cs]
 
-# IDE0058: Expression value is never used
-dotnet_diagnostic.IDE0058.severity = silent
+# CS8603: Possible null reference return.
+dotnet_diagnostic.CS8603.severity = silent
+
