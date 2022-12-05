@@ -78,18 +78,22 @@ namespace WineManager.Controllers
             else
                 return Problem("User not removed");
         }
+        [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserWithBottles(int id)
         {
             var userDto = await userRepository.GetUserWithBottlesAsync(id);
 
             return Ok(userDto);
         }
+        [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserWithDrawers(int id)
         {
             var userDto = await userRepository.GetUserWithDrawersAsync(id);
 
             return Ok(userDto);
         }
+        [HttpGet("{id}")]
+
         public async Task<ActionResult<UserDto>> GetUserWithCaves(int id)
         {
             var userDto = await userRepository.GetUserWithCavesAsync(id);
