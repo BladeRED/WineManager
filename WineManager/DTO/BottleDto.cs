@@ -1,21 +1,15 @@
-﻿namespace BottleManager.Entities
-{
-    public class Bottle
-    {
+﻿using BottleManager.Entities;
 
-        public int BottleId { get; set; }
+namespace BottleManager.DTO
+{
+    public class BottleDto
+    {
         public string Name { get; set; }
         public int Vintage { get; set; }
         public int StartKeepingYear { get; set; }
         public int EndKeepingYear { get; set; }
         public string Color { get; set; }
         public string Designation { get; set; }
-
-        // Navigation properties //
         public string DrawerPosition { get; set; }
-
-        //Navigation properties
-        public Drawer? Drawer { get; set; }
-        public User User { get; set; }
     }
 }
