@@ -14,6 +14,8 @@
 
         string Password { get; set; }   
 
+        // Navigation properties //
+
         List<Bottle>? Bottles { get; set; }
 
         List<Cave>? Caves { get; set; }
