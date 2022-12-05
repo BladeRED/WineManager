@@ -5,21 +5,15 @@
 
 
         int UserId { get; set; }
-
         string Name { get; set; }
-
         string Email { get; set; }
-
         DateTime BirthDate { get; set; }
-
         string Password { get; set; }   
 
         // Navigation properties //
 
         List<Bottle>? Bottles { get; set; }
-
         List<Cave>? Caves { get; set; }
-
         List<Drawer>? Drawers { get; set; }
 
         public User()
