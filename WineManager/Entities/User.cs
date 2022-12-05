@@ -1,11 +1,16 @@
-﻿namespace BottleManager.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BottleManager.Entities
 {
     public class User
     { 
         public int UserId { get; set; }
         public string Name { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public DateTime BirthDate { get; set; }
+        [Required]
         public string Password { get; set; }   
 
         // Navigation properties //
