@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Contexts\" />
-    <Folder Include="Entities\" />
     <Folder Include="IRepositories\" />
     <Folder Include="DTO\" />
     <Folder Include="ViewModel\" />
