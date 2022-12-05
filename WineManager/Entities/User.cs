@@ -2,11 +2,11 @@
 {
     public class User
     { 
-        int UserId { get; set; }
-        string Name { get; set; }
-        string Email { get; set; }
-        DateTime BirthDate { get; set; }
-        string Password { get; set; }   
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Password { get; set; }   
 
         // Navigation properties //
 
