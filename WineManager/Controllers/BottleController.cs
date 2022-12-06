@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using WineManager.DTO;
 using WineManager.Entities;
 using WineManager.IRepositories;
 
@@ -36,6 +37,13 @@ namespace WineManager.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Bottle>> GetBottle(int id)
         {
+
+            if (id == null)
+            {
+
+                return NotFound("No bottle found");
+
+            }
             return Ok(await bottleRepository.GetBottleAsync(id));
         }
 
@@ -68,14 +76,23 @@ namespace WineManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<Bottle>> AddBottle(Bottle bottle)
+        public async Task<ActionResult<Bottle>> AddBottle([FromForm] BottleDto bottleDto)
         {
             //var identity = User?.Identity as ClaimsIdentity;
             //var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             //if (idCurrentUser == null)
             //    return Problem("You must log before create an article ! Check/ User / Login");
             //bottle.UserId = Int32.Parse(idCurrentUser.Value);
-            var bottleCreated = await bottleRepository.AddBottleAsync(bottle);
+            var newBottle = new Bottle()
+            {
+                Name= bottleDto.Name,
+                Vintage=bottleDto.Vintage,
+                StartKeepingYear=bottleDto.StartKeepingYear,
+                EndKeepingYear=bottleDto.EndKeepingYear,
+                Color=bottleDto.Color,
+                Designation=bottleDto.Designation,
+            };
+            var bottleCreated = await bottleRepository.AddBottleAsync(newBottle);
 
             if (bottleCreated != null)
                 return Ok(bottleCreated);

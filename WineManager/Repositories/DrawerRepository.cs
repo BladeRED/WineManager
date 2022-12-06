@@ -3,6 +3,8 @@ using WineManager.Entities;
 using WineManager.IRepositories;
 using WineManager.Contexts;
 using Microsoft.Extensions.Hosting;
+using WineManager.DTO;
+using System.Linq;
 
 namespace WineManager.Repositories
 {
@@ -23,6 +25,41 @@ namespace WineManager.Repositories
         {
             return await WineManagerContext.Drawers.ToListAsync();
         }
+
+
+        /// <summary>
+        /// Get drawer from Id with his cave.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DrawerDtoGet> GetDrawerWithCaveAsync(int id)
+        {
+            var drawerWithCave = await WineManagerContext.Drawers.Include(p => p.Cave).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new CaveDtoLight(p.Cave))).FirstOrDefaultAsync();
+            return drawerWithCave;
+        }
+
+        /// <summary>
+        /// Get drawer from Id with his user.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DrawerDtoGet> GetDrawerWithUserAsync(int id)
+        {
+            var drawerWithUser = await WineManagerContext.Drawers.Include(p => p.User).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
+            return drawerWithUser;
+        }
+
+        /// <summary>
+        /// Get drawer from Id with his bottles.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DrawerDtoGet> GetDrawerWithBottlesAsync(int id)
+        {
+            //var drawerWithBottles = await WineManagerContext.Drawers.Include(p => p.Bottles).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new List<BottleDtoLight> { p.Bottles })).FirstOrDefaultAsync();
+            return drawerWithBottles;
+        }
+
         /// <summary>
         /// Get drawer from Id user
         /// </summary>
