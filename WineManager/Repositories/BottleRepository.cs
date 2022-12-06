@@ -92,9 +92,23 @@ namespace WineManager.Repositories
         {
             try
             {
-                context.Bottles.Update(bottle);
+                var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == id);
+
+                if (bottle.Name != null)
+                    bottleToUpdate.Name = bottle.Name;
+                if (bottle.Vintage != null)
+                    bottleToUpdate.Vintage = bottle.Vintage;
+                if (bottle.StartKeepingYear != null)
+                    bottleToUpdate.StartKeepingYear = bottle.StartKeepingYear;
+                if (bottle.EndKeepingYear != null)
+                    bottleToUpdate.EndKeepingYear = bottle.EndKeepingYear;
+                if (bottle.Color != null)
+                    bottleToUpdate.Color = bottle.Color;
+                if (bottle.DrawerPosition != null)
+                    bottleToUpdate.DrawerPosition = bottle.DrawerPosition;
 
                 await context.SaveChangesAsync();
+                return bottleToUpdate;
             }
             catch (Exception e)
             {
@@ -103,7 +117,6 @@ namespace WineManager.Repositories
                 return null;
             }
 
-            return bottle;
         }
 
         /// <summary>
