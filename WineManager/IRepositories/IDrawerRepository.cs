@@ -48,7 +48,7 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        //Task<DrawerDtoGet> GetDrawerWithBottlesAsync(int id);
+        Task<DrawerDtoGet> GetDrawerWithBottlesAsync(int id);
 
         /// <summary>
         /// Get drawer from Id with his cave.
