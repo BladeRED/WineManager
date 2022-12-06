@@ -19,7 +19,7 @@ namespace WineManager.Controllers
         {
             this.userRepository = userRepository;
         }
-
+        
         [HttpGet]
         public async Task<ActionResult<List<UserDto>>> GetAllUsers()
         {
@@ -27,10 +27,13 @@ namespace WineManager.Controllers
 
             return Ok(userDtoList);
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetUser(int id)
+        public async Task<ActionResult<UserDto?>> GetUser(int id)
         {
             var userDto = await userRepository.GetUserAsync(id);
+            if (userDto == null)
+                return NotFound("User in not found.");
 
             return Ok(userDto);
         }
