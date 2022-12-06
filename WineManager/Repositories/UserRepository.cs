@@ -145,7 +145,11 @@ namespace WineManager.Repositories
         {
             var user = await context.Users.Include(u => u.Bottles).FirstOrDefaultAsync(b => b.UserId == id);
             if (user == null)
+            {
+                logger.LogError("Item not found");
+
                 return null;
+            }
             var userDto = new UserDto(user);
             return userDto;
         }
@@ -154,7 +158,11 @@ namespace WineManager.Repositories
         {
             var user = await context.Users.Include(u => u.Drawers).FirstOrDefaultAsync(d => d.UserId == id);
             if (user == null)
+            {
+                logger.LogError("Item not found");
+
                 return null;
+            }
             var userDto = new UserDto(user);
             return userDto;
         }
@@ -163,7 +171,11 @@ namespace WineManager.Repositories
         {
             var user = await context.Users.Include(u => u.Caves).FirstOrDefaultAsync(c => c.UserId == id);
             if (user == null)
+            {
+                logger.LogError("Item not found");
+
                 return null;
+            }
             var userDto = new UserDto(user);
             return userDto;
         }
