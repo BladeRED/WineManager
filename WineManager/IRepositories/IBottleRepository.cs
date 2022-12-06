@@ -23,14 +23,14 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<BottleDtoLight> GetBottleWithUserAsync(int id);
+        Task<BottleDtoGet> GetBottleWithUserAsync(int id);
 
         /// <summary>
         /// Get bottle from Id with his drawer.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<BottleDtoLight> GetBottleWithDrawerAsync(int id);
+        Task<BottleDtoGet> GetBottleWithDrawerAsync(int id);
 
         /// <summary>
         /// Add a new bottle.
