@@ -85,12 +85,12 @@ namespace WineManager.Controllers
             //bottle.UserId = Int32.Parse(idCurrentUser.Value);
             var newBottle = new Bottle()
             {
-                Name= bottleDto.Name,
-                Vintage=bottleDto.Vintage,
-                StartKeepingYear=bottleDto.StartKeepingYear,
-                EndKeepingYear=bottleDto.EndKeepingYear,
-                Color=bottleDto.Color,
-                Designation=bottleDto.Designation,
+                Name = bottleDto.Name,
+                Vintage = bottleDto.Vintage,
+                StartKeepingYear = bottleDto.StartKeepingYear,
+                EndKeepingYear = bottleDto.EndKeepingYear,
+                Color = bottleDto.Color,
+                Designation = bottleDto.Designation,
             };
             var bottleCreated = await bottleRepository.AddBottleAsync(newBottle);
 
@@ -108,7 +108,7 @@ namespace WineManager.Controllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(200)]
-        public async Task<ActionResult<Bottle>> UpdateBottle(int id, Bottle bottle)
+        public async Task<ActionResult<Bottle>> UpdateBottle([FromForm] BottleDtoPut bottleDtoPut)
         {
             //var identity = User?.Identity as ClaimsIdentity;
             //var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -118,7 +118,19 @@ namespace WineManager.Controllers
             //if ((await bottleRepository.GetBottleAsync(id)).UserId != userId)
             //    return Problem("You must the author in order to update this article");
             //bottle.UserId = Int32.Parse(idCurrentUser.Value);
-            var bottleUpdated = await bottleRepository.UpdateBottleAsync(id, bottle);
+
+            var MajBottle = new BottleDtoPut()
+            {
+                BottleId = bottleDtoPut.BottleId,
+                Name = bottleDtoPut.Name,
+                Vintage = bottleDtoPut.Vintage,
+                Designation = bottleDtoPut.Designation,
+                StartKeepingYear = bottleDtoPut.StartKeepingYear,
+                EndKeepingYear = bottleDtoPut.EndKeepingYear,
+                Color = bottleDtoPut.Color,
+
+            };
+            var bottleUpdated = await bottleRepository.UpdateBottleAsync(MajBottle);
 
             if (bottleUpdated != null)
                 return Ok(bottleUpdated);
