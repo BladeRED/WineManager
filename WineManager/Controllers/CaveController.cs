@@ -62,7 +62,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(666)]
 
 
-        public async Task<ActionResult<Cave>> AddCave([FromForm] CaveDtoLight caveDto)
+        public async Task<ActionResult<Cave>> AddCave([FromForm] CavePostDto caveDto)
         {
             var NewCave = new Cave()
             {
@@ -90,7 +90,7 @@ namespace WineManager.Controllers
         [HttpPut]
         [ProducesResponseType(231)]
 
-        public async Task<ActionResult<Cave>> UpdateCave([FromForm] CavePostDto caveDto)
+        public async Task<ActionResult<Cave>> UpdateCave([FromForm] CaveDto caveDto)
         {
             var cave = new Cave()
             {
