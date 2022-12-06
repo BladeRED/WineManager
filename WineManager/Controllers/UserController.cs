@@ -36,15 +36,10 @@ namespace WineManager.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> AddUser(string Name, string email, DateTime birthDate, string password)
+        public async Task<ActionResult<UserDto>> AddUser([FromForm] UserPostDto userDto)
         {
-            UserDto userDto = new UserDto
-            {
-                Name = Name,
-                Email = email,
-                BirthDate = birthDate
-            };
-            var userCreated = await userRepository.AddUserAsync(userDto, password);
+            
+            var userCreated = await userRepository.AddUserAsync(userDto);
 
             if (userCreated != null)
                 return Ok(userCreated);
@@ -53,16 +48,9 @@ namespace WineManager.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<UserDto>> UpdateUser(string Name, string email, DateTime birthDate, string password)
+        public async Task<ActionResult<UserDto>> UpdateUser(UserPutDto userPutDto)
         {
-            UserDto userDto = new UserDto
-            {
-                Name = Name,
-                Email = email,
-                BirthDate = birthDate
-            };
-
-            var userModified = await userRepository.UpdateUserAsync(userDto, password);
+            var userModified = await userRepository.UpdateUserAsync(userPutDto);
 
             if (userModified != null)
                 return Ok(userModified);

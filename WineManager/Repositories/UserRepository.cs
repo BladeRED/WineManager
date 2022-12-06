@@ -65,49 +65,24 @@ namespace WineManager.Repositories
             }
         }
 
-        public async Task<UserDto?> AddUserAsync(UserDto userDto, string? password)
+        public async Task<UserDto?> AddUserAsync(UserPostDto userPostDto)
         {
             try
             {
-                var user = convertUserDtoToUser(userDto);
-                if (password != null)
-                    user.Password = password;
-                await context.Users.AddAsync(user);
-
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e?.InnerException?.ToString());
-
-                return null;
-            }
-            return userDto;
-        }
-
-
-        public async Task<UserDto?> UpdateUserAsync(UserDto userDto, string password)
-        {
-            try
-            {
-
-                User? user = await context.Users.FirstOrDefaultAsync(u => u.Email == userDto.Email);
-                if (user != null)
+                var isEmailExist = await context.Users.AnyAsync(u => u.Email == userPostDto.Email);
+                if (isEmailExist)
                 {
-                    user.Name = userDto.Name;
-                    user.Email = userDto.Email;
-                    user.BirthDate = userDto.BirthDate;
-                    user.Password = password;
-
-                    await context.SaveChangesAsync();
-                    return userDto;
-                }
-                else
-                {
-                    logger.LogError("Item not found");
+                    logger.LogError("The email already exists.");
 
                     return null;
                 }
+
+                var user = UserPostDto.ConvertUserPostDtoToUser(userPostDto);
+                var userDto = UserPostDto.ConvertUserPostDtoToUserDto(userPostDto);
+
+                await context.SaveChangesAsync();
+
+                return userDto;
             }
             catch (Exception e)
             {
@@ -115,7 +90,44 @@ namespace WineManager.Repositories
 
                 return null;
             }
-            return null;
+        }
+
+
+        public async Task<UserDto?> UpdateUserAsync(UserPutDto userPutDto)
+        {
+            try
+            {
+                var isEmailNewExist = await context.Users.AnyAsync(u => u.Email == userPutDto.NewEmail);
+                if (isEmailNewExist)
+                {
+                    logger.LogError("The new email already exists.");
+
+                    return null;
+                }
+
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Email == userPutDto.CurrentEmail);
+                if (user != null)
+                {
+                    var userDto = UserPutDto.ConvertUserPutDtoToUserDto(userPutDto);
+
+                    context.Users.Update(user);
+
+                    await context.SaveChangesAsync();
+                    return userDto;
+            }
+                else
+            {
+                logger.LogError("Item not found");
+
+                return null;
+            }
+        }
+            catch (Exception e)
+            {
+                logger.LogError(e?.InnerException?.ToString());
+
+                return null;
+            }
         }
 
         public async Task<UserDto?> DeleteUserAsync(int id)
