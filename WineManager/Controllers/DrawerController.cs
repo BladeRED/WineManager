@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using WineManager.IRepositories;
+using WineManager.DTO;
 
 namespace WineManager.Controllers
 {
@@ -47,19 +48,20 @@ namespace WineManager.Controllers
         [ProducesResponseType(666)]
 
 
-        public async Task<ActionResult<Drawer>> AddDrawer(Drawer drawer)
+        public async Task<ActionResult<Drawer>> AddDrawer([FromForm] DrawerPostDto drawerPostDto)
         {
 
 
-            var MyDrawer = new Drawer()
+            var NewDrawer = new Drawer()
             {
-                Level = drawer.Level,
-                MaxPosition = drawer.MaxPosition,
+                Level = drawerPostDto.Level,
+                MaxPosition = drawerPostDto.MaxPosition,
+                CaveId = drawerPostDto.CaveId
               
             };
-            var drawerAddd = await drawerRepository.AddDrawerAsync(drawer);
+            var drawerAdd = await drawerRepository.AddDrawerAsync(NewDrawer);
 
-            if (drawerAddd == null)
+            if (drawerAdd == null)
                 return Problem("Error when creating drawer, see log.");
 
             //if (!string.IsNullOrEmpty(drawer.Picture?.FileType) && drawer.Picture.FileType.Length > 0)
@@ -69,16 +71,25 @@ namespace WineManager.Controllers
             //    using (FileStream stream = new FileStream(path, FileMode.Add)) { await drawer.Picture.CopyToAsync(stream); stream.Close(); }
             //}
 
-            return Ok(drawerAddd);
+            return Ok(drawerAdd);
         }
 
 
         [HttpPut]
         [ProducesResponseType(231)]
 
-        public async Task<ActionResult<Drawer>> UpdateDrawer(Drawer drawer)
+        public async Task<ActionResult<Drawer>> UpdateDrawer([FromForm]DrawerDto drawerDto)
         {
-            var drawerUpdated = await drawerRepository.UpdateDrawerAsync(drawer);
+
+            var MajDrawer = new Drawer()
+            { 
+                DrawerId= drawerDto.DrawerId,
+                Level = drawerDto.Level,
+                MaxPosition = drawerDto.MaxPosition,
+                CaveId= drawerDto.CaveId,   
+            };
+
+            var drawerUpdated = await drawerRepository.UpdateDrawerAsync(MajDrawer);
 
             if (drawerUpdated != null)
                 return Ok(drawerUpdated);

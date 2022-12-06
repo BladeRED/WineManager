@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using WineManager.IRepositories;
+using WineManager.DTO;
 
 namespace WineManager.Controllers
 {
@@ -61,20 +62,18 @@ namespace WineManager.Controllers
         [ProducesResponseType(666)]
 
 
-        public async Task<ActionResult<Cave>> AddCave(Cave cave)
+        public async Task<ActionResult<Cave>> AddCave([FromForm] CaveDtoLight caveDto)
         {
-
-          
-            var MyCave = new Cave()
+            var NewCave = new Cave()
             {
-                CaveType = cave.CaveType,
-                Family = cave.Family,
-                Brand = cave.Brand,
-                Temperature = cave.Temperature,
+                CaveType = caveDto.CaveType,
+                Family = caveDto.Family,
+                Brand = caveDto.Brand,
+                Temperature = caveDto.Temperature,
             };
-            var caveAddd = await caveRepository.AddCaveAsync(cave);
+            var caveAdd = await caveRepository.AddCaveAsync(NewCave);
 
-            if (caveAddd == null)
+            if (caveAdd == null)
                 return Problem("Error when creating cave, see log.");
 
             //if (!string.IsNullOrEmpty(cave.Picture?.FileType) && cave.Picture.FileType.Length > 0)
@@ -84,15 +83,24 @@ namespace WineManager.Controllers
             //    using (FileStream stream = new FileStream(path, FileMode.Add)) { await cave.Picture.CopyToAsync(stream); stream.Close(); }
             //}
 
-            return Ok(caveAddd);
+            return Ok(caveAdd);
         }
 
 
         [HttpPut]
         [ProducesResponseType(231)]
 
-        public async Task<ActionResult<Cave>> UpdateCave(Cave cave)
+        public async Task<ActionResult<Cave>> UpdateCave([FromForm] CavePostDto caveDto)
         {
+            var cave = new Cave()
+            {
+                CaveId= caveDto.CaveId,
+                CaveType = caveDto.CaveType,
+                Family = caveDto.Family,
+                Brand = caveDto.Brand,
+                Temperature = caveDto.Temperature,
+            };
+
             var caveUpdated = await caveRepository.UpdateCaveAsync(cave);
 
             if (caveUpdated != null)

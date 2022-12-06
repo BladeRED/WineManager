@@ -19,13 +19,7 @@ namespace WineManager.Repositories
         }
         private UserDto convertUserToDto(User user)
         {
-            var userDto = new UserDto
-            {
-                Name = user.Name,
-                BirthDate = user.BirthDate,
-                Email = user.Email,
-                Drawers = user.Drawers
-            };
+            var userDto = new UserDto(user);
 
             return userDto;
         }
