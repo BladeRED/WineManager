@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WineManager.Contexts;
+using WineManager.DTO;
 using WineManager.Entities;
 using WineManager.IRepositories;
 
@@ -39,9 +41,11 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Bottle> GetBottleWithUserAsync(int id)
+        public async Task<BottleDtoLight> GetBottleWithUserAsync(int id)
         {
-            return await context.Bottles.Include(p => p.User).FirstOrDefaultAsync(p => p.BottleId == id);
+            var bottleWithUser = await context.Bottles.Include(p => p.User).Where(p => p.BottleId == id).Select(p => new BottleDtoLight(p.BottleId, p.Name, new UserDTOLight(p.User))).FirstOrDefaultAsync();
+
+            return bottleWithUser;
         }
 
         /// <summary>
@@ -49,9 +53,10 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Bottle> GetBottleWithDrawerAsync(int id)
+        public async Task<BottleDtoLight> GetBottleWithDrawerAsync(int id)
         {
-            return await context.Bottles.Include(p => p.Drawer).FirstOrDefaultAsync(p => p.BottleId == id);
+            var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id).Select(p => new BottleDtoLight(p.BottleId, p.Name, new DrawerDTOLight(p.Drawer))).FirstOrDefaultAsync();
+            return bottleWithDrawer;
         }
 
         /// <summary>

@@ -14,5 +14,14 @@ namespace WineManager.DTO
         public List<Drawer>? Drawers { get; set; }
         public List<Cave>? Caves { get; set; }
 
+        public UserDto() { }
+        public UserDto(User user)
+        {
+            Name = user.Name;
+            BirthDate = user.BirthDate;
+            Email = user.Email;
+            Drawers = user.Drawers;
+        }
     }
 }
+
