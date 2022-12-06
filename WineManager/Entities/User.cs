@@ -31,6 +31,14 @@ namespace WineManager.Entities
             BirthDate = (DateTime)userPutDto.NewBirthDate;
             Password = userPutDto.NewPassword;
         }
+        public User(UserPostDto userPostDto)
+        {
+            Name = userPostDto.Name;
+            Email = userPostDto.Email;
+            BirthDate = (DateTime)userPostDto.BirthDate;
+            Password = userPostDto.Password;
+        }
+
     }
 }
 
