@@ -3,6 +3,7 @@ using WineManager.Entities;
 using WineManager.IRepositories;
 using WineManager.Contexts;
 using Microsoft.Extensions.Hosting;
+using WineManager.DTO;
 
 namespace WineManager.Repositories
 {
@@ -40,9 +41,9 @@ namespace WineManager.Repositories
         /// <param name="caveId">Id Drawer</param>
         /// <returns></returns>
 
-        public async Task<Cave> GetWithDrawerAsync(int caveId)
+        public async Task<CaveDtoGet> GetWithDrawerAsync(int caveId)
         {
-            return await WineManagerContext.Caves.Include(p => p.Drawers).FirstOrDefaultAsync(p => p.CaveId == caveId);
+            return await WineManagerContext.Caves.Include(p => p.Drawers).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, p.Drawers)).FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -51,9 +52,9 @@ namespace WineManager.Repositories
         /// <param name="userId">Id User</param>
         /// <returns></returns>
 
-        public async Task<Cave> GetWithUserAsync(int caveId)
+        public async Task<CaveDtoGet> GetWithUserAsync(int caveId)
         {
-            return await WineManagerContext.Caves.Include(p => p.UserId).FirstOrDefaultAsync(p => p.CaveId == caveId);
+            return await WineManagerContext.Caves.Include(p => p.UserId).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
         }
         /// <summary>
         /// Get cave from Id cave

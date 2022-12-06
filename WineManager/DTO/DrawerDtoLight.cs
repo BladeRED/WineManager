@@ -2,11 +2,11 @@
 
 namespace WineManager.DTO
 {
-    public class DrawerDTOLight
+    public class DrawerDtoLight
     {
         public int? DrawerId { get; set; }
 
-        public DrawerDTOLight(Drawer drawer)
+        public DrawerDtoLight(Drawer drawer)
         {
             if (drawer != null)
                 DrawerId = drawer.DrawerId;

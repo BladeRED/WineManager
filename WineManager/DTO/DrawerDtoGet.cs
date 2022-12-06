@@ -1,10 +1,12 @@
-﻿namespace WineManager.DTO
+﻿using WineManager.Entities;
+
+namespace WineManager.DTO
 {
     public class DrawerDtoGet
     {
         public int DrawerId { get; set; }
         public UserDTOLight UserDTOLight { get; set; }
-        public BottleDtoLight BottleDtoLight { get; set; }
+        public List<BottleDtoLight> BottlesDtoLight { get; set; }
         public CaveDtoLight CaveDtoLight { get; set; }
 
         public DrawerDtoGet(int id, UserDTOLight userDTOLight)
@@ -12,10 +14,14 @@
             DrawerId = id;
             UserDTOLight = userDTOLight;
         }
-        public DrawerDtoGet(int id, BottleDtoLight bottleDtoLight)
+        public DrawerDtoGet(int id, List<Bottle> bottles)
         {
             DrawerId = id;
-            BottleDtoLight = bottleDtoLight;
+            BottlesDtoLight = new List<BottleDtoLight>();
+            foreach (var item in bottles)
+            {
+                BottlesDtoLight.Add(new BottleDtoLight(item));
+            }
         }
         public DrawerDtoGet(int id, CaveDtoLight caveDtoLight)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using WineManager.DTO;
 using WineManager.Entities;
 
 namespace WineManager.IRepositories
@@ -24,14 +25,14 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="CaveId">Id Drawer</param>
         /// <returns></returns>
-        Task<Cave> GetWithDrawerAsync(int CaveId);
+        Task<CaveDtoGet> GetWithDrawerAsync(int CaveId);
 
         /// <summary>
         /// Get cave from Id drawer
         /// </summary>
         /// <param name="UserId">Id User</param>
         /// <returns></returns>
-        Task<Cave> GetWithUserAsync(int CaveId);
+        Task<CaveDtoGet> GetWithUserAsync(int CaveId);
 
         /// <summary>
         /// Get cave from Id cave
