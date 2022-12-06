@@ -6,5 +6,6 @@ namespace WineManager.DTO
     {
         public int Level { get; set; }
         public int MaxPosition { get; set; }
+        public int? CaveId { get; set; }
     }
 }
