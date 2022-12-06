@@ -90,7 +90,7 @@ namespace WineManager.Repositories
         }
 
 
-        public async Task<UserPutDto?> UpdateUserAsync(UserPutDto userPutDto)
+        public async Task<UserDto?> UpdateUserAsync(UserPutDto userPutDto)
         {
             try
             {
@@ -101,17 +101,21 @@ namespace WineManager.Repositories
 
                     return null;
                 }
-
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Email == userPutDto.CurrentEmail);
                 if (user != null)
                 {
-                    var newuser = new User(userPutDto);
-                    newuser.UserId = user.UserId;
-
-                    context.Users.Update(newuser);
+                    if (userPutDto.NewName != null)
+                        user.Name = userPutDto.NewName;
+                    if (userPutDto.NewEmail != null)
+                        user.Email = userPutDto.NewEmail;
+                    if (userPutDto.NewPassword != null)
+                        user.Password = userPutDto.NewPassword;
+                    if (userPutDto.NewBirthDate != null)
+                        user.BirthDate = (DateTime)userPutDto.NewBirthDate;
 
                     await context.SaveChangesAsync();
-                    return userPutDto;
+                    var userDto = new UserDto(user);
+                    return userDto;
                 }
                 else
                 {

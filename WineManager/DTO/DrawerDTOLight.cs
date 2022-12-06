@@ -4,11 +4,12 @@ namespace WineManager.DTO
 {
     public class DrawerDTOLight
     {
-        public int DrawerId { get; set; }
+        public int? DrawerId { get; set; }
 
         public DrawerDTOLight(Drawer drawer)
         {
-            DrawerId = drawer.DrawerId;
+            if (drawer != null)
+                DrawerId = drawer.DrawerId;
         }
     }
 }
