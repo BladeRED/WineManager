@@ -10,5 +10,6 @@ namespace WineManager.DTO
         public string CurrentPassword { get; set; }
         public string? NewPassword { get; set; }
         public DateTime? NewBirthDate { get; set; }
+
     }
 }

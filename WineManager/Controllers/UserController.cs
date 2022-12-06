@@ -60,7 +60,7 @@ namespace WineManager.Controllers
         /// <param name="userPutDto"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<UserDto>> UpdateUser([FromForm] UserPutDto userPutDto)
+        public async Task<ActionResult<UserPutDto>> UpdateUser([FromForm] UserPutDto userPutDto)
         {
             var userModified = await userRepository.UpdateUserAsync(userPutDto);
 

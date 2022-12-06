@@ -7,7 +7,7 @@ namespace WineManager.IRepositories
         Task<List<UserDto>> GetAllUsersAsync();
         Task<UserDto?> GetUserAsync(int id);
         Task<UserDto?> AddUserAsync(UserPostDto userPostDto);
-        Task<UserDto?> UpdateUserAsync(UserPutDto userPutDto);
+        Task<UserPutDto?> UpdateUserAsync(UserPutDto userPutDto);
         Task<UserDto?> DeleteUserAsync(int id);
         //Task<UserDto> LoginUser(string login, string pwd);
         Task<UserDto?> GetUserWithBottlesAsync(int id);

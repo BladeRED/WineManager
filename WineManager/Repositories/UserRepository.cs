@@ -72,7 +72,9 @@ namespace WineManager.Repositories
                 }
 
                 var user = new User(userPostDto);
+
                 context.Users.Add(user);
+
                 var userDto = UserPostDto.ConvertUserPostDtoToUserDto(userPostDto);
 
                 await context.SaveChangesAsync();
@@ -88,7 +90,7 @@ namespace WineManager.Repositories
         }
 
 
-        public async Task<UserDto?> UpdateUserAsync(UserPutDto userPutDto)
+        public async Task<UserPutDto?> UpdateUserAsync(UserPutDto userPutDto)
         {
             try
             {
@@ -103,20 +105,21 @@ namespace WineManager.Repositories
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Email == userPutDto.CurrentEmail);
                 if (user != null)
                 {
-                    var userDto = new UserDto(userPutDto);
+                    var newuser = new User(userPutDto);
+                    newuser.UserId = user.UserId;
 
-                    context.Users.Update(user);
+                    context.Users.Update(newuser);
 
                     await context.SaveChangesAsync();
-                    return userDto;
-            }
+                    return userPutDto;
+                }
                 else
-            {
-                logger.LogError("Item not found");
+                {
+                    logger.LogError("Item not found");
 
-                return null;
+                    return null;
+                }
             }
-        }
             catch (Exception e)
             {
                 logger.LogError(e?.InnerException?.ToString());
