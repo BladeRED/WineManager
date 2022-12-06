@@ -36,6 +36,13 @@ namespace WineManager.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Bottle>> GetBottle(int id)
         {
+
+            if (id == null)
+            {
+
+                return NotFound("No bottle found");
+
+            }
             return Ok(await bottleRepository.GetBottleAsync(id));
         }
 

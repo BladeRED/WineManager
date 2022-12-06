@@ -41,6 +41,12 @@ namespace WineManager.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Cave>> GetCave(int id)
         {
+            if (id == null)
+            {
+
+                return NotFound("No cave found");
+
+            }
             return Ok(await caveRepository.GetByIdAsync(id));
         }
 
