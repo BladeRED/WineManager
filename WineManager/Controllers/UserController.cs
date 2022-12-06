@@ -19,7 +19,7 @@ namespace WineManager.Controllers
         {
             this.userRepository = userRepository;
         }
-        
+
         [HttpGet]
         public async Task<ActionResult<List<UserDto>>> GetAllUsers()
         {
@@ -27,7 +27,11 @@ namespace WineManager.Controllers
 
             return Ok(userDtoList);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto?>> GetUser(int id)
         {
@@ -48,7 +52,7 @@ namespace WineManager.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDto>> AddUser([FromForm] UserPostDto userDto)
         {
-            
+
             var userCreated = await userRepository.AddUserAsync(userDto);
 
             if (userCreated != null)
@@ -72,7 +76,11 @@ namespace WineManager.Controllers
             else
                 return Problem("User not modified");
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult<UserDto>> DeleteUser(int id)
         {
@@ -80,32 +88,49 @@ namespace WineManager.Controllers
             if (userRemoved != null)
                 return Ok(userRemoved);
             else
-                return Problem("User not removed");
+                return NotFound("The User is not found.");
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetUserWithBottles(int id)
+        public async Task<ActionResult<UserDto?>> GetUserWithBottles(int id)
         {
             var userDto = await userRepository.GetUserWithBottlesAsync(id);
-
-            return Ok(userDto);
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            else
+                return Ok(userDto);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserWithDrawers(int id)
         {
             var userDto = await userRepository.GetUserWithDrawersAsync(id);
-
-            return Ok(userDto);
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            else
+                return Ok(userDto);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
-
         public async Task<ActionResult<UserDto>> GetUserWithCaves(int id)
         {
             var userDto = await userRepository.GetUserWithCavesAsync(id);
-
-            return Ok(userDto);
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            else
+                return Ok(userDto);
         }
-
-
-
     }
 }
