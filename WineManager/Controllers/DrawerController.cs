@@ -50,9 +50,46 @@ namespace WineManager.Controllers
             return Ok(await drawerRepository.GetByIdAsync(id));
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DrawerDtoGet>> GetDrawerWithUser(int id)
+        {
+            if (id == null)
+            {
+
+                return NotFound("No drawer found");
+
+            }
+            return Ok(await drawerRepository.GetDrawerWithUserAsync(id));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DrawerDtoGet>> GetDrawerWithCave(int id)
+        {
+            if (id == null)
+            {
+
+                return NotFound("No drawer found");
+
+            }
+            return Ok(await drawerRepository.GetDrawerWithCaveAsync(id));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DrawerDtoGet>> GetDrawerWithBottles(int id)
+        {
+            if (id == null)
+            {
+
+                return NotFound("No drawer found");
+
+            }
+            return Ok(await drawerRepository.GetDrawerWithBottlesAsync(id));
+        }
+
+
+
         [HttpPost]
         [ProducesResponseType(666)]
-
 
         public async Task<ActionResult<Drawer>> AddDrawer([FromForm] DrawerPostDto drawerPostDto)
         {

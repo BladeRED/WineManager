@@ -53,14 +53,14 @@ namespace WineManager.Controllers
         [HttpGet("{id}")]
         //[HttpGet("GetCaveWithDrawer/{id}")]
         //petit commentaire //
-        public async Task<ActionResult<Cave>> GetCaveWithDrawer(int id)
+        public async Task<ActionResult<CaveDtoGet>> GetCaveWithDrawer(int id)
         {
             return Ok(await caveRepository.GetWithDrawerAsync(id));
         }
 
         [HttpGet("{id}")]
         //[HttpGet("GetCaveWithDrawer/{id}")]
-        public async Task<ActionResult<Cave>> GetCaveWithUser(int id)
+        public async Task<ActionResult<CaveDtoGet>> GetCaveWithUser(int id)
         {
             return Ok(await caveRepository.GetWithUserAsync(id));
         }

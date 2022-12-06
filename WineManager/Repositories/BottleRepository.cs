@@ -55,7 +55,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<BottleDtoGet> GetBottleWithDrawerAsync(int id)
         {
-            var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDTOLight(p.Drawer))).FirstOrDefaultAsync();
+            var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDtoLight(p.Drawer))).FirstOrDefaultAsync();
             return bottleWithDrawer;
         }
 
