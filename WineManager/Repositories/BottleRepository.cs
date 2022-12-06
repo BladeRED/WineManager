@@ -88,24 +88,23 @@ namespace WineManager.Repositories
         /// <param name="id"></param>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        public async Task<Bottle> UpdateBottleAsync(int id, Bottle bottle)
+        public async Task<Bottle> UpdateBottleAsync(BottleDtoPut bottleDtoPut)
         {
             try
             {
-                var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == id);
+                var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId);
 
-                if (bottle.Name != null)
-                    bottleToUpdate.Name = bottle.Name;
-                if (bottle.Vintage != null)
-                    bottleToUpdate.Vintage = bottle.Vintage;
-                if (bottle.StartKeepingYear != null)
-                    bottleToUpdate.StartKeepingYear = bottle.StartKeepingYear;
-                if (bottle.EndKeepingYear != null)
-                    bottleToUpdate.EndKeepingYear = bottle.EndKeepingYear;
-                if (bottle.Color != null)
-                    bottleToUpdate.Color = bottle.Color;
-                if (bottle.DrawerPosition != null)
-                    bottleToUpdate.DrawerPosition = bottle.DrawerPosition;
+                if (bottleDtoPut.Name != null)
+                    bottleToUpdate.Name = bottleDtoPut.Name;
+                if (bottleDtoPut.Vintage != null)
+                    bottleToUpdate.Vintage = bottleDtoPut.Vintage;
+                if (bottleDtoPut.StartKeepingYear != null)
+                    bottleToUpdate.StartKeepingYear = bottleDtoPut.StartKeepingYear;
+                if (bottleDtoPut.EndKeepingYear != null)
+                    bottleToUpdate.EndKeepingYear = bottleDtoPut.EndKeepingYear;
+                if (bottleDtoPut.Color != null)
+                    bottleToUpdate.Color = bottleDtoPut.Color;
+            
 
                 await context.SaveChangesAsync();
                 return bottleToUpdate;

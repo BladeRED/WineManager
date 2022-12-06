@@ -45,7 +45,7 @@ namespace WineManager.IRepositories
         /// <param name="id"></param>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        Task<Bottle> UpdateBottleAsync(int id, Bottle bottle);
+        Task<Bottle> UpdateBottleAsync(BottleDtoPut bottlePutDto);
 
         /// <summary>
         /// Delete bottle from Id.

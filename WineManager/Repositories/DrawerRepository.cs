@@ -54,11 +54,11 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<DrawerDtoGet> GetDrawerWithBottlesAsync(int id)
-        {
-            //var drawerWithBottles = await WineManagerContext.Drawers.Include(p => p.Bottles).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new List<BottleDtoLight> { p.Bottles })).FirstOrDefaultAsync();
-            return drawerWithBottles;
-        }
+        //public async Task<DrawerDtoGet> GetDrawerWithBottlesAsync(int id)
+        //{
+        //    //var drawerWithBottles = await WineManagerContext.Drawers.Include(p => p.Bottles).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new List<BottleDtoLight> { p.Bottles })).FirstOrDefaultAsync();
+        //    //return drawerWithBottles;
+        //}
 
         /// <summary>
         /// Get drawer from Id user
