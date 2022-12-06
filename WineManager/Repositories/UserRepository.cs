@@ -17,24 +17,6 @@ namespace WineManager.Repositories
             this.context = context;
             this.logger = logger;
         }
-        private UserDto convertUserToDto(User user)
-        {
-            var userDto = new UserDto(user);
-
-            return userDto;
-        }
-        private User convertUserDtoToUser(UserDto userDto)
-        {
-            var user = new User
-            {
-                Name = userDto.Name,
-                BirthDate = userDto.BirthDate,
-                Email = userDto.Email,
-                Drawers = userDto.Drawers
-            };
-
-            return user;
-        }
 
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
@@ -42,7 +24,7 @@ namespace WineManager.Repositories
             List<UserDto> userDtoList = new List<UserDto>();
             foreach (var user in users)
             {
-                userDtoList.Add(convertUserToDto(user));
+                userDtoList.Add(new UserDto(user));
             }
             return userDtoList;
         }
@@ -54,7 +36,7 @@ namespace WineManager.Repositories
                 return null;
             else
             {
-                var userDto = convertUserToDto(user);
+                var userDto = new UserDto(user);
                 return userDto;
             }
         }
@@ -137,13 +119,12 @@ namespace WineManager.Repositories
             try
             {
                 User? user = await context.Users.FirstOrDefaultAsync(p => p.UserId == id);
-                UserDto? userDto = convertUserToDto(user);
                 if (user != null)
                 {
                     context.Users.Remove(user);
 
                     await context.SaveChangesAsync();
-                    return userDto;
+                    return new UserDto(user);
                 }
                 else
                 {
@@ -162,23 +143,29 @@ namespace WineManager.Repositories
 
         public async Task<UserDto?> GetUserWithBottlesAsync(int id)
         {
-            var users = await context.Users.Include(u => u.Bottles).FirstOrDefaultAsync(b => b.UserId == id);
-            var userDtoList = convertUserToDto(users);
-            return userDtoList;
+            var user = await context.Users.Include(u => u.Bottles).FirstOrDefaultAsync(b => b.UserId == id);
+            if (user == null)
+                return null;
+            var userDto = new UserDto(user);
+            return userDto;
         }
 
         public async Task<UserDto?> GetUserWithDrawersAsync(int id)
         {
-            var users = await context.Users.Include(u => u.Drawers).FirstOrDefaultAsync(d => d.UserId == id);
-            var userDtoList = convertUserToDto(users);
-            return userDtoList;
+            var user = await context.Users.Include(u => u.Drawers).FirstOrDefaultAsync(d => d.UserId == id);
+            if (user == null)
+                return null;
+            var userDto = new UserDto(user);
+            return userDto;
         }
 
         public async Task<UserDto?> GetUserWithCavesAsync(int id)
         {
-            var users = await context.Users.Include(u => u.Caves).FirstOrDefaultAsync(c => c.UserId == id);
-            var userDtoList = convertUserToDto(users);
-            return userDtoList;
+            var user = await context.Users.Include(u => u.Caves).FirstOrDefaultAsync(c => c.UserId == id);
+            if (user == null)
+                return null;
+            var userDto = new UserDto(user);
+            return userDto;
         }
     }
 }
