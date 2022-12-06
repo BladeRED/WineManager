@@ -41,6 +41,12 @@ namespace WineManager.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Drawer>> GetDrawer(int id)
         {
+            if (id == null)
+            {
+
+                return NotFound("No drawer found");
+
+            }
             return Ok(await drawerRepository.GetByIdAsync(id));
         }
 
