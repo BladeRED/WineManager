@@ -69,6 +69,7 @@ namespace WineManager.Controllers
             else
                 return Problem("User not modified");
         }
+
         [HttpDelete]
         public async Task<ActionResult<UserDto>> DeleteUser(int id)
         {

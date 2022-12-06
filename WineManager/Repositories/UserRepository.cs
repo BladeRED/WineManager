@@ -72,7 +72,9 @@ namespace WineManager.Repositories
                 }
 
                 var user = new User(userPostDto);
+
                 context.Users.Add(user);
+
                 var userDto = UserPostDto.ConvertUserPostDtoToUserDto(userPostDto);
 
                 await context.SaveChangesAsync();
@@ -99,24 +101,29 @@ namespace WineManager.Repositories
 
                     return null;
                 }
-
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Email == userPutDto.CurrentEmail);
                 if (user != null)
                 {
-                    var userDto = new UserDto(userPutDto);
-
-                    context.Users.Update(user);
+                    if (userPutDto.NewName != null)
+                        user.Name = userPutDto.NewName;
+                    if (userPutDto.NewEmail != null)
+                        user.Email = userPutDto.NewEmail;
+                    if (userPutDto.NewPassword != null)
+                        user.Password = userPutDto.NewPassword;
+                    if (userPutDto.NewBirthDate != null)
+                        user.BirthDate = (DateTime)userPutDto.NewBirthDate;
 
                     await context.SaveChangesAsync();
+                    var userDto = new UserDto(user);
                     return userDto;
-            }
+                }
                 else
-            {
-                logger.LogError("Item not found");
+                {
+                    logger.LogError("Item not found");
 
-                return null;
+                    return null;
+                }
             }
-        }
             catch (Exception e)
             {
                 logger.LogError(e?.InnerException?.ToString());
