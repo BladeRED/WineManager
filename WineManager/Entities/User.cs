@@ -4,7 +4,7 @@ using WineManager.DTO;
 namespace WineManager.Entities
 {
     public class User
-    { 
+    {
         public int UserId { get; set; }
         public string Name { get; set; }
         [Required]
@@ -12,7 +12,7 @@ namespace WineManager.Entities
         [Required]
         public DateTime BirthDate { get; set; }
         [Required]
-        public string Password { get; set; }   
+        public string Password { get; set; }
 
         // Navigation properties //
 
@@ -24,18 +24,13 @@ namespace WineManager.Entities
         {
         }
 
-        public User(int userId, string name, string email, DateTime birthDate, string password, List<Bottle>? bottles, List<Cave>? caves, List<Drawer>? drawers)
+        public User(UserPutDto userPutDto)
         {
-            UserId = userId;
-            Name = name;
-            Email = email;
-            BirthDate = birthDate;
-            Password = password;
-            Bottles = bottles;
-            Caves = caves;
-            Drawers = drawers;
+            Name = userPutDto.NewName;
+            Email = userPutDto.NewEmail;
+            BirthDate = (DateTime)userPutDto.NewBirthDate;
+            Password = userPutDto.NewPassword;
         }
-
     }
 }
 

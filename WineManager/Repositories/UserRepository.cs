@@ -71,7 +71,8 @@ namespace WineManager.Repositories
                     return null;
                 }
 
-                var user = UserPostDto.ConvertUserPostDtoToUser(userPostDto);
+                var user = new User(userPostDto);
+                context.Users.Add(user);
                 var userDto = UserPostDto.ConvertUserPostDtoToUserDto(userPostDto);
 
                 await context.SaveChangesAsync();
@@ -102,7 +103,7 @@ namespace WineManager.Repositories
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Email == userPutDto.CurrentEmail);
                 if (user != null)
                 {
-                    var userDto = UserPutDto.ConvertUserPutDtoToUserDto(userPutDto);
+                    var userDto = new UserDto(userPutDto);
 
                     context.Users.Update(user);
 

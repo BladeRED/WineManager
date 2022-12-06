@@ -53,9 +53,14 @@ namespace WineManager.Controllers
             else
                 return Problem("User not created");
         }
-
+        /// <summary>
+        ///
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// </summary>
+        /// <param name="userPutDto"></param>
+        /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<UserDto>> UpdateUser(UserPutDto userPutDto)
+        public async Task<ActionResult<UserDto>> UpdateUser([FromForm] UserPutDto userPutDto)
         {
             var userModified = await userRepository.UpdateUserAsync(userPutDto);
 

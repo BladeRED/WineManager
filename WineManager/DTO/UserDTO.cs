@@ -22,6 +22,13 @@ namespace WineManager.DTO
             Email = user.Email;
             Drawers = user.Drawers;
         }
+        public UserDto(UserPutDto userPutDto)
+        {
+            Name = userPutDto.NewName;
+            Email = userPutDto.NewEmail;
+            BirthDate = (DateTime)userPutDto.NewBirthDate;
+        }
+
     }
 }
 
