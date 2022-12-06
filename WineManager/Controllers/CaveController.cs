@@ -49,26 +49,41 @@ namespace WineManager.Controllers
             }
             return Ok(await caveRepository.GetByIdAsync(id));
         }
-
+        /// <summary>
+        /// Get cave from Id Drawer
+        /// </summary>
+        /// <param name="id">Id Drawer</param>
+        /// <returns></returns>
+        /// 
         [HttpGet("{id}")]
-        //[HttpGet("GetCaveWithDrawer/{id}")]
-        //petit commentaire //
+
         public async Task<ActionResult<Cave>> GetCaveWithDrawer(int id)
         {
             return Ok(await caveRepository.GetWithDrawerAsync(id));
         }
 
+        /// <summary>
+        /// Get cave from Id User
+        /// </summary>
+        /// <param name="id">Id User</param>
+        /// <returns></returns>
+        /// 
         [HttpGet("{id}")]
-        //[HttpGet("GetCaveWithDrawer/{id}")]
+       
         public async Task<ActionResult<Cave>> GetCaveWithUser(int id)
         {
             return Ok(await caveRepository.GetWithUserAsync(id));
         }
 
+        /// <summary>
+        /// Add cave
+        /// </summary>
+        /// <param name="caveDto">Return a CavePostDto object called caveDto </param>
+        /// <returns></returns>
+        /// 
+
         [HttpPost]
         [ProducesResponseType(666)]
-
-
         public async Task<ActionResult<Cave>> AddCave([FromForm] CavePostDto caveDto)
         {
             var NewCave = new Cave()
@@ -93,7 +108,12 @@ namespace WineManager.Controllers
             return Ok(caveAdd);
         }
 
-
+        /// <summary>
+        /// Update a Cave
+        /// </summary>
+        /// <param name="caveDto">Return a maj CavePostDto object called caveDto </param>
+        /// <returns></returns>
+        /// 
         [HttpPut]
         [ProducesResponseType(231)]
 
@@ -115,7 +135,12 @@ namespace WineManager.Controllers
             else
                 return Problem("Cave was not updated, see log for details");
         }
-
+        /// <summary>
+        /// Delete a cave
+        /// </summary>
+        /// <param name="id">Search a cave with the id and delete it </param>
+        /// <returns></returns>
+        ///
         [HttpDelete]
         [ProducesResponseType(244)]
 
