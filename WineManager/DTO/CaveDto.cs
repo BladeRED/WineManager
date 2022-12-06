@@ -1,6 +1,6 @@
 ﻿namespace WineManager.DTO
 {
-    public class CavePostDto
+    public class CaveDto
     {
         public int CaveId { get; set; }
         public string CaveType { get; set; }
