@@ -48,15 +48,15 @@ namespace WineManager.Controllers
         [ProducesResponseType(666)]
 
 
-        public async Task<ActionResult<Drawer>> AddDrawer([FromForm] DrawerDtoLight drawerDto)
+        public async Task<ActionResult<Drawer>> AddDrawer([FromForm] DrawerPostDto drawerPostDto)
         {
 
 
             var NewDrawer = new Drawer()
             {
-                Level = drawerDto.Level,
-                MaxPosition = drawerDto.MaxPosition,
-                CaveId = drawerDto.CaveId
+                Level = drawerPostDto.Level,
+                MaxPosition = drawerPostDto.MaxPosition,
+                CaveId = drawerPostDto.CaveId
               
             };
             var drawerAdd = await drawerRepository.AddDrawerAsync(NewDrawer);
@@ -82,15 +82,14 @@ namespace WineManager.Controllers
         {
 
             var MajDrawer = new Drawer()
-            {
-                DrawerId= drawerDto.DrawerId,   
+            { 
+                DrawerId= drawerDto.DrawerId,
                 Level = drawerDto.Level,
                 MaxPosition = drawerDto.MaxPosition,
                 CaveId= drawerDto.CaveId,   
-
             };
 
-            var drawerUpdated = await drawerRepository.AddDrawerAsync(MajDrawer);
+            var drawerUpdated = await drawerRepository.UpdateDrawerAsync(MajDrawer);
 
             if (drawerUpdated != null)
                 return Ok(drawerUpdated);
