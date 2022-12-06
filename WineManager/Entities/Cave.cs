@@ -9,9 +9,9 @@
         public int Temperature { get; set;}
 
         // Navigation Properties //
-        public List<Drawer> Drawers { get; set; }
+        public List<Drawer>? Drawers { get; set; }
         public int? UserId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public Cave()
         {
