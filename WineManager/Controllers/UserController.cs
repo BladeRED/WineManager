@@ -27,7 +27,12 @@ namespace WineManager.Controllers
 
             return Ok(userDtoList);
         }
-
+        /// <summary>
+        /// Get user from Id
+        /// </summary>
+        /// <param name="id">Id user</param>
+        /// <returns></returns>
+        /// 
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto?>> GetUser(int id)
         {
@@ -72,7 +77,12 @@ namespace WineManager.Controllers
             else
                 return Problem("User not modified");
         }
-
+        /// <summary>
+        /// Delete an User
+        /// </summary>
+        /// <param name="id">Find a user by its id and delete it</param>
+        /// <returns></returns>
+        /// 
         [HttpDelete]
         public async Task<ActionResult<UserDto>> DeleteUser(int id)
         {

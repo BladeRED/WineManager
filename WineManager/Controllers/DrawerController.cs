@@ -37,7 +37,6 @@ namespace WineManager.Controllers
         /// <param name="id">Id drawer</param>
         /// <returns></returns>
         /// 
-
         [HttpGet("{id}")]
         public async Task<ActionResult<Drawer>> GetDrawer(int id)
         {
@@ -49,48 +48,14 @@ namespace WineManager.Controllers
             }
             return Ok(await drawerRepository.GetByIdAsync(id));
         }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DrawerDtoGet>> GetDrawerWithUser(int id)
-        {
-            if (id == null)
-            {
-
-                return NotFound("No drawer found");
-
-            }
-            return Ok(await drawerRepository.GetDrawerWithUserAsync(id));
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DrawerDtoGet>> GetDrawerWithCave(int id)
-        {
-            if (id == null)
-            {
-
-                return NotFound("No drawer found");
-
-            }
-            return Ok(await drawerRepository.GetDrawerWithCaveAsync(id));
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DrawerDtoGet>> GetDrawerWithBottles(int id)
-        {
-            if (id == null)
-            {
-
-                return NotFound("No drawer found");
-
-            }
-            return Ok(await drawerRepository.GetDrawerWithBottlesAsync(id));
-        }
-
-
-
+        /// <summary>
+        /// Add drawer
+        /// </summary>
+        /// <param name="drawerPostDto">Return a DrawerPostDto object</param>
+        /// <returns></returns>
+        /// 
         [HttpPost]
         [ProducesResponseType(666)]
-
         public async Task<ActionResult<Drawer>> AddDrawer([FromForm] DrawerPostDto drawerPostDto)
         {
 
@@ -117,7 +82,12 @@ namespace WineManager.Controllers
             return Ok(drawerAdd);
         }
 
-
+        /// <summary>
+        /// Update a drawer
+        /// </summary>
+        /// <param name="drawerDto">Maj a DrawerDto object</param>
+        /// <returns></returns>
+        /// 
         [HttpPut]
         [ProducesResponseType(231)]
 
@@ -139,7 +109,12 @@ namespace WineManager.Controllers
             else
                 return Problem("Drawer was not updated, see log for details");
         }
-
+        /// <summary>
+        /// Delete drawer
+        /// </summary>
+        /// <param name="id">Find a drawer by its id and delete it</param>
+        /// <returns></returns>
+        /// 
         [HttpDelete]
         [ProducesResponseType(244)]
 
