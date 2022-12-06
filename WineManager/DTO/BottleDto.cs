@@ -10,6 +10,5 @@ namespace WineManager.DTO
         public int EndKeepingYear { get; set; }
         public string Color { get; set; }
         public string Designation { get; set; }
-        public string DrawerPosition { get; set; }
     }
 }
