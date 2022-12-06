@@ -1,8 +1,7 @@
 ﻿namespace WineManager.DTO
 {
-    public class CaveDto
+    public class CaveDtoLight
     {
-        public int CaveId { get; set; }
         public string CaveType { get; set; }
         public string Family { get; set; }
         public string Brand { get; set; }

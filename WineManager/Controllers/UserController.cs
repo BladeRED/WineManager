@@ -34,7 +34,14 @@ namespace WineManager.Controllers
 
             return Ok(userDto);
         }
-
+        /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<UserDto>> AddUser(string Name, string email, DateTime birthDate, string password)
         {

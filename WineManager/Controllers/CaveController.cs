@@ -62,7 +62,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(666)]
 
 
-        public async Task<ActionResult<Cave>> AddCave([FromForm] CaveDto caveDto)
+        public async Task<ActionResult<Cave>> AddCave([FromForm] CaveDtoLight caveDto)
         {
             var NewCave = new Cave()
             {
@@ -94,6 +94,7 @@ namespace WineManager.Controllers
         {
             var cave = new Cave()
             {
+                CaveId= caveDto.CaveId,
                 CaveType = caveDto.CaveType,
                 Family = caveDto.Family,
                 Brand = caveDto.Brand,

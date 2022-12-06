@@ -2,9 +2,8 @@
 
 namespace WineManager.DTO
 {
-    public class DrawerDto
+    public class DrawerDtoLight
     {
-        public int DrawerId { get; set; }
         public int Level { get; set; }
         public int MaxPosition { get; set; }
         public int? CaveId { get; set; }
