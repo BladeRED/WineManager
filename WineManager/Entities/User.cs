@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WineManager.DTO;
 
 namespace WineManager.Entities
 {
@@ -34,6 +35,7 @@ namespace WineManager.Entities
             Caves = caves;
             Drawers = drawers;
         }
+
     }
 }
 

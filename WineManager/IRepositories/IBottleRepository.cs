@@ -1,4 +1,5 @@
-﻿using WineManager.Entities;
+﻿using WineManager.DTO;
+using WineManager.Entities;
 
 namespace WineManager.IRepositories
 {
@@ -22,14 +23,14 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Bottle> GetBottleWithUserAsync(int id);
+        Task<BottleDtoLight> GetBottleWithUserAsync(int id);
 
         /// <summary>
         /// Get bottle from Id with his drawer.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Bottle> GetBottleWithDrawerAsync(int id);
+        Task<BottleDtoLight> GetBottleWithDrawerAsync(int id);
 
         /// <summary>
         /// Add a new bottle.
