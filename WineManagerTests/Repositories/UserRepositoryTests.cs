@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using WineManager.Contexts;
 using Microsoft.EntityFrameworkCore.InMemory;
 using WineManager.DTO;
+using System.Collections;
 
 namespace WineManager.Repositories.Tests
 {
@@ -30,7 +31,7 @@ namespace WineManager.Repositories.Tests
         }
 
         [TestMethod()]
-        public async void AddUserAsyncTest()
+        public async Task AddUserAsyncTest()
         {
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
@@ -43,10 +44,13 @@ namespace WineManager.Repositories.Tests
                 BirthDate= new DateTime(2000, 01, 01),
                 Password= "test"
             };
-            var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
 
-            Assert.AreEqual("test", myUserAdded.Name);
+
+            var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
+            var myList = await testContext.GetAllUsersAsync();
+
             context.Database.EnsureDeleted();
+            Assert.AreEqual(1, myList.Count);
         }
     }
 }
