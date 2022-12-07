@@ -130,7 +130,7 @@ namespace WineManager.Repositories
             }
             catch (Exception e)
             {
-                logge   r.LogError(e?.InnerException?.ToString());
+                logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
 

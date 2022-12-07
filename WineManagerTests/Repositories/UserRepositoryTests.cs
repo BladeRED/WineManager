@@ -101,6 +101,21 @@ namespace WineManager.Repositories.Tests
             Assert.AreNotEqual("BRtest", userFinded.Email);
             Assert.AreNotEqual(new DateTime(2003, 03, 03), userFinded.BirthDate);
             Assert.AreNotEqual("BRtest", userFinded.Password);
+
+            myUserBabRequest = await testContext.UpdateUserAsync(new UserPutDto
+            {
+                CurrentEmail = "newtest",
+                CurrentPassword = "BadRequest",
+                NewName = "BRtest",
+                NewEmail = "BRtest",
+                NewBirthDate = new DateTime(2003, 03, 03),
+                NewPassword = "BRtest"
+            });
+            Assert.AreNotEqual("BRtest", userFinded.Name);
+            Assert.AreNotEqual("BRtest", userFinded.Email);
+            Assert.AreNotEqual(new DateTime(2003, 03, 03), userFinded.BirthDate);
+            Assert.AreNotEqual("BRtest", userFinded.Password);
+
             context.Database.EnsureDeleted();
         }
     }
