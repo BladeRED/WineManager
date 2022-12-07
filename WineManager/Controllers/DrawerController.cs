@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using WineManager.IRepositories;
 using WineManager.DTO;
 
 namespace WineManager.Controllers
@@ -65,7 +64,7 @@ namespace WineManager.Controllers
                 Level = drawerPostDto.Level,
                 MaxPosition = drawerPostDto.MaxPosition,
                 CaveId = drawerPostDto.CaveId
-              
+
             };
             var drawerAdd = await drawerRepository.AddDrawerAsync(NewDrawer);
 
@@ -91,15 +90,15 @@ namespace WineManager.Controllers
         [HttpPut]
         [ProducesResponseType(231)]
 
-        public async Task<ActionResult<Drawer>> UpdateDrawer([FromForm]DrawerDto drawerDto)
+        public async Task<ActionResult<Drawer>> UpdateDrawer([FromForm] DrawerDto drawerDto)
         {
 
             var MajDrawer = new Drawer()
-            { 
-                DrawerId= drawerDto.DrawerId,
+            {
+                DrawerId = drawerDto.DrawerId,
                 Level = drawerDto.Level,
                 MaxPosition = drawerDto.MaxPosition,
-                CaveId= drawerDto.CaveId,   
+                CaveId = drawerDto.CaveId,
             };
 
             var drawerUpdated = await drawerRepository.UpdateDrawerAsync(MajDrawer);

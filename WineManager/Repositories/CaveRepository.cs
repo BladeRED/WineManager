@@ -19,7 +19,7 @@ namespace WineManager.Repositories
         /// Get all caves
         /// </summary>
         /// <returns></returns>
-        
+
         public async Task<List<Cave>> GetCavesAsync()
         {
             return await WineManagerContext.Caves.ToListAsync();
@@ -29,7 +29,7 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="userId">Id User</param>
         /// <returns></returns>
-        
+
         public async Task<Cave> GetByIdUserAsync(int userId)
         {
             return await WineManagerContext.Caves.Include(p => p.UserId).FirstOrDefaultAsync(p => p.UserId == userId);

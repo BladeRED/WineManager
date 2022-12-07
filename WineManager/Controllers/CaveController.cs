@@ -69,7 +69,7 @@ namespace WineManager.Controllers
         /// <returns></returns>
         /// 
         [HttpGet("{id}")]
-       
+
         public async Task<ActionResult<Cave>> GetCaveWithUser(int id)
         {
             return Ok(await caveRepository.GetWithUserAsync(id));
@@ -121,7 +121,7 @@ namespace WineManager.Controllers
         {
             var cave = new Cave()
             {
-                CaveId= caveDto.CaveId,
+                CaveId = caveDto.CaveId,
                 CaveType = caveDto.CaveType,
                 Family = caveDto.Family,
                 Brand = caveDto.Brand,

@@ -29,7 +29,7 @@ namespace WineManager
             });
 
             // Adding the context for migration //
-            
+
             builder.Services.AddDbContext<WineManagerContext>(o =>
             {
                 o.UseSqlServer(builder.Configuration.GetConnectionString("WineManagerDbCS"));
