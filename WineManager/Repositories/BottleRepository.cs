@@ -86,7 +86,7 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        public async Task<Bottle> AddBottleAsync(Bottle bottle)
+        public async Task<Bottle?> AddBottleAsync(Bottle bottle)
         {
             try
             {
@@ -98,7 +98,6 @@ namespace WineManager.Repositories
                 logger.LogError(e?.InnerException?.ToString());
                 return null;
             }
-
             return bottle;
         }
 

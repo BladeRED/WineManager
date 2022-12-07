@@ -92,11 +92,16 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Cave?> AddCaveAsync(Cave cave)
         {
-
-            WineManagerContext.Caves.Add(cave);
-
-            await WineManagerContext.SaveChangesAsync();
-
+            try
+            {
+                WineManagerContext.Caves.Add(cave);
+                await WineManagerContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e?.InnerException?.ToString());
+                return null;
+            }
             return cave;
         }
 

@@ -138,8 +138,6 @@ namespace WineManager.Controllers
             return Ok(bottleAdded);
         }
 
-
-
         /// <summary>
         /// Update bottle from Id.
         /// </summary>

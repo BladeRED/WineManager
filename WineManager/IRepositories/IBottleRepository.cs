@@ -37,7 +37,7 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        Task<Bottle> AddBottleAsync(Bottle bottle);
+        Task<Bottle?> AddBottleAsync(Bottle bottle);
 
         /// <summary>
         /// Update bottle from Id.
