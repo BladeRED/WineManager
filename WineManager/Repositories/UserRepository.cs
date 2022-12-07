@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using System;
 using WineManager.Contexts;
 using WineManager.DTO;
 using WineManager.Entities;
@@ -21,7 +23,7 @@ namespace WineManager.Repositories
         /// <summary>
         /// Get all users
         /// </summary>
-        /// <returns></returns
+        /// <returns></returns>
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
             List<User> users = await context.Users.ToListAsync();
@@ -132,7 +134,7 @@ namespace WineManager.Repositories
                 }
                 else
                 {
-                    logger.LogError("Item not found");
+                    logger?.LogError("Item not found");
 
                     return null;
                 }
