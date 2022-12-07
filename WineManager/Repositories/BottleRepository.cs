@@ -23,7 +23,13 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<List<Bottle>> GetAllBottlesAsync()
         {
-            return await context.Bottles.ToListAsync();
+            var bottles = await context.Bottles.ToListAsync();
+            if (bottles == null)
+            {
+                logger.LogError("Item not found");
+                return null;
+            }
+            return bottles;
         }
 
         /// <summary>
@@ -33,7 +39,13 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Bottle> GetBottleAsync(int id)
         {
-            return await context.Bottles.FindAsync(id);
+            var bottle = await context.Bottles.FindAsync(id);
+            if (bottle == null)
+            {
+                logger.LogError("Item not found");
+                return null;
+            }
+            return bottle;
         }
 
         /// <summary>
@@ -44,7 +56,11 @@ namespace WineManager.Repositories
         public async Task<BottleDtoGet> GetBottleWithUserAsync(int id)
         {
             var bottleWithUser = await context.Bottles.Include(p => p.User).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new UserDTOLight(p.User))).FirstOrDefaultAsync();
-
+            if (bottleWithUser == null)
+            {
+                logger.LogError("Item not found");
+                return null;
+            }
             return bottleWithUser;
         }
 
@@ -56,6 +72,11 @@ namespace WineManager.Repositories
         public async Task<BottleDtoGet> GetBottleWithDrawerAsync(int id)
         {
             var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDtoLight(p.Drawer))).FirstOrDefaultAsync();
+            if (bottleWithDrawer == null)
+            {
+                logger.LogError("Item not found");
+                return null;
+            }
             return bottleWithDrawer;
         }
 
@@ -69,13 +90,11 @@ namespace WineManager.Repositories
             try
             {
                 context.Bottles.Add(bottle);
-
                 await context.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 logger.LogError(e?.InnerException?.ToString());
-
                 return null;
             }
 
@@ -112,7 +131,6 @@ namespace WineManager.Repositories
             catch (Exception e)
             {
                 logger.LogError(e?.InnerException?.ToString());
-
                 return null;
             }
 
@@ -136,7 +154,6 @@ namespace WineManager.Repositories
             catch (Exception e)
             {
                 logger.LogError(e?.InnerException?.ToString());
-
                 return null;
             }
             return bottle;

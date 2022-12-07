@@ -39,14 +39,12 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="idCave">Id Cave</param>
         /// <returns></returns>
-        /// 
         Task<Cave?> GetByIdAsync(int idCave);
 
         /// <summary>
         /// Add a Cave
         /// </summary>
         /// <returns></returns>
-        /// 
         Task<Cave?> AddCaveAsync(Cave cave);
 
         /// <summary>
@@ -60,7 +58,6 @@ namespace WineManager.IRepositories
         /// Delete a Cave
         /// </summary>
         /// <returns></returns>
-        /// 
         Task<bool> DeleteCaveAsync(int idCave);
 
     }
