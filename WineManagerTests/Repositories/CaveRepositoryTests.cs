@@ -16,10 +16,8 @@ namespace WineManager.Repositories.Tests
     [TestClass()]
     public class CaveRepositoryTests
     {
-
-
         [TestMethod()]
-        public async Task<Cave?> AddCaveAsyncTest()
+        public async Task AddCaveAsyncTest()
         {
             // creation of the temp database and its context //
 
@@ -31,6 +29,7 @@ namespace WineManager.Repositories.Tests
 
             Cave TestCave = new Cave()
             {
+                CaveId= 1,
                 CaveType = "Cave de test",
                 Brand= "Lambda",
                 Family="Random",
@@ -43,14 +42,13 @@ namespace WineManager.Repositories.Tests
             context.Caves.Add(TestCave);
 
             var MyList = await CaveTest.GetCavesAsync();
-            await context.SaveChangesAsync();
 
             // comparing the list of objects to see if there is a new entry in the database //
 
             Assert.AreEqual(1, MyList.Count);
 
             context.Database.EnsureDeleted();
-            return TestCave;
+           
         }
 
         [TestMethod()]
