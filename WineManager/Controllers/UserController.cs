@@ -77,6 +77,22 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<UserDto>> SignUp([FromForm] UserPostDto userDto)
+        {
+            return await AddUser(userDto);
+        }
+
+        /// <summary>
         /// Update a user from email
         /// </summary>
         /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
@@ -231,6 +247,31 @@ namespace WineManager.Controllers
                 return Ok(drawers);
             }
             return NotFound("No drawer found.");
+        }
+
+        /// <summary>
+        /// Get all caves of current logged user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<BottleDtoLight>>> GetUserBottles()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your bottles ! Check/ User / Login");
+            var userDto = await userRepository.GetUserWithBottlesAsync(Int32.Parse(idCurrentUser.Value));
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            var bottles = userDto.Bottles;
+            if (bottles != null)
+            {
+                return Ok(bottles);
+            }
+            return NotFound("No bottle found.");
         }
 
         /// <summary>
