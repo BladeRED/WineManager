@@ -27,7 +27,7 @@ namespace WineManager.Repositories
         public async Task<List<Drawer>> GetDrawersAsync()
         {
             var drawers = await WineManagerContext.Drawers.ToListAsync();
-            if(drawers== null)
+            if (drawers == null)
             {
                 logger.LogError("Item not found");
                 return null;
@@ -119,11 +119,16 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Drawer?> AddDrawerAsync(Drawer drawer)
         {
-
-            WineManagerContext.Drawers.Add(drawer);
-
-            await WineManagerContext.SaveChangesAsync();
-
+            try
+            {
+                WineManagerContext.Drawers.Add(drawer);
+                await WineManagerContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                logger?.LogError(e?.InnerException?.ToString());
+                return null;
+            }
             return drawer;
         }
 

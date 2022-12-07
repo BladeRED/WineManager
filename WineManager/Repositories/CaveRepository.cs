@@ -99,7 +99,7 @@ namespace WineManager.Repositories
             }
             catch (Exception e)
             {
-                logger.LogError(e?.InnerException?.ToString());
+                logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
             return cave;
