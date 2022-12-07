@@ -115,6 +115,30 @@ namespace WineManager.Controllers
             else
                 return Problem("Bottle non créé, cf log");
         }
+        [HttpPost]
+        public async Task<ActionResult<Bottle>> AddNewBottleToUser([FromForm] BottleDto bottleDto)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+
+            var newBottle = new Bottle()
+            {
+                Name = bottleDto.Name,
+                Vintage = bottleDto.Vintage,
+                StartKeepingYear = bottleDto.StartKeepingYear,
+                EndKeepingYear = bottleDto.EndKeepingYear,
+                Color = bottleDto.Color,
+                Designation = bottleDto.Designation,
+                UserId = Int32.Parse(idCurrentUser.Value)
+        };
+
+            var bottleAdded = await bottleRepository.AddBottleAsync(newBottle);
+            return Ok(bottleAdded);
+        }
+
+
 
         /// <summary>
         /// Update bottle from Id.
