@@ -29,11 +29,11 @@ namespace WineManager.Repositories.Tests
 
             Cave TestCave = new Cave()
             {
-                CaveId= 1,
+                CaveId = 1,
                 CaveType = "Cave de test",
-                Brand= "Lambda",
-                Family="Random",
-                Temperature= 12,
+                Brand = "Lambda",
+                Family = "Random",
+                Temperature = 12,
             };
 
             // simulating the add method //
@@ -48,13 +48,43 @@ namespace WineManager.Repositories.Tests
             Assert.AreEqual(1, MyList.Count);
 
             context.Database.EnsureDeleted();
-           
+
         }
 
         [TestMethod()]
-        public void UpdateCaveAsyncTest()
+        public async Task UpdateCaveAsyncTest()
         {
-            Assert.Fail();
+            // creation of the temp database and its context //
+
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            CaveRepository CaveTest = new CaveRepository(context);
+
+            Cave MajCave = new Cave()
+            {
+                CaveId = 2,
+                CaveType = "Cave de test",
+                Brand = "Lambda",
+                Family = "Random",
+                Temperature = 12,
+            };
+
+            // simulating the add method //
+
+            var MyAddTest = await CaveTest.AddCaveAsync(MajCave);
+            context.Caves.Add(MajCave);
+
+            var context2 = new WineManagerContext(builder.Options);
+            CaveRepository CaveTest2 = new CaveRepository(context2);
+
+            MajCave.CaveType = "Cave de test 2";
+            MajCave.Brand = "Lambda2";
+            MajCave.Family = "Random2";
+            MajCave.Temperature = 14;
+
+            var MyUpdateTest= await CaveTest2.UpdateCaveAsync(MajCave);
+
+            Assert.AreNotSame(MyAddTest, MyUpdateTest);
         }
     }
 }
