@@ -15,6 +15,14 @@ namespace WineManager.DTO
         public List<Cave>? Caves { get; set; }
 
         public UserDto() { }
+
+        public UserDto(UserPostDto userPostDto)
+        {
+            Name = userPostDto.Name;
+            Email = userPostDto.Email;
+            BirthDate = userPostDto.BirthDate;
+        }
+
         public UserDto(User user)
         {
             Name = user.Name;
