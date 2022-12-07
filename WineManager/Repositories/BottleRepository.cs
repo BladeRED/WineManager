@@ -26,7 +26,7 @@ namespace WineManager.Repositories
             var bottles = await context.Bottles.ToListAsync();
             if (bottles == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return bottles;
@@ -42,7 +42,7 @@ namespace WineManager.Repositories
             var bottle = await context.Bottles.FindAsync(id);
             if (bottle == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return bottle;
@@ -58,7 +58,7 @@ namespace WineManager.Repositories
             var bottleWithUser = await context.Bottles.Include(p => p.User).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new UserDTOLight(p.User))).FirstOrDefaultAsync();
             if (bottleWithUser == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return bottleWithUser;
@@ -74,7 +74,7 @@ namespace WineManager.Repositories
             var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDtoLight(p.Drawer))).FirstOrDefaultAsync();
             if (bottleWithDrawer == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return bottleWithDrawer;
@@ -94,7 +94,7 @@ namespace WineManager.Repositories
             }
             catch (Exception e)
             {
-                logger.LogError(e?.InnerException?.ToString());
+                logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
 
@@ -130,7 +130,7 @@ namespace WineManager.Repositories
             }
             catch (Exception e)
             {
-                logger.LogError(e?.InnerException?.ToString());
+                logge   r.LogError(e?.InnerException?.ToString());
                 return null;
             }
 
@@ -153,7 +153,7 @@ namespace WineManager.Repositories
             }
             catch (Exception e)
             {
-                logger.LogError(e?.InnerException?.ToString());
+                logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
             return bottle;

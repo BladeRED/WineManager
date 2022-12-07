@@ -141,7 +141,7 @@ namespace WineManager.Repositories
             }
             catch (Exception e)
             {
-                logger.LogError(e?.InnerException?.ToString());
+                logger?.LogError(e?.InnerException?.ToString());
 
                 return null;
             }
@@ -164,13 +164,13 @@ namespace WineManager.Repositories
                 }
                 else
                 {
-                    logger.LogError("Item not found");
+                    logger?.LogError("Item not found");
                     return null;
                 }
             }
             catch (Exception e)
             {
-                logger.LogError(e?.InnerException?.ToString());
+                logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
         }
@@ -185,7 +185,7 @@ namespace WineManager.Repositories
             var user = await context.Users.Include(u => u.Bottles).Where(b => b.UserId == id).Select(u => new UserDto(u,u.Bottles)).FirstOrDefaultAsync();
             if (user == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return user;
@@ -201,7 +201,7 @@ namespace WineManager.Repositories
             var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u=> new UserDto(u,u.Drawers)).FirstOrDefaultAsync();
             if (user == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return user;
@@ -217,7 +217,7 @@ namespace WineManager.Repositories
             var user = await context.Users.Include(u => u.Caves).Where(c=>c.UserId == id).Select(u=>new UserDto(u,u.Caves)).FirstOrDefaultAsync();
             if (user == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return user;

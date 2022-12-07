@@ -29,7 +29,7 @@ namespace WineManager.Repositories
             var drawers = await WineManagerContext.Drawers.ToListAsync();
             if(drawers== null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return drawers;
@@ -45,7 +45,7 @@ namespace WineManager.Repositories
             var drawerWithCave = await WineManagerContext.Drawers.Include(p => p.Cave).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new CaveDtoLight(p.Cave))).FirstOrDefaultAsync();
             if (drawerWithCave == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return drawerWithCave;
@@ -61,7 +61,7 @@ namespace WineManager.Repositories
             var drawerWithUser = await WineManagerContext.Drawers.Include(p => p.User).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
             if (drawerWithUser == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return drawerWithUser;
@@ -77,7 +77,7 @@ namespace WineManager.Repositories
             var drawerWithBottles = await WineManagerContext.Drawers.Include(p => p.Bottles).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, p.Bottles)).FirstOrDefaultAsync();
             if (drawerWithBottles == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return drawerWithBottles;

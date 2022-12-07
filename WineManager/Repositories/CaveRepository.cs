@@ -28,7 +28,7 @@ namespace WineManager.Repositories
             var cave = await WineManagerContext.Caves.ToListAsync();
             if (cave == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return cave;
@@ -54,7 +54,7 @@ namespace WineManager.Repositories
             var cave = await WineManagerContext.Caves.Include(p => p.Drawers).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, p.Drawers)).FirstOrDefaultAsync();
             if (cave == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return cave;
@@ -70,7 +70,7 @@ namespace WineManager.Repositories
             var cave = await WineManagerContext.Caves.Include(p => p.UserId).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
             if (cave == null)
             {
-                logger.LogError("Item not found");
+                logger?.LogError("Item not found");
                 return null;
             }
             return cave;
