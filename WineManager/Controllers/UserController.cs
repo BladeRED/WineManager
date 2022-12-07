@@ -86,10 +86,21 @@ namespace WineManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<UserDto>> SignUp([FromForm] UserPostDto userDto)
+        public async Task<IActionResult?> SignUp([FromForm] UserPostDto userDto, bool CGU)
         {
-            return await AddUser(userDto);
+            if (CGU)
+            {
+                var user = await AddUser(userDto);
+                if (user != null)
+                {
+                    var userConnected = await userRepository.LoginUserAsync(userDto.Email, userDto.Password);
+                    return Ok($"{userConnected.Name} logged");
+                }
+                return BadRequest("Error in the request");
+            }
+            return Problem("CGU not accepted");
         }
 
         /// <summary>
