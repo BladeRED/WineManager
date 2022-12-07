@@ -126,7 +126,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto?>> GetUserWithBottles(int id)
+        public async Task<ActionResult<UserDtoGet?>> GetUserWithBottles(int id)
         {
             if (id < 1)
             {
@@ -148,7 +148,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto>> GetUserWithDrawers(int id)
+        public async Task<ActionResult<UserDtoGet>> GetUserWithDrawers(int id)
         {
             if (id < 1)
             {
@@ -170,7 +170,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto>> GetUserWithCaves(int id)
+        public async Task<ActionResult<UserDtoGet>> GetUserWithCaves(int id)
         {
             if (id < 1)
             {
@@ -181,6 +181,32 @@ namespace WineManager.Controllers
                 return NotFound("The User is not found.");
             else
                 return Ok(userDto);
+        }
+
+        /// <summary>
+        /// Get all caves of current logged user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<CaveDto>>> GetUserCaves()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your caves ! Check/ User / Login");
+            var userDto = await userRepository.GetUserWithCavesAsync(Int32.Parse(idCurrentUser.Value));
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            var caves = userDto.Caves;
+            var cavesDto = new List<CaveDtoLight>();
+            if (caves != null)
+            {
+                return Ok(caves);
+            }
+            return NotFound("No cave found.");
         }
 
         [HttpGet]

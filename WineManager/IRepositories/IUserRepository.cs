@@ -45,21 +45,21 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<UserDto?> GetUserWithBottlesAsync(int id);
+        Task<UserDtoGet?> GetUserWithBottlesAsync(int id);
 
         /// <summary>
         /// Get user from Id with his drawer.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<UserDto?> GetUserWithDrawersAsync(int id);
+        Task<UserDtoGet?> GetUserWithDrawersAsync(int id);
 
         /// <summary>
         /// Get user from Id with his caves.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<UserDto?> GetUserWithCavesAsync(int id);
+        Task<UserDtoGet?> GetUserWithCavesAsync(int id);
 
         /// <summary>
         /// Login user from email and password
