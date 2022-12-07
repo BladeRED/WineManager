@@ -83,6 +83,13 @@ namespace WineManager.Repositories
 
                     return null;
                 }
+                var isCorrectPassword = await context.Users.AnyAsync(u => u.Password == userPutDto.CurrentPassword);
+                if (!isCorrectPassword)
+                {
+                    logger.LogError("The current password is not correct.");
+
+                    return null;
+                }
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Email == userPutDto.CurrentEmail);
                 if (user != null)
                 {
