@@ -65,7 +65,7 @@ namespace WineManager.Repositories
 
                 context.Users.Add(user);
 
-                var userDto = UserPostDto.ConvertUserPostDtoToUserDto(userPostDto);
+                var userDto = new UserDto (userPostDto);
 
                 await context.SaveChangesAsync();
 
