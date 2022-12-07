@@ -115,6 +115,67 @@ namespace WineManager.Controllers
             else
                 return Problem("Bottle non créé, cf log");
         }
+        [HttpPost]
+        public async Task<ActionResult<Bottle>> AddNewBottleToUser([FromForm] BottleDto bottleDto)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+
+            var newBottle = new Bottle()
+            {
+                Name = bottleDto.Name,
+                Vintage = bottleDto.Vintage,
+                StartKeepingYear = bottleDto.StartKeepingYear,
+                EndKeepingYear = bottleDto.EndKeepingYear,
+                Color = bottleDto.Color,
+                Designation = bottleDto.Designation,
+                UserId = Int32.Parse(idCurrentUser.Value)
+        };
+
+            var bottleAdded = await bottleRepository.AddBottleAsync(newBottle);
+            return Ok(bottleAdded);
+        }
+
+
+
+        /// <summary>
+        /// Duplicate a new bottle, with a quantity for multiply the add requests.
+        /// </summary>
+        /// <param name="bottleDupl"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Bottle>> DuplicateBottle([FromForm] BottleDtoDupl bottleDupl, int quantity)
+        {
+            // Quantity desired //
+            //bottleDupl.Quantity = quantity;
+
+            List<Bottle> Bottles = new List<Bottle>();  
+
+            for (int i = 0; i < quantity; i++)
+            {
+                Bottle ListBottle = new Bottle()
+                {
+                    Name = bottleDupl.Name,
+                    Vintage = bottleDupl.Vintage,
+                    StartKeepingYear = bottleDupl.StartKeepingYear,
+                    EndKeepingYear = bottleDupl.EndKeepingYear,
+                    Color = bottleDupl.Color,
+                    Designation = bottleDupl.Designation,
+                };
+
+                Bottles.Add(ListBottle);
+            }
+            var bottleCreated = await bottleRepository.DuplicateBottleAsync(Bottles, quantity);
+                if (bottleCreated != null)
+                    return Ok(bottleCreated);
+                else
+                    return Problem("Bottle non créé, cf log");        
+        }
 
         /// <summary>
         /// Update bottle from Id.
