@@ -18,9 +18,18 @@ namespace WineManager.Repositories
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <returns></returns
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
             List<User> users = await context.Users.ToListAsync();
+            if (users == null)
+            {
+                logger.LogError("Item not found");
+                return null;
+            }
             List<UserDto> userDtoList = new List<UserDto>();
             foreach (var user in users)
             {
@@ -29,11 +38,19 @@ namespace WineManager.Repositories
             return userDtoList;
         }
 
+        /// <summary>
+        /// Get user from Id 
+        /// </summary>
+        /// <param name="id">Id user</param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserAsync(int id)
         {
             var user = await context.Users.FindAsync(id);
             if (user == null)
+            {
+                logger.LogError("Item not found");
                 return null;
+            }
             else
             {
                 var userDto = new UserDto(user);
@@ -41,6 +58,10 @@ namespace WineManager.Repositories
             }
         }
 
+        /// <summary>
+        /// Add a User
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserDto?> AddUserAsync(UserPostDto userPostDto)
         {
             try
@@ -57,7 +78,7 @@ namespace WineManager.Repositories
 
                 context.Users.Add(user);
 
-                var userDto = UserPostDto.ConvertUserPostDtoToUserDto(userPostDto);
+                var userDto = new UserDto(userPostDto);
 
                 await context.SaveChangesAsync();
 
@@ -71,7 +92,10 @@ namespace WineManager.Repositories
             }
         }
 
-
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserDto?> UpdateUserAsync(UserPutDto userPutDto)
         {
             try
@@ -121,6 +145,10 @@ namespace WineManager.Repositories
             }
         }
 
+        /// <summary>
+        /// Delete a User
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserDto?> DeleteUserAsync(int id)
         {
             try
@@ -129,62 +157,68 @@ namespace WineManager.Repositories
                 if (user != null)
                 {
                     context.Users.Remove(user);
-
                     await context.SaveChangesAsync();
                     return new UserDto(user);
                 }
                 else
                 {
                     logger.LogError("Item not found");
-
                     return null;
                 }
             }
             catch (Exception e)
             {
                 logger.LogError(e?.InnerException?.ToString());
-
                 return null;
             }
         }
 
+        /// <summary>
+        /// Get user from Id with his bottles.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserWithBottlesAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Bottles).FirstOrDefaultAsync(b => b.UserId == id);
+            var user = await context.Users.Include(u => u.Bottles).Where(b => b.UserId == id).Select(u => new UserDto(u,u.Bottles)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger.LogError("Item not found");
-
                 return null;
             }
-            var userDto = new UserDto(user);
-            return userDto;
+            return user;
         }
 
+        /// <summary>
+        /// Get user from Id with his drawers.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserWithDrawersAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Drawers).FirstOrDefaultAsync(d => d.UserId == id);
+            var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u=> new UserDto(u,u.Drawers)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger.LogError("Item not found");
-
                 return null;
             }
-            var userDto = new UserDto(user);
-            return userDto;
+            return user;
         }
 
+        /// <summary>
+        /// Get user from Id with his caves.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserWithCavesAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Caves).FirstOrDefaultAsync(c => c.UserId == id);
+            var user = await context.Users.Include(u => u.Caves).Where(c=>c.UserId == id).Select(u=>new UserDto(u,u.Caves)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger.LogError("Item not found");
-
                 return null;
             }
-            var userDto = new UserDto(user);
-            return userDto;
+            return user;
         }
     }
 }

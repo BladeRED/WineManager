@@ -22,7 +22,7 @@ namespace WineManager.Repositories.Tests
 
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            DrawerRepository DrawerTest = new DrawerRepository(context);
+            DrawerRepository DrawerTest = new DrawerRepository(context, null);
 
             // creation of the object to add //
 

@@ -25,7 +25,6 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="idDrawer">Id Drawer</param>
         /// <returns></returns>
-        /// 
         Task<Drawer?> GetByIdAsync(int idDrawer);
 
         /// <summary>
@@ -33,7 +32,6 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="idCave">Id Drawer</param>
         /// <returns></returns>
-        /// 
         Task<Drawer?> GetByIdCaveAsync(int idCave);
 
         /// <summary>
@@ -61,7 +59,6 @@ namespace WineManager.IRepositories
         /// Add a Drawer
         /// </summary>
         /// <returns></returns>
-        /// 
         Task<Drawer?> AddDrawerAsync(Drawer drawer);
 
         /// <summary>
@@ -75,7 +72,6 @@ namespace WineManager.IRepositories
         /// Delete a Drawer
         /// </summary>
         /// <returns></returns>
-        /// 
         Task<bool> DeleteDrawerAsync(int idDrawer);
 
     }
