@@ -77,6 +77,22 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<UserDto>> SignUp([FromForm] UserPostDto userDto)
+        {
+            return await AddUser(userDto);
+        }
+
+        /// <summary>
         /// Update a user from email
         /// </summary>
         /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
