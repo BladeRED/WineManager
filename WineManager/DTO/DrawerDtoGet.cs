@@ -5,28 +5,33 @@ namespace WineManager.DTO
     public class DrawerDtoGet
     {
         public int DrawerId { get; set; }
-        public UserDTOLight UserDTOLight { get; set; }
-        public List<BottleDtoLight> BottlesDtoLight { get; set; }
-        public CaveDtoLight CaveDtoLight { get; set; }
+        public UserDTOLight User { get; set; }
+        public List<BottleDtoLight> Bottles { get; set; }
+        public CaveDtoLight Cave { get; set; }
 
         public DrawerDtoGet(int id, UserDTOLight userDTOLight)
         {
             DrawerId = id;
-            UserDTOLight = userDTOLight;
+            User = userDTOLight;
         }
+
         public DrawerDtoGet(int id, List<Bottle> bottles)
         {
             DrawerId = id;
-            BottlesDtoLight = new List<BottleDtoLight>();
-            foreach (var item in bottles)
+            if (bottles != null)
             {
-                BottlesDtoLight.Add(new BottleDtoLight(item));
+                Bottles = new List<BottleDtoLight>();
+                foreach (var item in bottles)
+                {
+                    Bottles.Add(new BottleDtoLight(item));
+                }
             }
         }
+
         public DrawerDtoGet(int id, CaveDtoLight caveDtoLight)
         {
             DrawerId = id;
-            CaveDtoLight = caveDtoLight;
+            Cave = caveDtoLight;
         }
     }
 }

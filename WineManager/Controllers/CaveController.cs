@@ -23,7 +23,12 @@ namespace WineManager.Controllers
             this.environment = environment;
         }
 
+        /// <summary>
+        /// Get all caves
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(200)]
         public async Task<ActionResult<List<Cave>>> GetAllCaves()
         {
             var caves = await caveRepository.GetCavesAsync();
@@ -32,34 +37,49 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get cave from Id
+        /// Get cave from with Id
         /// </summary>
         /// <param name="id">Id cave</param>
         /// <returns></returns>
-        /// 
-
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Cave>> GetCave(int id)
         {
-            if (id == null)
+            if (id < 1)
             {
-
-                return NotFound("No cave found");
-
+                return BadRequest("No valuable id found in the request");
             }
-            return Ok(await caveRepository.GetByIdAsync(id));
+            var cave = await caveRepository.GetByIdAsync(id);
+            if (cave == null)
+            {
+                return NotFound("No cave found");
+            }
+            return Ok(cave);
         }
+
         /// <summary>
-        /// Get cave from Id Drawer
+        /// Get cave from Id with Drawer
         /// </summary>
         /// <param name="id">Id Drawer</param>
         /// <returns></returns>
-        /// 
         [HttpGet("{id}")]
-
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Cave>> GetCaveWithDrawer(int id)
         {
-            return Ok(await caveRepository.GetWithDrawerAsync(id));
+            if (id < 1)
+            {
+                return BadRequest("No valuable id found in the request");
+            }
+            var cave = await caveRepository.GetWithDrawerAsync(id);
+            if (cave == null)
+            {
+                return NotFound("No cave found");
+            }
+            return Ok(cave);
         }
 
         /// <summary>
@@ -69,10 +89,21 @@ namespace WineManager.Controllers
         /// <returns></returns>
         /// 
         [HttpGet("{id}")]
-
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Cave>> GetCaveWithUser(int id)
         {
-            return Ok(await caveRepository.GetWithUserAsync(id));
+            if (id < 1)
+            {
+                return BadRequest("No valuable id found in the request");
+            }
+            var cave = await caveRepository.GetWithUserAsync(id);
+            if (cave == null)
+            {
+                return NotFound("No cave found");
+            }
+            return Ok(cave);
         }
 
         /// <summary>
@@ -80,10 +111,9 @@ namespace WineManager.Controllers
         /// </summary>
         /// <param name="caveDto">Return a CavePostDto object called caveDto </param>
         /// <returns></returns>
-        /// 
-
         [HttpPost]
-        [ProducesResponseType(666)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Cave>> AddCave([FromForm] CavePostDto caveDto)
         {
             var NewCave = new Cave()
@@ -113,10 +143,9 @@ namespace WineManager.Controllers
         /// </summary>
         /// <param name="caveDto">Return a maj CavePostDto object called caveDto </param>
         /// <returns></returns>
-        /// 
         [HttpPut]
-        [ProducesResponseType(231)]
-
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Cave>> UpdateCave([FromForm] CaveDto caveDto)
         {
             var cave = new Cave()
@@ -135,17 +164,21 @@ namespace WineManager.Controllers
             else
                 return Problem("Cave was not updated, see log for details");
         }
+
         /// <summary>
         /// Delete a cave
         /// </summary>
         /// <param name="id">Search a cave with the id and delete it </param>
         /// <returns></returns>
-        ///
-        [HttpDelete]
-        [ProducesResponseType(244)]
-
+        [HttpDelete("id")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Cave>> DeleteCave(int id)
         {
+            if (id < 1)
+            {
+                return BadRequest("No valuable id found in the request");
+            }
             var caveDeleted = await caveRepository.DeleteCaveAsync(id);
 
             if (caveDeleted != null)

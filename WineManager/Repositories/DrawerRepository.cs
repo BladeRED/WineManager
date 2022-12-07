@@ -5,16 +5,19 @@ using WineManager.Contexts;
 using Microsoft.Extensions.Hosting;
 using WineManager.DTO;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace WineManager.Repositories
 {
     public class DrawerRepository : IDrawerRepository
     {
 
-        readonly WineManagerContext WineManagerContext;
-        public DrawerRepository(WineManagerContext WineManagerContext)
+        WineManagerContext WineManagerContext;
+        ILogger<DrawerRepository> logger;
+        public DrawerRepository(WineManagerContext WineManagerContext, ILogger<DrawerRepository> logger)
         {
             this.WineManagerContext = WineManagerContext;
+            this.logger = logger;
         }
         /// <summary>
         /// Get all drawers
@@ -46,6 +49,12 @@ namespace WineManager.Repositories
         public async Task<DrawerDtoGet> GetDrawerWithUserAsync(int id)
         {
             var drawerWithUser = await WineManagerContext.Drawers.Include(p => p.User).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
+            if (drawerWithUser == null)
+            {
+                logger.LogError("Item not found");
+
+                return null;
+            }
             return drawerWithUser;
         }
 
@@ -86,7 +95,6 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="idCave">Id Drawer</param>
         /// <returns></returns>
-        /// 
         public async Task<Drawer?> GetByIdCaveAsync(int idCave)
         {
             return await WineManagerContext.Drawers.FirstOrDefaultAsync(p => p.CaveId == idCave);

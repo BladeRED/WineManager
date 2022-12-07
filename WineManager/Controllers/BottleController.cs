@@ -22,6 +22,7 @@ namespace WineManager.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(200)]
         public async Task<ActionResult<List<Bottle>>> GetAllBottles()
         {
             var bottles = await bottleRepository.GetAllBottlesAsync();
@@ -35,27 +36,34 @@ namespace WineManager.Controllers
         /// <param name="id">Id bottle</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Bottle>> GetBottle(int id)
         {
-
-            if (id == null)
+            var bottle = await bottleRepository.GetBottleAsync(id);
+            if (bottle == null)
             {
-
                 return NotFound("No bottle found");
-
             }
-            return Ok(await bottleRepository.GetBottleAsync(id));
+            return Ok(bottle);
         }
 
         /// <summary>
-        /// Get bottle from Id with his bottle.
+        /// Get bottle from Id with his user.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Bottle>> GetBottleWithUser(int id)
         {
-            return Ok(await bottleRepository.GetBottleWithUserAsync(id));
+            var bottle = await bottleRepository.GetBottleWithUserAsync(id);
+            if (bottle == null)
+            {
+                return NotFound("No bottle found");
+            }
+            return Ok(bottle);
         }
 
         /// <summary>
@@ -64,9 +72,16 @@ namespace WineManager.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Bottle>> GetBottleWithDrawer(int id)
         {
-            return Ok(await bottleRepository.GetBottleWithDrawerAsync(id));
+            var bottle = await bottleRepository.GetBottleWithDrawerAsync(id);
+            if (bottle == null)
+            {
+                return NotFound("No bottle found");
+            }
+            return Ok(bottle);
         }
 
         /// <summary>
@@ -76,6 +91,7 @@ namespace WineManager.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Bottle>> AddBottle([FromForm] BottleDto bottleDto)
         {
             //var identity = User?.Identity as ClaimsIdentity;
@@ -108,6 +124,7 @@ namespace WineManager.Controllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Bottle>> UpdateBottle([FromForm] BottleDtoPut bottleDtoPut)
         {
             //var identity = User?.Identity as ClaimsIdentity;
@@ -145,6 +162,7 @@ namespace WineManager.Controllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Bottle>> DeleteBottle(int id)
         {
 
@@ -160,7 +178,7 @@ namespace WineManager.Controllers
             if (bottleDelated != null)
                 return Ok(bottleDelated);
             else
-                return Problem("Bottle non effacé, cf log");
+                return NotFound("Bottle non trouvé");
         }
     }
 }
