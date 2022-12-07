@@ -18,6 +18,10 @@ namespace WineManager.Repositories
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <returns></returns
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
             List<User> users = await context.Users.ToListAsync();
@@ -34,6 +38,11 @@ namespace WineManager.Repositories
             return userDtoList;
         }
 
+        /// <summary>
+        /// Get user from Id 
+        /// </summary>
+        /// <param name="id">Id user</param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserAsync(int id)
         {
             var user = await context.Users.FindAsync(id);
@@ -49,6 +58,10 @@ namespace WineManager.Repositories
             }
         }
 
+        /// <summary>
+        /// Add a User
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserDto?> AddUserAsync(UserPostDto userPostDto)
         {
             try
@@ -65,7 +78,7 @@ namespace WineManager.Repositories
 
                 context.Users.Add(user);
 
-                var userDto = new UserDto (userPostDto);
+                var userDto = new UserDto(userPostDto);
 
                 await context.SaveChangesAsync();
 
@@ -79,7 +92,10 @@ namespace WineManager.Repositories
             }
         }
 
-
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserDto?> UpdateUserAsync(UserPutDto userPutDto)
         {
             try
@@ -129,6 +145,10 @@ namespace WineManager.Repositories
             }
         }
 
+        /// <summary>
+        /// Delete a User
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserDto?> DeleteUserAsync(int id)
         {
             try
@@ -153,6 +173,11 @@ namespace WineManager.Repositories
             }
         }
 
+        /// <summary>
+        /// Get user from Id with his bottles.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserWithBottlesAsync(int id)
         {
             var user = await context.Users.Include(u => u.Bottles).Where(b => b.UserId == id).Select(u => new UserDto(u,u.Bottles)).FirstOrDefaultAsync();
@@ -164,6 +189,11 @@ namespace WineManager.Repositories
             return user;
         }
 
+        /// <summary>
+        /// Get user from Id with his drawers.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserWithDrawersAsync(int id)
         {
             var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u=> new UserDto(u,u.Drawers)).FirstOrDefaultAsync();
@@ -175,6 +205,11 @@ namespace WineManager.Repositories
             return user;
         }
 
+        /// <summary>
+        /// Get user from Id with his caves.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<UserDto?> GetUserWithCavesAsync(int id)
         {
             var user = await context.Users.Include(u => u.Caves).Where(c=>c.UserId == id).Select(u=>new UserDto(u,u.Caves)).FirstOrDefaultAsync();
