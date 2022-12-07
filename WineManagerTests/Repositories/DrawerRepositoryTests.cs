@@ -55,7 +55,7 @@ namespace WineManager.Repositories.Tests
 
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            DrawerRepository DrawerTest = new DrawerRepository(context);
+            DrawerRepository DrawerTest = new DrawerRepository(context, null);
 
             Drawer MajDrawer = new Drawer()
             {
@@ -70,7 +70,7 @@ namespace WineManager.Repositories.Tests
             context.Drawers.Add(MajDrawer);
 
             var context2 = new WineManagerContext(builder.Options);
-            DrawerRepository DrawerTest2 = new DrawerRepository(context2);
+            DrawerRepository DrawerTest2 = new DrawerRepository(context2, null);
 
             MajDrawer.DrawerId= 2;
             MajDrawer.Level = 5;

@@ -58,7 +58,7 @@ namespace WineManager.Repositories.Tests
 
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            CaveRepository CaveTest = new CaveRepository(context);
+            CaveRepository CaveTest = new CaveRepository(context, null);
 
             Cave MajCave = new Cave()
             {
@@ -75,7 +75,7 @@ namespace WineManager.Repositories.Tests
             context.Caves.Add(MajCave);
 
             var context2 = new WineManagerContext(builder.Options);
-            CaveRepository CaveTest2 = new CaveRepository(context2);
+            CaveRepository CaveTest2 = new CaveRepository(context2, null);
 
             MajCave.CaveType = "Cave de test 2";
             MajCave.Brand = "Lambda2";
