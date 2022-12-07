@@ -1,4 +1,5 @@
 ﻿using WineManager.DTO;
+using WineManager.Entities;
 
 namespace WineManager.IRepositories
 {
@@ -60,6 +61,12 @@ namespace WineManager.IRepositories
         /// <returns></returns>
         Task<UserDto?> GetUserWithCavesAsync(int id);
 
-
+        /// <summary>
+        /// Login user from email and password
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
+        Task<User> LoginUserAsync(string login, string pwd);
     }
 }

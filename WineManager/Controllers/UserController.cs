@@ -182,5 +182,28 @@ namespace WineManager.Controllers
             else
                 return Ok(userDto);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> LoginUser([DefaultValue("test@test.com")] string login, [DefaultValue("test")] string pwd)
+        {
+            var userCreated = await userRepository.LoginUserAsync(login, pwd);
+            if (userCreated == null)
+                return Problem($"Erreur lors du login, vérifiez le login ou mot de passe");
+            Claim emailClaim = new(ClaimTypes.Email, userCreated.Email);
+            Claim nameClaim = new(ClaimTypes.Name, userCreated.Name);
+            Claim dobClaim = new(ClaimTypes.DateOfBirth, userCreated.BirthDate.ToString());
+            Claim idClaim = new(ClaimTypes.NameIdentifier, userCreated.UserId.ToString());
+            ClaimsIdentity identity = new(new List<Claim> { emailClaim, nameClaim, dobClaim, idClaim }, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new
+            ClaimsPrincipal(identity));
+            return Ok($"{userCreated.Name} logged");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Ok("Logout");
+        }
     }
 }

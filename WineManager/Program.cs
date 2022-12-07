@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using WineManager.IRepositories;
 using WineManager.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WineManager
 {
@@ -40,6 +41,8 @@ namespace WineManager
             builder.Services.AddScoped<IDrawerRepository, DrawerRepository>();
             builder.Services.AddScoped<IBottleRepository, BottleRepository>();
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -52,6 +55,8 @@ namespace WineManager
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseStaticFiles();
 
