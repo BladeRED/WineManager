@@ -77,6 +77,22 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<UserDto>> SignUp([FromForm] UserPostDto userDto)
+        {
+            return await AddUser(userDto);
+        }
+
+        /// <summary>
         /// Update a user from email
         /// </summary>
         /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
@@ -191,7 +207,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<List<CaveDto>>> GetUserCaves()
+        public async Task<ActionResult<List<CaveDtoLight>>> GetUserCaves()
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -201,7 +217,6 @@ namespace WineManager.Controllers
             if (userDto == null)
                 return NotFound("The User is not found.");
             var caves = userDto.Caves;
-            var cavesDto = new List<CaveDtoLight>();
             if (caves != null)
             {
                 return Ok(caves);
@@ -209,6 +224,62 @@ namespace WineManager.Controllers
             return NotFound("No cave found.");
         }
 
+        /// <summary>
+        /// Get all caves of current logged user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<DrawerDtoLight>>> GetUserDrawers()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+            var userDto = await userRepository.GetUserWithDrawersAsync(Int32.Parse(idCurrentUser.Value));
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            var drawers = userDto.Drawers;
+            if (drawers != null)
+            {
+                return Ok(drawers);
+            }
+            return NotFound("No drawer found.");
+        }
+
+        /// <summary>
+        /// Get all caves of current logged user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<BottleDtoLight>>> GetUserBottles()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your bottles ! Check/ User / Login");
+            var userDto = await userRepository.GetUserWithBottlesAsync(Int32.Parse(idCurrentUser.Value));
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            var bottles = userDto.Bottles;
+            if (bottles != null)
+            {
+                return Ok(bottles);
+            }
+            return NotFound("No bottle found.");
+        }
+
+        /// <summary>
+        /// Login of a user from email and password
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> LoginUser([DefaultValue("test@test.com")] string login, [DefaultValue("test")] string pwd)
         {

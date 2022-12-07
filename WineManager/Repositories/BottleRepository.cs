@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
+using System.Security.Claims;
 using WineManager.Contexts;
 using WineManager.DTO;
 using WineManager.Entities;
@@ -10,7 +10,7 @@ namespace WineManager.Repositories
 {
     public class BottleRepository : IBottleRepository
     {
-        WineManagerContext context;
+        public WineManagerContext context;
         ILogger<BottleRepository> logger;
         public BottleRepository(WineManagerContext context, ILogger<BottleRepository> logger)
         {
