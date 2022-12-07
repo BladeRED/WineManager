@@ -15,23 +15,23 @@ namespace WineManager.Repositories.Tests
     [TestClass()]
     public class UserRepositoryTests
     {
+        var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+        var context = new WineManagerContext(builder.Options);
+        UserRepository MyGetAllTest = new UserRepository(context, null);
         [TestMethod()]
         public async Task GetAllUsersAsyncTest()
         {
-            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
-            var context = new WineManagerContext(builder.Options);
-            UserRepository MyGetAllTest = new UserRepository(context, null);
-
             var MyList = await MyGetAllTest.GetAllUsersAsync();
 
-            context.Database.EnsureDeleted();
-            Assert.AreEqual(10, MyList.Count);
+            Assert.AreEqual(0, MyList.Count);
         }
 
         [TestMethod()]
         public void AddUserAsyncTest()
         {
+
             Assert.Fail();
         }
+        context.Database.EnsureDeleted();
     }
 }
