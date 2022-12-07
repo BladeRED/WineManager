@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using WineManager.Contexts;
 using WineManager.DTO;
 using WineManager.Entities;
@@ -99,6 +100,34 @@ namespace WineManager.Repositories
             }
 
             return bottle;
+        }
+
+        /// <summary>
+        /// Duplicate a new bottle, with a quantity for multiply the add requests.
+        /// </summary>
+        /// <param name="bottle"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle>Bottles, int quantity)
+        {
+            try
+            {
+                foreach (Bottle bottle in Bottles)
+                {
+                    context.Bottles.Add(bottle);
+                    await context.SaveChangesAsync();
+                }
+
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e?.InnerException?.ToString());
+                return null;
+            }
+
+            return Bottles;
+
+
         }
 
         /// <summary>
