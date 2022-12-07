@@ -118,7 +118,7 @@ namespace WineManager.Repositories
 
             drawerToUpdate.Level = drawer.Level;
             drawerToUpdate.MaxPosition = drawer.MaxPosition;
-         
+
             await WineManagerContext.SaveChangesAsync();
 
             return drawerToUpdate;

@@ -4,7 +4,7 @@ namespace WineManager.DTO
 {
     public class BottleDtoPut
     {
-        public int BottleId { get; set; }   
+        public int BottleId { get; set; }
         public string Name { get; set; }
         public int Vintage { get; set; }
         public int StartKeepingYear { get; set; }

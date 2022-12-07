@@ -9,7 +9,7 @@ namespace WineManager.DTO
 
         public BottleDtoLight(Bottle bottle)
         {
-            if(bottle != null)
+            if (bottle != null)
             {
                 BottleId = bottle.BottleId;
                 Name = bottle.Name;

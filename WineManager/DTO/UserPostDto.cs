@@ -20,7 +20,7 @@ namespace WineManager.DTO
                 BirthDate = userPostDto.BirthDate
             };
 
-            return user; 
+            return user;
         }
         public static UserDto ConvertUserPostDtoToUserDto(UserPostDto userDto)
         {

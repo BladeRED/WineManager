@@ -104,7 +104,7 @@ namespace WineManager.Repositories
                     bottleToUpdate.EndKeepingYear = bottleDtoPut.EndKeepingYear;
                 if (bottleDtoPut.Color != null)
                     bottleToUpdate.Color = bottleDtoPut.Color;
-            
+
 
                 await context.SaveChangesAsync();
                 return bottleToUpdate;
