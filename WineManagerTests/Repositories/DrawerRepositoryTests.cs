@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WineManager.Contexts;
 using WineManager.Entities;
+using WineManager.DTO;
 
 namespace WineManager.Repositories.Tests
 {
@@ -48,9 +49,36 @@ namespace WineManager.Repositories.Tests
         }
 
         [TestMethod()]
-        public void UpdateDrawerAsyncTest()
+        public async Task UpdateDrawerAsyncTest()
         {
-            Assert.Fail();
+            // creation of the temp database and its context //
+
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            DrawerRepository DrawerTest = new DrawerRepository(context, null);
+
+            Drawer MajDrawer = new Drawer()
+            {
+                DrawerId = 2,
+                Level= 2,
+                MaxPosition= 2,
+            };
+
+            // simulating the add method //
+
+            var MyAddTest = await DrawerTest.AddDrawerAsync(MajDrawer);
+            context.Drawers.Add(MajDrawer);
+
+            var context2 = new WineManagerContext(builder.Options);
+            DrawerRepository DrawerTest2 = new DrawerRepository(context2, null);
+
+            MajDrawer.DrawerId= 2;
+            MajDrawer.Level = 5;
+            MajDrawer.MaxPosition = 5;
+         
+            var MyUpdateTest = await DrawerTest2.UpdateDrawerAsync(MajDrawer);
+
+            Assert.AreNotSame(MyAddTest, MyUpdateTest);
         }
     }
 }
