@@ -9,29 +9,44 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WineManager.Contexts;
 using Microsoft.EntityFrameworkCore.InMemory;
+using WineManager.DTO;
 
 namespace WineManager.Repositories.Tests
 {
     [TestClass()]
     public class UserRepositoryTests
     {
-        var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
-        var context = new WineManagerContext(builder.Options);
-        UserRepository MyGetAllTest = new UserRepository(context, null);
         [TestMethod()]
         public async Task GetAllUsersAsyncTest()
         {
-            var MyList = await MyGetAllTest.GetAllUsersAsync();
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            UserRepository testContext = new UserRepository(context, null);
 
-            Assert.AreEqual(0, MyList.Count);
+            var myList = await testContext.GetAllUsersAsync();
+
+            context.Database.EnsureDeleted();
+            Assert.AreEqual(0, myList.Count);
         }
 
         [TestMethod()]
-        public void AddUserAsyncTest()
+        public async void AddUserAsyncTest()
         {
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            UserRepository testContext = new UserRepository(context, null);
 
-            Assert.Fail();
+            var myUserPostDto = new UserPostDto()
+            {
+                Name= "test",
+                Email= "test",
+                BirthDate= new DateTime(2000, 01, 01),
+                Password= "test"
+            };
+            var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
+
+            Assert.AreEqual("test", myUserAdded.Name);
+            context.Database.EnsureDeleted();
         }
-        context.Database.EnsureDeleted();
     }
 }
