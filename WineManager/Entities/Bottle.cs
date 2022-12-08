@@ -21,7 +21,7 @@ namespace WineManager.Entities
         public int? UserId { get; set; }
         public User? User { get; set; }
 
-        public Bottle (BottleDto bottleDto,int userId)
+        public Bottle(BottleDto bottleDto, int userId)
         {
             Name = bottleDto.Name;
             Vintage = bottleDto.Vintage;

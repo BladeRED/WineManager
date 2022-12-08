@@ -240,7 +240,7 @@ namespace WineManager.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType( 200)]
+        [ProducesResponseType(200)]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
@@ -252,7 +252,7 @@ namespace WineManager.Controllers
         /// </summary>
         /// <param></param>
         /// <returns></returns>
-        [HttpGet]   
+        [HttpGet]
         public async Task<IActionResult> ExportListUser()
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -262,8 +262,8 @@ namespace WineManager.Controllers
             var response = await userRepository.ExportListUserAsync(int.Parse(idCurrentUser.Value));
             string usersJson = JsonSerializer.Serialize(response, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.IgnoreCycles });
             var path = Path.Combine(environment.WebRootPath, "ListUsers/");
-            string fileName = path + idCurrentUser.Value +".json";
-            
+            string fileName = path + idCurrentUser.Value + ".json";
+
             System.IO.File.WriteAllText(fileName, usersJson);
 
             return Ok(fileName);

@@ -198,7 +198,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<UserDtoGet?> GetUserWithDrawersAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u=> new UserDtoGet(u)).FirstOrDefaultAsync();
+            var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
@@ -214,7 +214,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<UserDtoGet?> GetUserWithCavesAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Caves).Where(c=>c.UserId == id).Select(u=>new UserDtoGet(u)).FirstOrDefaultAsync();
+            var user = await context.Users.Include(u => u.Caves).Where(c => c.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
@@ -231,7 +231,7 @@ namespace WineManager.Repositories
 
         public async Task<ListDTO> ExportListUserAsync(int id)
         {
-            var userList = await context.Users.Include(u=>u.Caves).Include(u=>u.Drawers).Include(u=>u.Bottles).Where(c=>c.UserId == id).FirstOrDefaultAsync();
+            var userList = await context.Users.Include(u => u.Caves).Include(u => u.Drawers).Include(u => u.Bottles).Where(c => c.UserId == id).FirstOrDefaultAsync();
             var list = new ListDTO(userList.Bottles, userList.Drawers, userList.Caves);
 
             return list;

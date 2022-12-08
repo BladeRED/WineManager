@@ -34,14 +34,14 @@ namespace WineManager.Repositories.Tests
             Bottle TestBottle = new Bottle()
             {
                 BottleId = 1,
-                Name= "Test",
+                Name = "Test",
                 Color = "Rouge",
-                Vintage= 2020,
-                Designation= "Domaine de Test",
-                StartKeepingYear=2022,
-                EndKeepingYear=2024,
-                
-                
+                Vintage = 2020,
+                Designation = "Domaine de Test",
+                StartKeepingYear = 2022,
+                EndKeepingYear = 2024,
+
+
             };
 
             // simulating the add method //

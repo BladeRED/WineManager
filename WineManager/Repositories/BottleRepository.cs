@@ -107,7 +107,7 @@ namespace WineManager.Repositories
         /// <param name="bottle"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle>Bottles, int quantity)
+        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity)
         {
             try
             {
