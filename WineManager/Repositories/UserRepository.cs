@@ -228,5 +228,13 @@ namespace WineManager.Repositories
             var user = await context.Users.FirstOrDefaultAsync(p => p.Email == login && p.Password == pwd);
             return user;
         }
+
+        public async Task<ListDTO> ExportListUserAsync(int id)
+        {
+            var userList = await context.Users.Include(u=>u.Caves).Include(u=>u.Drawers).Include(u=>u.Bottles).Where(c=>c.UserId == id).FirstOrDefaultAsync();
+            var list = new ListDTO(userList.Bottles, userList.Drawers, userList.Caves);
+
+            return list;
+        }
     }
 }

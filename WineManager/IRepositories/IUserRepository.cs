@@ -75,6 +75,6 @@ namespace WineManager.IRepositories
         /// <param name="login"></param>
         /// <param name="pwd"></param>
         /// <returns></returns>
-        Task<User> ExportListUserAsync();
+        Task<ListDTO> ExportListUserAsync(int id);
     }
 }
