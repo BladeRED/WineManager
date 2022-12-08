@@ -75,12 +75,6 @@ namespace WineManager.IRepositories
         /// <param name="login"></param>
         /// <param name="pwd"></param>
         /// <returns></returns>
-        Task<User> ExportListUserAsync();
-
-        /// <summary>
-        /// Import the list of bottles,caves and drawer of the user
-        /// </summary>
-        /// <returns></returns>
-        Task<User> ImportListUserAsync();
+        Task<ListDTO> ExportListUserAsync(int id);
     }
 }

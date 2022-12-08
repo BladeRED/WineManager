@@ -6,6 +6,10 @@ using System.Security.Claims;
 using WineManager.DTO;
 using WineManager.Entities;
 using WineManager.IRepositories;
+using Azure;
+using System.Text.Json;
+using System;
+using System.Text.Json.Serialization;
 
 namespace WineManager.Controllers
 {
@@ -14,10 +18,12 @@ namespace WineManager.Controllers
     public class UserController : ControllerBase
     {
         IUserRepository userRepository;
+        readonly IWebHostEnvironment environment;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IWebHostEnvironment environment)
         {
             this.userRepository = userRepository;
+            this.environment = environment;
         }
 
         /// <summary>
@@ -224,6 +230,23 @@ namespace WineManager.Controllers
         {
             await HttpContext.SignOutAsync();
             return Ok("Logout");
+        }
+
+        [HttpGet]   
+        public async Task<IActionResult> ExportListUser()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your bottles ! Check/ User / Login");
+            var response = await userRepository.ExportListUserAsync(int.Parse(idCurrentUser.Value));
+            string usersJson = JsonSerializer.Serialize(response, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.IgnoreCycles });
+            var path = Path.Combine(environment.WebRootPath, "ListUsers/");
+            string fileName = path + idCurrentUser.Value +".json";
+            
+            System.IO.File.WriteAllText(fileName, usersJson);
+
+            return Ok(fileName);
         }
 
         /// <summary>

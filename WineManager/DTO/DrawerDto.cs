@@ -8,5 +8,18 @@ namespace WineManager.DTO
         public int Level { get; set; }
         public int MaxPosition { get; set; }
         public int? CaveId { get; set; }
+
+        public DrawerDto(Drawer drawer)
+        {
+            DrawerId = drawer.DrawerId;
+            Level = drawer.Level;
+            MaxPosition = drawer.MaxPosition;
+
+            if (drawer.CaveId != null)
+            {
+                CaveId = drawer.CaveId;
+            }
+
+        }
     }
 }

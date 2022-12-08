@@ -18,6 +18,12 @@ namespace WineManager.DTO
             Family = cave.Family;
             Brand = cave.Brand;
             Temperature = cave.Temperature;
+            if (cave.UserId != null)
+            {
+
+                UserId = cave.UserId;
+            }
+
         }
     }
 }
