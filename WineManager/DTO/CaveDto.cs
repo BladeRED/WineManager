@@ -1,4 +1,6 @@
-﻿namespace WineManager.DTO
+﻿using WineManager.Entities;
+
+namespace WineManager.DTO
 {
     public class CaveDto
     {
@@ -8,5 +10,14 @@
         public string Brand { get; set; }
         public int Temperature { get; set; }
         public int? UserId { get; set; }
+
+        public CaveDto(Cave cave)
+        {
+            CaveId = cave.CaveId;
+            CaveType = cave.CaveType;
+            Family = cave.Family;
+            Brand = cave.Brand;
+            Temperature = cave.Temperature;
+        }
     }
 }

@@ -89,6 +89,27 @@ namespace WineManager.Controllers
 
             return Ok(drawerAdd);
         }
+        [HttpPost]
+        public async Task<ActionResult<Drawer>> AddNewDrawerToUser([FromForm] DrawerPostToUserDto drawerDto)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+
+            var newDrawer = new Drawer()
+            {
+                MaxPosition = drawerDto.MaxPosition,
+                Level = drawerDto.Level,
+                CaveId = drawerDto.CaveId,
+                UserId = Int32.Parse(idCurrentUser.Value)
+            };
+
+            var drawerAdded = await drawerRepository.AddDrawerAsync(newDrawer);
+
+            return Ok(drawerAdded);
+        }
+
 
         /// <summary>
         /// Update a drawer

@@ -37,7 +37,15 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        Task<Bottle> AddBottleAsync(Bottle bottle);
+        Task<Bottle?> AddBottleAsync(Bottle bottle);
+
+        /// <summary>
+        /// Duplicate a new bottle, with a quantity for multiply the add requests.
+        /// </summary>
+        /// <param name="bottleDupl"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity);
 
         /// <summary>
         /// Update bottle from Id.

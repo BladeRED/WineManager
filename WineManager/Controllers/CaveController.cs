@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using WineManager.IRepositories;
 using WineManager.DTO;
+using WineManager.Repositories;
 
 namespace WineManager.Controllers
 {
@@ -136,6 +137,26 @@ namespace WineManager.Controllers
             //}
 
             return Ok(caveAdd);
+        }
+        [HttpPost]
+        public async Task<ActionResult<Cave>> AddNewCaveToUser([FromForm] CavePostToUserDto caveDto)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+
+            var newCave = new Cave()
+            {
+                CaveType = caveDto.CaveType,
+                Family = caveDto.Family,
+                Brand = caveDto.Brand,
+                Temperature = caveDto.Temperature,
+                UserId = Int32.Parse(idCurrentUser.Value)
+            };
+
+            var caveAdded = await caveRepository.AddCaveAsync(newCave);
+            return Ok(caveAdded);
         }
 
         /// <summary>

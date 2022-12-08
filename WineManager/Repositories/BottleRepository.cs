@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WineManager.Contexts;
 using WineManager.DTO;
 using WineManager.Entities;
@@ -9,7 +10,7 @@ namespace WineManager.Repositories
 {
     public class BottleRepository : IBottleRepository
     {
-        WineManagerContext context;
+        public WineManagerContext context;
         ILogger<BottleRepository> logger;
         public BottleRepository(WineManagerContext context, ILogger<BottleRepository> logger)
         {
@@ -85,7 +86,7 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        public async Task<Bottle> AddBottleAsync(Bottle bottle)
+        public async Task<Bottle?> AddBottleAsync(Bottle bottle)
         {
             try
             {
@@ -97,8 +98,35 @@ namespace WineManager.Repositories
                 logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
-
             return bottle;
+        }
+
+        /// <summary>
+        /// Duplicate a new bottle, with a quantity for multiply the add requests.
+        /// </summary>
+        /// <param name="bottle"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle>Bottles, int quantity)
+        {
+            try
+            {
+                foreach (Bottle bottle in Bottles)
+                {
+                    context.Bottles.Add(bottle);
+                    await context.SaveChangesAsync();
+                }
+
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e?.InnerException?.ToString());
+                return null;
+            }
+
+            return Bottles;
+
+
         }
 
         /// <summary>

@@ -77,6 +77,33 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult?> SignUp([FromForm] UserPostDto userDto, bool CGU)
+        {
+            if (CGU)
+            {
+                var user = await AddUser(userDto);
+                if (user != null)
+                {
+                    var userConnected = await userRepository.LoginUserAsync(userDto.Email, userDto.Password);
+                    return Ok($"{userConnected.Name} logged");
+                }
+                return BadRequest("Error in the request");
+            }
+            return Problem("CGU not accepted");
+        }
+
+        /// <summary>
         /// Update a user from email
         /// </summary>
         /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
@@ -126,7 +153,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto?>> GetUserWithBottles(int id)
+        public async Task<ActionResult<UserDtoGet?>> GetUserWithBottles(int id)
         {
             if (id < 1)
             {
@@ -148,7 +175,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto>> GetUserWithDrawers(int id)
+        public async Task<ActionResult<UserDtoGet>> GetUserWithDrawers(int id)
         {
             if (id < 1)
             {
@@ -170,7 +197,7 @@ namespace WineManager.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto>> GetUserWithCaves(int id)
+        public async Task<ActionResult<UserDtoGet>> GetUserWithCaves(int id)
         {
             if (id < 1)
             {
@@ -181,6 +208,110 @@ namespace WineManager.Controllers
                 return NotFound("The User is not found.");
             else
                 return Ok(userDto);
+        }
+
+        /// <summary>
+        /// Get all caves of current logged user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<CaveDtoLight>>> GetUserCaves()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your caves ! Check/ User / Login");
+            var userDto = await userRepository.GetUserWithCavesAsync(Int32.Parse(idCurrentUser.Value));
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            var caves = userDto.Caves;
+            if (caves != null)
+            {
+                return Ok(caves);
+            }
+            return NotFound("No cave found.");
+        }
+
+        /// <summary>
+        /// Get all caves of current logged user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<DrawerDtoLight>>> GetUserDrawers()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+            var userDto = await userRepository.GetUserWithDrawersAsync(Int32.Parse(idCurrentUser.Value));
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            var drawers = userDto.Drawers;
+            if (drawers != null)
+            {
+                return Ok(drawers);
+            }
+            return NotFound("No drawer found.");
+        }
+
+        /// <summary>
+        /// Get all caves of current logged user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<List<BottleDtoLight>>> GetUserBottles()
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your bottles ! Check/ User / Login");
+            var userDto = await userRepository.GetUserWithBottlesAsync(Int32.Parse(idCurrentUser.Value));
+            if (userDto == null)
+                return NotFound("The User is not found.");
+            var bottles = userDto.Bottles;
+            if (bottles != null)
+            {
+                return Ok(bottles);
+            }
+            return NotFound("No bottle found.");
+        }
+
+        /// <summary>
+        /// Login of a user from email and password
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> LoginUser([DefaultValue("test@test.com")] string login, [DefaultValue("test")] string pwd)
+        {
+            var userCreated = await userRepository.LoginUserAsync(login, pwd);
+            if (userCreated == null)
+                return Problem($"Erreur lors du login, vérifiez le login ou mot de passe");
+            Claim emailClaim = new(ClaimTypes.Email, userCreated.Email);
+            Claim nameClaim = new(ClaimTypes.Name, userCreated.Name);
+            Claim dobClaim = new(ClaimTypes.DateOfBirth, userCreated.BirthDate.ToString());
+            Claim idClaim = new(ClaimTypes.NameIdentifier, userCreated.UserId.ToString());
+            ClaimsIdentity identity = new(new List<Claim> { emailClaim, nameClaim, dobClaim, idClaim }, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new
+            ClaimsPrincipal(identity));
+            return Ok($"{userCreated.Name} logged");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Ok("Logout");
         }
     }
 }

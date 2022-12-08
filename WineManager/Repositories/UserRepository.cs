@@ -180,9 +180,9 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UserDto?> GetUserWithBottlesAsync(int id)
+        public async Task<UserDtoGet?> GetUserWithBottlesAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Bottles).Where(b => b.UserId == id).Select(u => new UserDto(u,u.Bottles)).FirstOrDefaultAsync();
+            var user = await context.Users.Include(u => u.Bottles).Where(b => b.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
@@ -196,9 +196,9 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UserDto?> GetUserWithDrawersAsync(int id)
+        public async Task<UserDtoGet?> GetUserWithDrawersAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u=> new UserDto(u,u.Drawers)).FirstOrDefaultAsync();
+            var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u=> new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
@@ -212,14 +212,20 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UserDto?> GetUserWithCavesAsync(int id)
+        public async Task<UserDtoGet?> GetUserWithCavesAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Caves).Where(c=>c.UserId == id).Select(u=>new UserDto(u,u.Caves)).FirstOrDefaultAsync();
+            var user = await context.Users.Include(u => u.Caves).Where(c=>c.UserId == id).Select(u=>new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
                 return null;
             }
+            return user;
+        }
+
+        public async Task<User> LoginUserAsync(string login, string pwd)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(p => p.Email == login && p.Password == pwd);
             return user;
         }
     }
