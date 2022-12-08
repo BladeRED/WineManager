@@ -236,10 +236,5 @@ namespace WineManager.Repositories
 
             return list;
         }
-
-        public async Task<User> ImportListUserAsync()
-        {
-            return null;
-        }
     }
 }

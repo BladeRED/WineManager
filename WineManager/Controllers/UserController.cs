@@ -10,6 +10,10 @@ using Azure;
 using System.Text.Json;
 using System;
 using System.Text.Json.Serialization;
+using WineManager.Repositories;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.IO;
+using WineManager.Helpers;
 
 namespace WineManager.Controllers
 {
@@ -18,11 +22,17 @@ namespace WineManager.Controllers
     public class UserController : ControllerBase
     {
         IUserRepository userRepository;
+        IBottleRepository bottleRepository;
+        ICaveRepository caveRepository;
+        IDrawerRepository drawerRepository;
         readonly IWebHostEnvironment environment;
 
-        public UserController(IUserRepository userRepository, IWebHostEnvironment environment)
+        public UserController(IUserRepository userRepository, IBottleRepository bottleRepository, ICaveRepository caveRepository, IDrawerRepository drawerRepository, IWebHostEnvironment environment)
         {
             this.userRepository = userRepository;
+            this.bottleRepository = bottleRepository;
+            this.caveRepository = caveRepository;
+            this.drawerRepository = drawerRepository;
             this.environment = environment;
         }
 
@@ -225,13 +235,23 @@ namespace WineManager.Controllers
             return Ok($"{userCreated.Name} logged");
         }
 
+        /// <summary>
+        /// Log out the current user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType( 200)]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
             return Ok("Logout");
         }
 
+        /// <summary>
+        /// Export the list of bottles,caves and drawer of the current user
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
         [HttpGet]   
         public async Task<IActionResult> ExportListUser()
         {
@@ -305,16 +325,12 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Add a user
+        /// Import a json from the user
         /// </summary>
-        /// <param name="Name"></param>
-        /// <param name="email"></param>
-        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
-        /// <param name="password"></param>
+        /// <param name="formFile"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public async Task<IActionResult?> ImportListUser(IFormFile formFile)
         {
@@ -322,12 +338,32 @@ namespace WineManager.Controllers
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
                 return Problem("You must log before create an article ! Check/ User / Login");
-
+            var id = int.Parse(idCurrentUser.Value);
             if (!string.IsNullOrEmpty(formFile.FileName) && formFile.FileName.Length > 0)
             {
                 if (formFile.ContentType == "application/json")
                 {
-
+                    var str = await formFile.ReadAsStringAsync();
+                    var fileJson = JsonSerializer.Deserialize<ListDTO>(str);
+                    var bottles = fileJson.Bottles;
+                    foreach (var item in bottles)
+                    {
+                        var b = new Bottle(item, id);
+                        await bottleRepository.AddBottleAsync(b);
+                    }
+                    var caves = fileJson.Caves;
+                    foreach (var item in caves)
+                    {
+                        var c = new Cave(item, id);
+                        await caveRepository.AddCaveAsync(c);
+                    }
+                    var drawers = fileJson.Drawers;
+                    foreach (var item in drawers)
+                    {
+                        var c = new Drawer(item, id);
+                        await drawerRepository.AddDrawerAsync(c);
+                    }
+                    return Ok("This is ok");
                 }
                 return Problem("No json file found");
             }

@@ -9,6 +9,10 @@ namespace WineManager.DTO
         public List<DrawerDto> Drawers { get; set; }
         public List<CaveDto> Caves { get; set; }
 
+        public ListDTO()
+        {
+
+        }
         public ListDTO(List<Bottle> bottles, List<Drawer> drawers, List<Cave> caves)
         {
             Bottles = new List<BottleDto>();

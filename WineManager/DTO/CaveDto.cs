@@ -25,5 +25,9 @@ namespace WineManager.DTO
             }
 
         }
+        public CaveDto()
+        {
+
+        }
     }
 }

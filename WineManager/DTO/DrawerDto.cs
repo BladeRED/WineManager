@@ -21,5 +21,9 @@ namespace WineManager.DTO
             }
 
         }
+        public DrawerDto()
+        {
+
+        }
     }
 }

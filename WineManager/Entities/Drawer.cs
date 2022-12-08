@@ -1,4 +1,6 @@
-﻿namespace WineManager.Entities
+﻿using WineManager.DTO;
+
+namespace WineManager.Entities
 {
     public class Drawer
     {
@@ -12,5 +14,18 @@
         public Cave? Cave { get; set; }
         public int? UserId { get; set; }
         public User? User { get; set; }
+
+        public Drawer(DrawerDto drawerDto, int userId)
+        {
+            Level = drawerDto.Level;
+            MaxPosition = drawerDto.MaxPosition;
+            CaveId = drawerDto.CaveId;
+            UserId = userId;
+        }
+
+        public Drawer()
+        {
+
+        }
     }
 }

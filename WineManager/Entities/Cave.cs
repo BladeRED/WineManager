@@ -1,4 +1,6 @@
-﻿namespace WineManager.Entities
+﻿using WineManager.DTO;
+
+namespace WineManager.Entities
 {
     public class Cave
     {
@@ -26,6 +28,16 @@
             Temperature = temperature;
             Drawers = drawers;
             User = user;
+        }
+
+
+        public Cave(CaveDto caveDto, int userId)
+        {
+            CaveType = caveDto.CaveType;
+            Family = caveDto.Family;
+            Brand = caveDto.Brand;
+            Temperature = caveDto.Temperature;
+            UserId= userId;
         }
     }
 }

@@ -22,5 +22,9 @@ namespace WineManager.DTO
             Designation = bottle.Designation;
             DrawerId = bottle.DrawerId;
         }
+        public BottleDto()
+        {
+
+        }
     }
 }
