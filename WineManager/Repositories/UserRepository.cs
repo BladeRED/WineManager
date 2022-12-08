@@ -228,5 +228,10 @@ namespace WineManager.Repositories
             var user = await context.Users.FirstOrDefaultAsync(p => p.Email == login && p.Password == pwd);
             return user;
         }
+
+        public async Task<User> ImportListUserAsync()
+        {
+            return null;
+        }
     }
 }
