@@ -186,7 +186,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get drawer from Id with user
+        /// Get drawer from Id with bottles
         /// </summary>
         /// <param name="id">Id Drawer</param>
         /// <returns></returns>
@@ -211,7 +211,7 @@ namespace WineManager.Controllers
         /// <summary>
         /// Get drawer from Id with cave
         /// </summary>
-        /// <param name="id">Id User</param>
+        /// <param name="id">Id Drawer</param>
         /// <returns></returns>
         /// 
         [HttpGet("{id}")]

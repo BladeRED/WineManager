@@ -61,9 +61,9 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get cave from Id with Drawer
+        /// Get cave from Id Cave with Drawer
         /// </summary>
-        /// <param name="id">Id Drawer</param>
+        /// <param name="id">Id Cave</param>
         /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
