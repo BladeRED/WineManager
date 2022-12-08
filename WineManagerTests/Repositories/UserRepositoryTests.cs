@@ -20,23 +20,34 @@ namespace WineManager.Repositories.Tests
         [TestMethod()]
         public async Task GetAllUsersAsyncTest()
         {
+            // Bdd create
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+
+            // Context
             var context = new WineManagerContext(builder.Options);
             UserRepository testContext = new UserRepository(context, null);
 
+            // List
             var myList = await testContext.GetAllUsersAsync();
 
-            context.Database.EnsureDeleted();
+            // Test
             Assert.AreEqual(0, myList.Count);
+
+            // Bdd delete
+            context.Database.EnsureDeleted();
         }
 
         [TestMethod()]
         public async Task AddUserAsyncTest()
         {
+            // Bdd create
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+
+            // Context
             var context = new WineManagerContext(builder.Options);
             UserRepository testContext = new UserRepository(context, null);
 
+            // Object to inject
             var myUserPostDto = new UserPostDto()
             {
                 Name= "test",
@@ -45,7 +56,7 @@ namespace WineManager.Repositories.Tests
                 Password= "test"
             };
 
-
+            
             var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
             var myList = await testContext.GetAllUsersAsync();
 
