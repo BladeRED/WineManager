@@ -304,6 +304,35 @@ namespace WineManager.Controllers
             return Problem("CGU not accepted");
         }
 
+        /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult?> ImportListUser(IFormFile formFile)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log before create an article ! Check/ User / Login");
+
+            if (!string.IsNullOrEmpty(formFile.FileName) && formFile.FileName.Length > 0)
+            {
+                if (formFile.ContentType == "application/json")
+                {
+
+                }
+                return Problem("No json file found");
+            }
+            return Problem("No file found");
+        }
 
         /// <summary>
         /// Update a user from email
