@@ -90,15 +90,22 @@ namespace WineManager.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult?> SignUp([FromForm] UserPostDto userDto, bool CGU)
         {
+            var age = (DateTime.Now - userDto.BirthDate).TotalDays / 365.25;
             if (CGU)
             {
-                var user = await AddUser(userDto);
-                if (user != null)
+                if (age >= 18)
                 {
-                    var userConnected = await userRepository.LoginUserAsync(userDto.Email, userDto.Password);
-                    return Ok($"{userConnected.Name} logged");
+
+                    var user = await AddUser(userDto);
+                    if (user != null)
+                    {
+                        var userConnected = await userRepository.LoginUserAsync(userDto.Email, userDto.Password);
+                        return Ok($"{userConnected.Name} logged");
+                    }
+                    return BadRequest("Error in the request");
                 }
-                return BadRequest("Error in the request");
+                else
+                    return Problem("Vous n'avez pas 18 ans");
             }
             return Problem("CGU not accepted");
         }
