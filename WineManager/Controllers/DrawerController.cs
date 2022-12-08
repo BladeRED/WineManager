@@ -16,6 +16,7 @@ namespace WineManager.Controllers
     public class DrawerController : ControllerBase
     {
         IDrawerRepository drawerRepository;
+
         readonly IWebHostEnvironment environment;
         public DrawerController(IDrawerRepository drawerRepository, IWebHostEnvironment environment)
         {
@@ -89,7 +90,10 @@ namespace WineManager.Controllers
 
             return Ok(drawerAdd);
         }
+
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Drawer>> AddNewDrawerToUser([FromForm] DrawerPostToUserDto drawerDto)
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -106,6 +110,8 @@ namespace WineManager.Controllers
             };
 
             var drawerAdded = await drawerRepository.AddDrawerAsync(newDrawer);
+            if (drawerAdded == null)
+                return Problem("Error when creating drawer, see log.");
 
             return Ok(drawerAdded);
         }
