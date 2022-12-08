@@ -224,7 +224,7 @@ namespace WineManager.Controllers
         {
             var userCreated = await userRepository.LoginUserAsync(login, pwd);
             if (userCreated == null)
-                return Problem($"Erreur lors du login, vérifiez le login ou mot de passe");
+                return Problem("Error in login, verify your password and email.");
             Claim emailClaim = new(ClaimTypes.Email, userCreated.Email);
             Claim nameClaim = new(ClaimTypes.Name, userCreated.Name);
             Claim dobClaim = new(ClaimTypes.DateOfBirth, userCreated.BirthDate.ToString());
@@ -258,7 +258,7 @@ namespace WineManager.Controllers
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
-                return Problem("You must log in order to see your bottles ! Check/ User / Login");
+                return Problem("You must log in order to export ! Check/ User / Login");
             var response = await userRepository.ExportListUserAsync(int.Parse(idCurrentUser.Value));
             string usersJson = JsonSerializer.Serialize(response, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.IgnoreCycles });
             var path = Path.Combine(environment.WebRootPath, "ListUsers/");
@@ -319,7 +319,7 @@ namespace WineManager.Controllers
                     return BadRequest("Error in the request");
                 }
                 else
-                    return Problem("Vous n'avez pas 18 ans");
+                    return Problem("You are not worthy.");
             }
             return Problem("CGU not accepted");
         }
@@ -337,7 +337,7 @@ namespace WineManager.Controllers
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
-                return Problem("You must log before create an article ! Check/ User / Login");
+                return Problem("You must log before import a list ! Check/ User / Login");
             var id = int.Parse(idCurrentUser.Value);
             if (!string.IsNullOrEmpty(formFile.FileName) && formFile.FileName.Length > 0)
             {
