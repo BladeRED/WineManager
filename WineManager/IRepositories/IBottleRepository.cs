@@ -56,6 +56,14 @@ namespace WineManager.IRepositories
         Task<Bottle> UpdateBottleAsync(BottleDtoPut bottlePutDto);
 
         /// <summary>
+        /// To put or remove a Bottle from a Cave
+        /// </summary>
+        /// <param name="bottleDtoStock"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<Bottle> StockBottleAsync(BottleDtoStock bottleDtoStock, int userId);
+
+        /// <summary>
         /// Delete bottle from Id.
         /// </summary>
         /// <param name="id"></param>

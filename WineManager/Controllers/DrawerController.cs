@@ -216,6 +216,34 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
+        /// Range a Drawer into a Cave
+        /// The Drawer and the Cave must belong to the connected user
+        /// </summary>
+        /// <param name="drawerId"></param>
+        /// <param name="caveId"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Drawer>> StockDrawer(int drawerId, int caveId)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+
+            var userId = Int32.Parse(idCurrentUser.Value);
+
+            var drawerPutted = await drawerRepository.StockDrawerAsync(drawerId,caveId, userId);
+
+            if (drawerPutted != null)
+                return Ok(drawerPutted);
+            else
+                return Problem("Drawer was not updated, see log for details");
+        }
+
+
+        /// <summary>
         /// Delete drawer
         /// </summary>
         /// <param name="id">Find a drawer by its id and delete it</param>

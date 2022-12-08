@@ -214,6 +214,27 @@ namespace WineManager.Controllers
                 return Problem("Bottle non modifié, cf log");
         }
 
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Bottle>> StockBottle([FromForm] BottleDtoStock bottleDtoStock)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+
+            var userId = Int32.Parse(idCurrentUser.Value);
+
+            var bottleStocked = await bottleRepository.StockBottleAsync(bottleDtoStock, userId);
+
+            if (bottleStocked != null)
+                return Ok(bottleStocked);
+            else
+                return Problem("Bottle non modifié, cf log");
+        }
+
+
         /// <summary>
         /// Delete bottle from Id.
         /// </summary>
