@@ -72,8 +72,7 @@ namespace WineManager.IRepositories
         /// <summary>
         /// Export the list of bottles,caves and drawer of the user
         /// </summary>
-        /// <param name="login"></param>
-        /// <param name="pwd"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         Task<ListDTO> ExportListUserAsync(int id);
     }
