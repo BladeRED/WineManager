@@ -59,6 +59,77 @@ namespace WineManager.Controllers
             }
             return Ok(drawer);
         }
+
+        /// <summary>
+        /// Get drawer from Id with bottles
+        /// </summary>
+        /// <param name="id">Id Drawer</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Cave>> GetDrawerWithBottles(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest("No valuable id found in the request");
+            }
+            var drawer = await drawerRepository.GetDrawerWithBottlesAsync(id);
+            if (drawer == null)
+            {
+                return NotFound("No drawer found");
+            }
+            return Ok(drawer);
+        }
+
+        /// <summary>
+        /// Get drawer from Id with cave
+        /// </summary>
+        /// <param name="id">Id Drawer</param>
+        /// <returns></returns>
+        /// 
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Cave>> GetDrawerWithCave(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest("No valuable id found in the request");
+            }
+            var drawer = await drawerRepository.GetDrawerWithCaveAsync(id);
+            if (drawer == null)
+            {
+                return NotFound("No drawer found");
+            }
+            return Ok(drawer);
+        }
+
+        /// <summary>
+        /// Get drawer from Id with user
+        /// </summary>
+        /// <param name="id">Id Drawer</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<Cave>> GetDrawerWithUser(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest("No valuable id found in the request");
+            }
+            var drawer = await drawerRepository.GetDrawerWithUserAsync(id);
+            if (drawer == null)
+            {
+                return NotFound("No drawer found");
+            }
+            return Ok(drawer);
+        }
+
         /// <summary>
         /// Add drawer
         /// </summary>
@@ -160,76 +231,6 @@ namespace WineManager.Controllers
                 return Ok(drawerDeleted);
             else
                 return Problem("Drawer was not deleted, see log for details");
-        }
-
-        /// <summary>
-        /// Get drawer from Id with user
-        /// </summary>
-        /// <param name="id">Id Drawer</param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetDrawerWithUser(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var drawer = await drawerRepository.GetDrawerWithUserAsync(id);
-            if (drawer == null)
-            {
-                return NotFound("No drawer found");
-            }
-            return Ok(drawer);
-        }
-
-        /// <summary>
-        /// Get drawer from Id with bottles
-        /// </summary>
-        /// <param name="id">Id Drawer</param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetDrawerWithBottles(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var drawer = await drawerRepository.GetDrawerWithBottlesAsync(id);
-            if (drawer == null)
-            {
-                return NotFound("No drawer found");
-            }
-            return Ok(drawer);
-        }
-
-        /// <summary>
-        /// Get drawer from Id with cave
-        /// </summary>
-        /// <param name="id">Id Drawer</param>
-        /// <returns></returns>
-        /// 
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetDrawerWithCave(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var drawer = await drawerRepository.GetDrawerWithCaveAsync(id);
-            if (drawer == null)
-            {
-                return NotFound("No drawer found");
-            }
-            return Ok(drawer);
         }
     }
 }

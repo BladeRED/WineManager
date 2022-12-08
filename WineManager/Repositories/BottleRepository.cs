@@ -125,8 +125,6 @@ namespace WineManager.Repositories
             }
 
             return Bottles;
-
-
         }
 
         /// <summary>
@@ -186,6 +184,7 @@ namespace WineManager.Repositories
             }
             return bottle;
         }
+
     }
 }
 
