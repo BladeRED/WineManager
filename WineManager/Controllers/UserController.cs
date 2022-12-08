@@ -55,60 +55,6 @@ namespace WineManager.Controllers
             return Ok(userDto);
         }
 
-        /// <summary>
-        /// Add a user
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <param name="email"></param>
-        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<UserDto>> AddUser([FromForm] UserPostDto userDto)
-        {
-            var userCreated = await userRepository.AddUserAsync(userDto);
-
-            if (userCreated != null)
-                return Ok(userCreated);
-            else
-                return Problem("User not created");
-        }
-
-        /// <summary>
-        /// Add a user
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <param name="email"></param>
-        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult?> SignUp([FromForm] UserPostDto userDto, bool CGU)
-        {
-            var age = (DateTime.Now - userDto.BirthDate).TotalDays / 365.25;
-            if (CGU)
-            {
-                if (age >= 18)
-                {
-
-                    var user = await AddUser(userDto);
-                    if (user != null)
-                    {
-                        var userConnected = await userRepository.LoginUserAsync(userDto.Email, userDto.Password);
-                        return Ok($"{userConnected.Name} logged");
-                    }
-                    return BadRequest("Error in the request");
-                }
-                else
-                    return Problem("Vous n'avez pas 18 ans");
-            }
-            return Problem("CGU not accepted");
-        }
 
         /// <summary>
         /// Get user from id with his drawers
@@ -279,6 +225,62 @@ namespace WineManager.Controllers
             await HttpContext.SignOutAsync();
             return Ok("Logout");
         }
+
+        /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<UserDto>> AddUser([FromForm] UserPostDto userDto)
+        {
+            var userCreated = await userRepository.AddUserAsync(userDto);
+
+            if (userCreated != null)
+                return Ok(userCreated);
+            else
+                return Problem("User not created");
+        }
+
+        /// <summary>
+        /// Add a user
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="email"></param>
+        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult?> SignUp([FromForm] UserPostDto userDto, bool CGU)
+        {
+            var age = (DateTime.Now - userDto.BirthDate).TotalDays / 365.25;
+            if (CGU)
+            {
+                if (age >= 18)
+                {
+
+                    var user = await AddUser(userDto);
+                    if (user != null)
+                    {
+                        var userConnected = await userRepository.LoginUserAsync(userDto.Email, userDto.Password);
+                        return Ok($"{userConnected.Name} logged");
+                    }
+                    return BadRequest("Error in the request");
+                }
+                else
+                    return Problem("Vous n'avez pas 18 ans");
+            }
+            return Problem("CGU not accepted");
+        }
+
 
         /// <summary>
         /// Update a user from email
