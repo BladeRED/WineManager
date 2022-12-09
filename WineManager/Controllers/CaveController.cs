@@ -25,19 +25,6 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get all caves
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<List<Cave>>> GetAllCaves()
-        {
-            var caves = await caveRepository.GetCavesAsync();
-
-            return Ok(caves);
-        }
-
-        /// <summary>
         /// Get cave from with Id
         /// </summary>
         /// <param name="id">Id cave</param>
@@ -61,85 +48,10 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get cave from Id Cave with Drawer
-        /// </summary>
-        /// <param name="id">Id Cave</param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetCaveWithDrawer(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var cave = await caveRepository.GetWithDrawerAsync(id);
-            if (cave == null)
-            {
-                return NotFound("No cave found");
-            }
-            return Ok(cave);
-        }
-
-        /// <summary>
-        /// Get cave from Id User
-        /// </summary>
-        /// <param name="id">Id User</param>
-        /// <returns></returns>
-        /// 
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetCaveWithUser(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var cave = await caveRepository.GetWithUserAsync(id);
-            if (cave == null)
-            {
-                return NotFound("No cave found");
-            }
-            return Ok(cave);
-        }
-
-        /// <summary>
         /// Add cave
         /// </summary>
         /// <param name="caveDto">Return a CavePosToUsertDto object called caveDto </param>
         /// <returns></returns>
-        //[HttpPost]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(500)]
-        //public async Task<ActionResult<Cave>> AddCave([FromForm] CavePostDto caveDto)
-        //{
-        //    var NewCave = new Cave()
-        //    {
-        //        CaveType = caveDto.CaveType,
-        //        Family = caveDto.Family,
-        //        Brand = caveDto.Brand,
-        //        Temperature = caveDto.Temperature,
-        //        NbMaxDrawer = caveDto.NbMaxDrawer,
-        //        NbMaxBottlePerDrawer = caveDto.NbMaxBottlePerDrawer
-        //};
-        //    var caveAdd = await caveRepository.AddCaveAsync(NewCave);
-
-        //    if (caveAdd == null)
-        //        return Problem("Error when creating cave, see log.");
-
-        //    //if (!string.IsNullOrEmpty(cave.Picture?.FileType) && cave.Picture.FileType.Length > 0)
-
-        //    //{// service IWebHostEnvironment
-        //    //    var path = Path.Combine(environment.WebRootPath, "Pictures/", cave.Picture.FileType);
-        //    //    using (FileStream stream = new FileStream(path, FileMode.Add)) { await cave.Picture.CopyToAsync(stream); stream.Close(); }
-        //    //}
-
-        //    return Ok(caveAdd);
-        //}
 
         [HttpPost]
         public async Task<ActionResult<Cave>> AddNewCaveToUser([FromForm] CavePostToUserDto caveDto)
