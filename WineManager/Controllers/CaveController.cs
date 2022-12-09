@@ -110,34 +110,37 @@ namespace WineManager.Controllers
         /// <summary>
         /// Add cave
         /// </summary>
-        /// <param name="caveDto">Return a CavePostDto object called caveDto </param>
+        /// <param name="caveDto">Return a CavePosToUsertDto object called caveDto </param>
         /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<Cave>> AddCave([FromForm] CavePostDto caveDto)
-        {
-            var NewCave = new Cave()
-            {
-                CaveType = caveDto.CaveType,
-                Family = caveDto.Family,
-                Brand = caveDto.Brand,
-                Temperature = caveDto.Temperature,
-            };
-            var caveAdd = await caveRepository.AddCaveAsync(NewCave);
+        //[HttpPost]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(500)]
+        //public async Task<ActionResult<Cave>> AddCave([FromForm] CavePostDto caveDto)
+        //{
+        //    var NewCave = new Cave()
+        //    {
+        //        CaveType = caveDto.CaveType,
+        //        Family = caveDto.Family,
+        //        Brand = caveDto.Brand,
+        //        Temperature = caveDto.Temperature,
+        //        NbMaxDrawer = caveDto.NbMaxDrawer,
+        //        NbMaxBottlePerDrawer = caveDto.NbMaxBottlePerDrawer
+        //};
+        //    var caveAdd = await caveRepository.AddCaveAsync(NewCave);
 
-            if (caveAdd == null)
-                return Problem("Error when creating cave, see log.");
+        //    if (caveAdd == null)
+        //        return Problem("Error when creating cave, see log.");
 
-            //if (!string.IsNullOrEmpty(cave.Picture?.FileType) && cave.Picture.FileType.Length > 0)
+        //    //if (!string.IsNullOrEmpty(cave.Picture?.FileType) && cave.Picture.FileType.Length > 0)
 
-            //{// service IWebHostEnvironment
-            //    var path = Path.Combine(environment.WebRootPath, "Pictures/", cave.Picture.FileType);
-            //    using (FileStream stream = new FileStream(path, FileMode.Add)) { await cave.Picture.CopyToAsync(stream); stream.Close(); }
-            //}
+        //    //{// service IWebHostEnvironment
+        //    //    var path = Path.Combine(environment.WebRootPath, "Pictures/", cave.Picture.FileType);
+        //    //    using (FileStream stream = new FileStream(path, FileMode.Add)) { await cave.Picture.CopyToAsync(stream); stream.Close(); }
+        //    //}
 
-            return Ok(caveAdd);
-        }
+        //    return Ok(caveAdd);
+        //}
+
         [HttpPost]
         public async Task<ActionResult<Cave>> AddNewCaveToUser([FromForm] CavePostToUserDto caveDto)
         {
@@ -152,7 +155,9 @@ namespace WineManager.Controllers
                 Family = caveDto.Family,
                 Brand = caveDto.Brand,
                 Temperature = caveDto.Temperature,
-                UserId = Int32.Parse(idCurrentUser.Value)
+                UserId = Int32.Parse(idCurrentUser.Value),
+                NbMaxDrawer = caveDto.NbMaxDrawer,
+                NbMaxBottlePerDrawer = caveDto.NbMaxBottlePerDrawer
             };
 
             var caveAdded = await caveRepository.AddCaveAsync(newCave);

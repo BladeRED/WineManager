@@ -6,8 +6,8 @@ namespace WineManager.DTO
     {
         public int BottleId { get; set; }
         public string Name { get; set; }
-        public UserDTOLight User { get; set; }
-        public DrawerDtoLight Drawer { get; set; }
+        public UserDTOLight? User { get; set; }
+        public DrawerDtoLight? Drawer { get; set; }
 
         public BottleDtoGet(int bottleId, string name, UserDTOLight userDTOLight)
         {
