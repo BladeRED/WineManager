@@ -95,13 +95,23 @@ namespace WineManager.Repositories
         }
 
         /// <summary>
-        /// Get drawer from Id drawer
+        /// Get drawer from drawer's ID.
         /// </summary>
-        /// <param name="idDrawer">Id Drawer</param>
+        /// <param name="drawerId">Drawer's ID.</param>
+        /// <param name="userId">User's ID.</param>
         /// <returns></returns>
-        public async Task<Drawer?> GetByIdAsync(int idDrawer)
+        public async Task<Drawer?> GetDrawerAsync(int drawerId, int userId)
         {
-            return await WineManagerContext.Drawers.FirstOrDefaultAsync(p => p.DrawerId == idDrawer);
+            var drawer = await WineManagerContext.Drawers.Where(d => (d.DrawerId == drawerId) && (d.UserId == userId)).FirstOrDefaultAsync();
+            if (drawer == null)
+            {
+                logger?.LogError("Item not found. Check the drawer ID.");
+
+                return null;
+            }
+            return drawer;
+
+            // return await WineManagerContext.Drawers.FirstOrDefaultAsync(p => p.DrawerId == idDrawer);
         }
 
         /// <summary>
@@ -139,7 +149,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Drawer?> UpdateDrawerAsync(Drawer drawer)
         {
-            var drawerToUpdate = await GetByIdAsync(drawer.DrawerId);
+            var drawerToUpdate = await WineManagerContext.Drawers.FirstOrDefaultAsync(d => d.DrawerId == drawer.DrawerId);
 
             if (drawerToUpdate == null) return null;
 
