@@ -52,18 +52,47 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
+        /// Get the cave's capacity from his cave ID.
+        /// </summary>
+        /// <param name="caveId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetCaveCapacity(int caveId)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to add cave ! Check/ User / Login");
+            int userId = Int32.Parse(idCurrentUser.Value);
+
+            var cave = await caveRepository.GetCaveAsync(caveId, userId);
+            if (cave == null)
+            {
+                return NotFound("No cave found");
+            }
+            var res = cave.NbMaxBottlePerDrawer * cave.NbMaxDrawer;
+
+            return Ok($"This cave has a capacity of {res} bottles.");
+        }
+
+        /// <summary>
         /// Add cave
         /// </summary>
         /// <param name="caveDto">Return a CavePosToUsertDto object called caveDto </param>
         /// <returns></returns>
-
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Cave>> AddNewCaveToUser([FromForm] CavePostToUserDto caveDto)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
                 return Problem("You must log in order to add cave ! Check/ User / Login");
+
 
             var newCave = new Cave()
             {
@@ -105,7 +134,7 @@ namespace WineManager.Controllers
                 Temperature = caveDto.Temperature,
             };
 
-            var caveUpdated = await caveRepository.UpdateCaveAsync(cave,userId);
+            var caveUpdated = await caveRepository.UpdateCaveAsync(cave, userId);
 
             if (caveUpdated != null)
                 return Ok(caveUpdated);

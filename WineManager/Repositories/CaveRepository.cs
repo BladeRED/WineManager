@@ -117,7 +117,7 @@ namespace WineManager.Repositories
         /// Update a cave
         /// </summary>
         /// <returns></returns>
-        public async Task<Cave?> UpdateCaveAsync(Cave cave,int userId)
+        public async Task<Cave?> UpdateCaveAsync(Cave cave, int userId)
         {
             var caveToUpdate = await WineManagerContext.Caves.FirstOrDefaultAsync(c => c.CaveId == cave.CaveId && userId == c.UserId);
 

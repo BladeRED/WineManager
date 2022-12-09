@@ -153,6 +153,8 @@ namespace WineManager.Controllers
         /// <param name="pwd"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> LoginUser([DefaultValue("test@test.com")] string login, [DefaultValue("test")] string pwd)
         {
             var userCreated = await userRepository.LoginUserAsync(login, pwd);
@@ -186,6 +188,8 @@ namespace WineManager.Controllers
         /// <param></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> ExportListUser()
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -202,34 +206,11 @@ namespace WineManager.Controllers
             return Ok(fileName);
         }
 
-        ///// <summary>
-        ///// Add a user
-        ///// </summary>
-        ///// <param name="Name"></param>
-        ///// <param name="email"></param>
-        ///// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
-        ///// <param name="password"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(500)]
-        //public async Task<ActionResult<UserDto>> AddUser([FromForm] UserPostDto userDto)
-        //{
-        //    var userCreated = await userRepository.AddUserAsync(userDto);
-
-        //    if (userCreated != null)
-        //        return Ok(userCreated);
-        //    else
-        //        return Problem("User not created");
-        //}
-
         /// <summary>
         /// Add a user
         /// </summary>
-        /// <param name="Name"></param>
-        /// <param name="email"></param>
-        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
-        /// <param name="password"></param>
+        /// <param name="userDto"></param>
+        /// <param name="CGU"></param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
@@ -306,7 +287,6 @@ namespace WineManager.Controllers
         /// <summary>
         /// Update a user from email
         /// </summary>
-        /// <param name="birthDate"> format example: "2000-05-23" (without the string on SWAGGER) </param>
         /// <param name="userPutDto"></param>
         /// <returns></returns>
         [HttpPut]

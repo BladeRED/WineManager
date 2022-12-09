@@ -77,6 +77,7 @@ namespace WineManager.Repositories.Tests
                 Designation = "Domaine de Test",
                 StartKeepingYear = 2022,
                 EndKeepingYear = 2024,
+                UserId = 1
             };
 
             BottleDtoPut MajBottle = new BottleDtoPut()
@@ -106,7 +107,7 @@ namespace WineManager.Repositories.Tests
             MajBottle.StartKeepingYear = 2022;
             MajBottle.EndKeepingYear = 2024;
 
-            var MyUpdateTest = await BottleTest2.UpdateBottleAsync(MajBottle);
+            var MyUpdateTest = await BottleTest2.UpdateBottleAsync(MajBottle, 1);
 
             Assert.AreNotSame(MyAddTest, MyUpdateTest);
             // Ne test pas bien la fonction.

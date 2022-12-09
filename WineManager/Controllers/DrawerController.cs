@@ -55,7 +55,7 @@ namespace WineManager.Controllers
         /// <summary>
         /// Add drawer
         /// </summary>
-        /// <param name="drawerPostDto">Return a DrawerPostDto object</param>
+        /// <param name="drawerDto">Return a DrawerPostDto object</param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
@@ -119,6 +119,7 @@ namespace WineManager.Controllers
         /// </summary>
         /// <param name="drawerId"></param>
         /// <param name="caveId"></param>
+        /// <param name="caveLevel"></param>
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(200)]

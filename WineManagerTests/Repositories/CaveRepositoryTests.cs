@@ -67,6 +67,7 @@ namespace WineManager.Repositories.Tests
                 Brand = "Lambda",
                 Family = "Random",
                 Temperature = 12,
+                UserId = 1
             };
 
             // simulating the add method //
@@ -82,7 +83,7 @@ namespace WineManager.Repositories.Tests
             MajCave.Family = "Random2";
             MajCave.Temperature = 14;
 
-            var MyUpdateTest = await CaveTest2.UpdateCaveAsync(MajCave);
+            var MyUpdateTest = await CaveTest2.UpdateCaveAsync(MajCave, 1);
 
             Assert.AreNotSame(MyAddTest, MyUpdateTest);
         }

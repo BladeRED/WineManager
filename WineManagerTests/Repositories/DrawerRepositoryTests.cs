@@ -62,6 +62,7 @@ namespace WineManager.Repositories.Tests
                 DrawerId = 2,
                 Level = 2,
                 MaxPosition = 2,
+                UserId= 1
             };
 
             // simulating the add method //
@@ -76,7 +77,7 @@ namespace WineManager.Repositories.Tests
             MajDrawer.Level = 5;
             MajDrawer.MaxPosition = 5;
 
-            var MyUpdateTest = await DrawerTest2.UpdateDrawerAsync(MajDrawer);
+            var MyUpdateTest = await DrawerTest2.UpdateDrawerAsync(MajDrawer, 1);
 
             Assert.AreNotSame(MyAddTest, MyUpdateTest);
         }

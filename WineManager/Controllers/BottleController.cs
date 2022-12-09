@@ -48,9 +48,11 @@ namespace WineManager.Controllers
         /// <summary>
         /// Add a new bottle.
         /// </summary>
-        /// <param name="bottle"></param>
+        /// <param name="bottleDto"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Bottle>> AddNewBottleToUser([FromForm] BottleDto bottleDto)
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -114,7 +116,7 @@ namespace WineManager.Controllers
         /// Update bottle from Id.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="bottle"></param>
+        /// <param name="bottleDtoPut"></param>
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(200)]

@@ -140,7 +140,7 @@ namespace WineManager.Repositories
         {
             try
             {
-                var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId && b.UserId==userId);
+                var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId && b.UserId == userId);
 
                 if (bottleDtoPut.Name != null)
                     bottleToUpdate.Name = bottleDtoPut.Name;
