@@ -143,7 +143,12 @@ namespace WineManager.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<Drawer>> DeleteDrawer(int id)
         {
-            var drawerDeleted = await drawerRepository.DeleteDrawerAsync(id);
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to delete your drawer ! Check/ User / Login");
+
+            var drawerDeleted = await drawerRepository.DeleteDrawerAsync(id, int.Parse(idCurrentUser.Value));
 
             if (drawerDeleted != null)
                 return Ok(drawerDeleted);

@@ -81,7 +81,7 @@ namespace WineManager.IRepositories
         /// Delete a Drawer
         /// </summary>
         /// <returns></returns>
-        Task<bool> DeleteDrawerAsync(int idDrawer);
+        Task<Drawer> DeleteDrawerAsync(int idDrawer, int userId);
 
     }
 }
