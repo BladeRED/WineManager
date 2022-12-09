@@ -53,7 +53,7 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <returns></returns>
         /// 
-        Task<Cave?> UpdateCaveAsync(Cave cave);
+        Task<Cave?> UpdateCaveAsync(Cave cave, int userId);
 
         /// <summary>
         /// Delete a Cave

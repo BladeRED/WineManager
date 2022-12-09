@@ -117,17 +117,23 @@ namespace WineManager.Repositories
         /// Update a cave
         /// </summary>
         /// <returns></returns>
-        public async Task<Cave?> UpdateCaveAsync(Cave cave)
+        public async Task<Cave?> UpdateCaveAsync(Cave cave,int userId)
         {
-            var caveToUpdate = await WineManagerContext.Caves.FirstOrDefaultAsync(c => c.CaveId == cave.CaveId);
+            var caveToUpdate = await WineManagerContext.Caves.FirstOrDefaultAsync(c => c.CaveId == cave.CaveId && userId == c.UserId);
 
-            if (caveToUpdate == null) return null;
+            if (caveToUpdate == null)
+            {
+                return null;
+            }
 
-
-            caveToUpdate.CaveType = cave.CaveType;
-            caveToUpdate.Family = cave.Family;
-            caveToUpdate.Brand = cave.Brand;
-            caveToUpdate.Temperature = cave.Temperature;
+            if (cave.CaveType != null)
+                caveToUpdate.CaveType = cave.CaveType;
+            if (cave.Family != null)
+                caveToUpdate.Family = cave.Family;
+            if (cave.Brand != null)
+                caveToUpdate.Brand = cave.Brand;
+            if (cave.Temperature != null)
+                caveToUpdate.Temperature = cave.Temperature;
 
             await WineManagerContext?.SaveChangesAsync();
 

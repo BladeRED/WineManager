@@ -88,8 +88,14 @@ namespace WineManager.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Cave>> UpdateCave([FromForm] CaveDto caveDto)
+        public async Task<ActionResult<Cave>> UpdateCave([FromForm] CavePutDto caveDto)
         {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log before updating a cave ! Check/ User / Login");
+            int userId = Int32.Parse(idCurrentUser.Value);
+
             var cave = new Cave()
             {
                 CaveId = caveDto.CaveId,
@@ -99,7 +105,7 @@ namespace WineManager.Controllers
                 Temperature = caveDto.Temperature,
             };
 
-            var caveUpdated = await caveRepository.UpdateCaveAsync(cave);
+            var caveUpdated = await caveRepository.UpdateCaveAsync(cave,userId);
 
             if (caveUpdated != null)
                 return Ok(caveUpdated);

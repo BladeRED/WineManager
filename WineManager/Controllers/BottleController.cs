@@ -121,14 +121,11 @@ namespace WineManager.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<Bottle>> UpdateBottle([FromForm] BottleDtoPut bottleDtoPut)
         {
-            //var identity = User?.Identity as ClaimsIdentity;
-            //var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            //if (idCurrentUser == null)
-            //    return Problem("You must log before create an article ! Check/ User / Login");
-            //int userId = Int32.Parse(idCurrentUser.Value);
-            //if ((await bottleRepository.GetBottleAsync(id)).UserId != userId)
-            //    return Problem("You must the author in order to update this article");
-            //bottle.UserId = Int32.Parse(idCurrentUser.Value);
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log before updating a bootle ! Check/ User / Login");
+            int userId = Int32.Parse(idCurrentUser.Value);
 
             var MajBottle = new BottleDtoPut()
             {
@@ -141,7 +138,7 @@ namespace WineManager.Controllers
                 Color = bottleDtoPut.Color,
 
             };
-            var bottleUpdated = await bottleRepository.UpdateBottleAsync(MajBottle);
+            var bottleUpdated = await bottleRepository.UpdateBottleAsync(MajBottle, userId);
 
             if (bottleUpdated != null)
                 return Ok(bottleUpdated);

@@ -66,7 +66,7 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <returns></returns>
         /// 
-        Task<Drawer?> UpdateDrawerAsync(Drawer drawer);
+        Task<Drawer?> UpdateDrawerAsync(Drawer drawer, int userId);
 
         /// <summary>
         /// Range a Drawer into a Cave

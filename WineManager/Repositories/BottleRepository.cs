@@ -136,11 +136,11 @@ namespace WineManager.Repositories
         /// <param name="id"></param>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        public async Task<Bottle> UpdateBottleAsync(BottleDtoPut bottleDtoPut)
+        public async Task<Bottle> UpdateBottleAsync(BottleDtoPut bottleDtoPut, int userId)
         {
             try
             {
-                var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId);
+                var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId && b.UserId==userId);
 
                 if (bottleDtoPut.Name != null)
                     bottleToUpdate.Name = bottleDtoPut.Name;
@@ -152,7 +152,6 @@ namespace WineManager.Repositories
                     bottleToUpdate.EndKeepingYear = bottleDtoPut.EndKeepingYear;
                 if (bottleDtoPut.Color != null)
                     bottleToUpdate.Color = bottleDtoPut.Color;
-
 
                 await context.SaveChangesAsync();
                 return bottleToUpdate;

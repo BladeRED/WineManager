@@ -137,14 +137,17 @@ namespace WineManager.Repositories
         /// Update a drawer
         /// </summary>
         /// <returns></returns>
-        public async Task<Drawer?> UpdateDrawerAsync(Drawer drawer)
+        public async Task<Drawer?> UpdateDrawerAsync(Drawer drawer, int userId)
         {
-            var drawerToUpdate = await GetByIdAsync(drawer.DrawerId);
+            var drawerToUpdate = await WineManagerContext.Drawers.FirstOrDefaultAsync(d => d.DrawerId == drawer.DrawerId && userId == d.UserId);
 
-            if (drawerToUpdate == null) return null;
+            if (drawerToUpdate == null)
+            {
+                return null;
+            }
 
-            drawerToUpdate.Level = drawer.Level;
-            drawerToUpdate.MaxPosition = drawer.MaxPosition;
+            if (drawer.Level != null)
+                drawerToUpdate.Level = drawer.Level;
 
             await WineManagerContext.SaveChangesAsync();
 
