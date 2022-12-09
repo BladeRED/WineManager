@@ -4,6 +4,7 @@ using System.Security.Claims;
 using WineManager.DTO;
 using WineManager.Entities;
 using WineManager.IRepositories;
+using WineManager.Repositories;
 
 namespace WineManager.Controllers
 {
@@ -12,6 +13,7 @@ namespace WineManager.Controllers
     public class BottleController : ControllerBase
     {
         IBottleRepository bottleRepository;
+        IUserRepository userRepository;
         public BottleController(IBottleRepository bottleRepository)
         {
             this.bottleRepository = bottleRepository;
@@ -33,14 +35,23 @@ namespace WineManager.Controllers
         /// <summary>
         /// Get bottle from Id.
         /// </summary>
-        /// <param name="id">Id bottle</param>
+        /// <param name="bottleId">Bottle's ID.</param>
+        /// <param name="userId">CurrentUser's ID, not required.</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{bottleId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Bottle>> GetBottle(int id)
+        public async Task<ActionResult<Bottle>> GetBottle(int bottleId, int? userId)
         {
-            var bottle = await bottleRepository.GetBottleAsync(id);
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+            {
+                return Problem("You must log in order to see your Bottle ! Check/ User / Login");
+            }
+            var currentUserId = Int32.Parse(idCurrentUser.Value);
+
+            var bottle = await bottleRepository.GetBottleAsync(bottleId, currentUserId);
             if (bottle == null)
             {
                 return NotFound("No bottle found");
@@ -250,18 +261,10 @@ namespace WineManager.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Bottle>> DeleteBottle(int id)
         {
+            var bottleDeleted = await bottleRepository.DeleteBottleAsync(id);
 
-            //var identity = User?.Identity as ClaimsIdentity;
-            //var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            //if (idCurrentUser == null)
-            //    return Problem("You must log before create an article ! Check/ User / Login");
-            //int userId = Int32.Parse(idCurrentUser.Value);
-            //if ((await bottleRepository.GetBottleAsync(id)).UserId != userId)
-            //    return Problem("You must the author in order to update this article");
-            var bottleDelated = await bottleRepository.DeleteBottleAsync(id);
-
-            if (bottleDelated != null)
-                return Ok(bottleDelated);
+            if (bottleDeleted != null)
+                return Ok(bottleDeleted);
             else
                 return NotFound("Bottle non trouvé");
         }

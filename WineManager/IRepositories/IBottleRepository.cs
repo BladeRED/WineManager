@@ -10,13 +10,13 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <returns></returns>
         Task<List<Bottle>> GetAllBottlesAsync();
-
         /// <summary>
         /// Get bottle from Id.
         /// </summary>
-        /// <param name="id">Id bottle</param>
+        /// <param name="bottleid">Bottle's ID</param>
+        /// <param name="userId">Current User's ID</param>
         /// <returns></returns>
-        Task<Bottle> GetBottleAsync(int id);
+        Task<Bottle> GetBottleAsync(int bottleid, int userId);
 
         /// <summary>
         /// Get bottle from Id with his user.

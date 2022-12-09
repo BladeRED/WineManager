@@ -36,18 +36,21 @@ namespace WineManager.Repositories
         /// <summary>
         /// Get bottle from Id.
         /// </summary>
-        /// <param name="id">Id bottle</param>
+        /// <param name="bottleid">Id bottle</param>
+        /// <param name="userId">CurrentUser's ID.</param>
         /// <returns></returns>
-        public async Task<Bottle> GetBottleAsync(int id)
+        public async Task<Bottle> GetBottleAsync(int bottleid, int userId)
         {
-            var bottle = await context.Bottles.FindAsync(id);
+            var bottle = await context.Bottles.Where(b => (b.BottleId == bottleid) && (b.UserId == userId)).FirstOrDefaultAsync();
             if (bottle == null)
             {
-                logger?.LogError("Item not found");
+                logger?.LogError("Item not found. Check the bottle ID.");
+
                 return null;
             }
             return bottle;
         }
+
 
         /// <summary>
         /// Get bottle from Id with his user.
@@ -204,24 +207,30 @@ namespace WineManager.Repositories
         /// <summary>
         /// Delete bottle from Id.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="bottleId"></param>
         /// <returns></returns>
-        public async Task<Bottle> DeleteBottleAsync(int id)
+        public async Task<Bottle> DeleteBottleAsync(int bottleId)
         {
-            Bottle bottle;
             try
             {
-                bottle = await GetBottleAsync(id);
+                var bottle = await context.Bottles.FindAsync(bottleId);
+                if (bottle == null)
+                {
+                    logger?.LogError("Item not found. Check the bottle ID.");
+
+                    return null;
+                }
                 context.Bottles.Remove(bottle);
 
                 await context.SaveChangesAsync();
+                return bottle;
             }
             catch (Exception e)
             {
                 logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
-            return bottle;
+
         }
 
     }
