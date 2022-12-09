@@ -18,8 +18,8 @@ namespace WineManager.Entities
         //Navigation properties //
         public int? DrawerId { get; set; }
         public Drawer? Drawer { get; set; }
-        public int? UserId { get; set; }
-        public User? User { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         public Bottle(BottleDto bottleDto, int userId)
         {
