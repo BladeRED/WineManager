@@ -25,21 +25,26 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get drawer from Id
+        /// Get drawer from drawer's ID.
         /// </summary>
-        /// <param name="id">Id drawer</param>
+        /// <param name="drawerId">Drawer's ID</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{drawerId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Drawer>> GetDrawer(int id)
+        public async Task<ActionResult<Drawer>> GetDrawer(int drawerId)
         {
-            if (id < 1)
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
             {
-                return BadRequest("No valuable id found in the request");
+                return Problem("You must log in order to see your Drawer ! Check/ User / Login");
             }
-            var drawer = await drawerRepository.GetByIdAsync(id);
+            var currentUserId = Int32.Parse(idCurrentUser.Value);
+
+
+            var drawer = await drawerRepository.GetDrawerAsync(drawerId, currentUserId);
             if (drawer == null)
             {
                 return NotFound("No drawer found");
