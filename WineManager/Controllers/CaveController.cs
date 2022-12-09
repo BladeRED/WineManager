@@ -113,11 +113,12 @@ namespace WineManager.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<Cave>> DeleteCave(int id)
         {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var caveDeleted = await caveRepository.DeleteCaveAsync(id);
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to delete your bottles ! Check/ User / Login");
+
+            var caveDeleted = await caveRepository.DeleteCaveAsync(id, int.Parse(idCurrentUser.Value));
 
             if (caveDeleted != null)
                 return Ok(caveDeleted);

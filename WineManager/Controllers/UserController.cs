@@ -333,10 +333,6 @@ namespace WineManager.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<UserDto>> DeleteUser(int id)
         {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
             var userRemoved = await userRepository.DeleteUserAsync(id);
             if (userRemoved != null)
                 return Ok(userRemoved);

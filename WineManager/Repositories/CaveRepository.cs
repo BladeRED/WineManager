@@ -130,20 +130,24 @@ namespace WineManager.Repositories
         /// Delete a Cave
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> DeleteCaveAsync(int idCave)
+        public async Task<Cave> DeleteCaveAsync(int idCave, int userId)
         {
-            var caveToDelete = await GetByIdAsync(idCave);
-
-            if (caveToDelete == null) return false;
-
-            WineManagerContext?.Caves.Remove(caveToDelete);
-
+            var caveToDelete = await WineManagerContext.Caves.Where(b => b.CaveId == idCave && b.UserId == userId).Include(c => c.Drawers).FirstOrDefaultAsync();
+            if (caveToDelete == null)
+            {
+                logger?.LogError("Item not found. Check the cave ID.");
+                return null;
+            }
+            foreach(var drawer in caveToDelete.Drawers)
+            {
+                drawer.CaveId = null;
+            }
 
             WineManagerContext?.Caves.Remove(caveToDelete);
 
             await WineManagerContext?.SaveChangesAsync();
 
-            return true;
+            return caveToDelete;
         }
     }
 }

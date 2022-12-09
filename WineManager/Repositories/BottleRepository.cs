@@ -217,7 +217,6 @@ namespace WineManager.Repositories
                 if (bottle == null)
                 {
                     logger?.LogError("Item not found. Check the bottle ID.");
-
                     return null;
                 }
                 context.Bottles.Remove(bottle);
