@@ -36,12 +36,11 @@ namespace WineManager.Controllers
         /// Get bottle from Id.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
-        /// <param name="userId">CurrentUser's ID, not required.</param>
         /// <returns></returns>
         [HttpGet("{bottleId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Bottle>> GetBottle(int bottleId, int? userId)
+        public async Task<ActionResult<Bottle>> GetBottle(int bottleId)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
