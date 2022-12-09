@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<NoWarn>$(NoWarn);CS8618</NoWarn>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,10 +21,14 @@
 
 
 	<ItemGroup>
-		<Folder Include="IRepositories\" />
 		<Folder Include="Repositories\" />
 		<Folder Include="ViewModel\" />
-		<Folder Include="wwwroot\" />
+		<Folder Include="wwwroot\ListUsers\" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
 	</ItemGroup>
 
 

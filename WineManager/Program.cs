@@ -2,6 +2,9 @@ using WineManager.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using WineManager.IRepositories;
+using WineManager.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WineManager
 {
@@ -27,11 +30,19 @@ namespace WineManager
             });
 
             // Adding the context for migration //
-            
+
             builder.Services.AddDbContext<WineManagerContext>(o =>
             {
                 o.UseSqlServer(builder.Configuration.GetConnectionString("WineManagerDbCS"));
             });
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ICaveRepository, CaveRepository>();
+            builder.Services.AddScoped<IDrawerRepository, DrawerRepository>();
+            builder.Services.AddScoped<IBottleRepository, BottleRepository>();
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -45,8 +56,9 @@ namespace WineManager
 
             app.UseAuthorization();
 
-            app.UseStaticFiles();
+            app.UseAuthentication();
 
+            app.UseStaticFiles();
 
             app.MapControllers();
 
