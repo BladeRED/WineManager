@@ -79,11 +79,19 @@ namespace WineManager.Repositories
         /// <summary>
         /// Get cave from Id cave
         /// </summary>
-        /// <param name="idCave">Id Cave</param>
+        /// <param name="caveId">Cave's Id</param>
+        /// <param name="userId">User's Id</param>
         /// <returns></returns>
-        public async Task<Cave?> GetByIdAsync(int idCave)
+        public async Task<Cave?> GetCaveAsync(int caveId, int userId)
         {
-            return await WineManagerContext.Caves.FirstOrDefaultAsync(p => p.CaveId == idCave);
+            var cave = await WineManagerContext.Caves.Where(c => (c.CaveId == caveId) && (c.UserId == userId)).FirstOrDefaultAsync();
+            if (cave == null)
+            {
+                logger?.LogError("Item not found. Check the Cave ID.");
+
+                return null;
+            }
+            return cave;
         }
 
         /// <summary>
