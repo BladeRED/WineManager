@@ -132,7 +132,7 @@ namespace WineManager.Controllers
                 Color = bottleDto.Color,
                 Designation = bottleDto.Designation,
                 UserId = Int32.Parse(idCurrentUser.Value)
-        };
+            };
 
             var bottleAdded = await bottleRepository.AddBottleAsync(newBottle);
             return Ok(bottleAdded);
@@ -152,7 +152,7 @@ namespace WineManager.Controllers
             // Quantity desired //
             //bottleDupl.Quantity = quantity;
 
-            List<Bottle> Bottles = new List<Bottle>();  
+            List<Bottle> Bottles = new List<Bottle>();
 
             for (int i = 0; i < quantity; i++)
             {
@@ -169,10 +169,10 @@ namespace WineManager.Controllers
                 Bottles.Add(ListBottle);
             }
             var bottleCreated = await bottleRepository.DuplicateBottleAsync(Bottles, quantity);
-                if (bottleCreated != null)
-                    return Ok(bottleCreated);
-                else
-                    return Problem("Bottle non créé, cf log");        
+            if (bottleCreated != null)
+                return Ok(bottleCreated);
+            else
+                return Problem("Bottle non créé, cf log");
         }
 
         /// <summary>
@@ -214,6 +214,11 @@ namespace WineManager.Controllers
                 return Problem("Bottle non modifié, cf log");
         }
 
+        /// <summary>
+        /// Stock Bottle into a cave
+        /// </summary>
+        /// <param name="bottleDtoStock"></param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]

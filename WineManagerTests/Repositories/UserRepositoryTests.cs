@@ -62,9 +62,12 @@ namespace WineManager.Repositories.Tests
             var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
             var myList = await testContext.GetAllUsersAsync();
 
-            context.Database.EnsureDeleted();
+            // Tests 
             Assert.AreEqual(1, myList.Count);
             Assert.AreEqual("test", myUserAdded.Name);
+
+            // Db delete
+            context.Database.EnsureDeleted();
         }
 
         [TestMethod()]

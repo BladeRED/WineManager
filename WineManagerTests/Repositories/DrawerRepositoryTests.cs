@@ -29,8 +29,8 @@ namespace WineManager.Repositories.Tests
             Drawer TestDrawer = new Drawer()
             {
                 DrawerId = 1,
-                Level= 1,
-                MaxPosition= 1,
+                Level = 1,
+                MaxPosition = 1,
             };
 
             // simulating the add method //
@@ -60,8 +60,8 @@ namespace WineManager.Repositories.Tests
             Drawer MajDrawer = new Drawer()
             {
                 DrawerId = 2,
-                Level= 2,
-                MaxPosition= 2,
+                Level = 2,
+                MaxPosition = 2,
             };
 
             // simulating the add method //
@@ -72,13 +72,36 @@ namespace WineManager.Repositories.Tests
             var context2 = new WineManagerContext(builder.Options);
             DrawerRepository DrawerTest2 = new DrawerRepository(context2, null);
 
-            MajDrawer.DrawerId= 2;
+            MajDrawer.DrawerId = 2;
             MajDrawer.Level = 5;
             MajDrawer.MaxPosition = 5;
-         
+
             var MyUpdateTest = await DrawerTest2.UpdateDrawerAsync(MajDrawer);
 
             Assert.AreNotSame(MyAddTest, MyUpdateTest);
+        }
+
+        [TestMethod()]
+        public async Task StockDrawerAsyncTest()
+        {
+            // creation of the temp database and its context //
+
+            //var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            //var context = new WineManagerContext(builder.Options);
+            //DrawerRepository DrawerTest = new DrawerRepository(context, null);
+
+            //// Add a Drawer in context
+            //Drawer drawer = new Drawer()
+            //{
+            //    UserId= 1,
+            //    MaxPosition = 10
+            //};
+            //context.Drawers.Add(drawer);
+
+            //// DrawerId
+            //var drawerid = await context
+
+            Assert.Fail();
         }
     }
 }

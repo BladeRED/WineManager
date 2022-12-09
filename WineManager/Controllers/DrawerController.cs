@@ -225,7 +225,7 @@ namespace WineManager.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> StockDrawer(int drawerId, int caveId)
+        public async Task<ActionResult<Drawer>> StockDrawer(int drawerId, int caveId, int caveLevel)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -234,7 +234,7 @@ namespace WineManager.Controllers
 
             var userId = Int32.Parse(idCurrentUser.Value);
 
-            var drawerPutted = await drawerRepository.StockDrawerAsync(drawerId,caveId, userId);
+            var drawerPutted = await drawerRepository.StockDrawerAsync(drawerId,caveId, userId, caveLevel);
 
             if (drawerPutted != null)
                 return Ok(drawerPutted);
