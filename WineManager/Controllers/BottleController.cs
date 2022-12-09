@@ -84,9 +84,11 @@ namespace WineManager.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<Bottle>> DuplicateBottle([FromForm] BottleDtoDupl bottleDupl, int quantity)
         {
-            // Quantity desired //
-            //bottleDupl.Quantity = quantity;
-
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to duplicate bottles ! Check/ User / Login");
+            int userId = Int32.Parse(idCurrentUser.Value);
             List<Bottle> Bottles = new List<Bottle>();
 
             for (int i = 0; i < quantity; i++)
@@ -99,6 +101,7 @@ namespace WineManager.Controllers
                     EndKeepingYear = bottleDupl.EndKeepingYear,
                     Color = bottleDupl.Color,
                     Designation = bottleDupl.Designation,
+                    UserId = userId
                 };
 
                 Bottles.Add(ListBottle);
