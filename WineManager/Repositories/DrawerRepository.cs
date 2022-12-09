@@ -192,20 +192,23 @@ namespace WineManager.Repositories
         /// Delete a Drawer
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> DeleteDrawerAsync(int idDrawer)
+        public async Task<Drawer> DeleteDrawerAsync(int idDrawer, int userId)
         {
-            var drawerToDelete = await GetByIdAsync(idDrawer);
-
-            if (drawerToDelete == null) return false;
-
-            WineManagerContext?.Drawers.Remove(drawerToDelete);
-
-
+            var drawerToDelete = await WineManagerContext.Drawers.Where(b => b.DrawerId == idDrawer && b.UserId == userId).Include(c => c.Bottles).FirstOrDefaultAsync();
+            if (drawerToDelete == null)
+            {
+                logger?.LogError("Item not found. Check the drawer ID.");
+                return null;
+            }
+            foreach (var bottle in drawerToDelete.Bottles)
+            {
+                bottle.DrawerId = null;
+            }
             WineManagerContext?.Drawers.Remove(drawerToDelete);
 
             await WineManagerContext.SaveChangesAsync();
 
-            return true;
+            return drawerToDelete;
         }
     }
 }

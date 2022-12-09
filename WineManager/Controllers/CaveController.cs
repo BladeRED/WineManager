@@ -116,7 +116,7 @@ namespace WineManager.Controllers
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
-                return Problem("You must log in order to delete your bottles ! Check/ User / Login");
+                return Problem("You must log in order to delete your cave ! Check/ User / Login");
 
             var caveDeleted = await caveRepository.DeleteCaveAsync(id, int.Parse(idCurrentUser.Value));
 
