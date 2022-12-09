@@ -58,7 +58,7 @@ namespace WineManager.Repositories.Tests
                 Password = "test"
             };
 
-            
+
             var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
             var myList = await testContext.GetAllUsersAsync();
 

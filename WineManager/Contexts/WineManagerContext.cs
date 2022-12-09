@@ -46,7 +46,8 @@ namespace WineManager.Contexts
                 StartKeepingYear = 5,
                 EndKeepingYear = 8,
                 Color = "red",
-                Designation = "Pessac-Leognan"
+                Designation = "Pessac-Leognan",
+                UserId = 1
             };
             var b3 = new Bottle
             {
@@ -56,7 +57,8 @@ namespace WineManager.Contexts
                 StartKeepingYear = 5,
                 EndKeepingYear = 8,
                 Color = "red",
-                Designation = "Pessac-Leognan"
+                Designation = "Pessac-Leognan",
+                UserId = 3
             };
             var b4 = new Bottle
             {
@@ -66,7 +68,8 @@ namespace WineManager.Contexts
                 StartKeepingYear = 5,
                 EndKeepingYear = 8,
                 Color = "White",
-                Designation = "Riesling"
+                Designation = "Riesling",
+                UserId = 1
             };
             var b5 = new Bottle
             {
@@ -76,7 +79,8 @@ namespace WineManager.Contexts
                 StartKeepingYear = 5,
                 EndKeepingYear = 8,
                 Color = "White",
-                Designation = "Riesling"
+                Designation = "Riesling",
+                UserId = 2
             };
             var b6 = new Bottle
             {
@@ -86,7 +90,8 @@ namespace WineManager.Contexts
                 StartKeepingYear = 5,
                 EndKeepingYear = 8,
                 Color = "White",
-                Designation = "Riesling"
+                Designation = "Riesling",
+                UserId = 3
             };
 
             var d1 = new Drawer
@@ -114,6 +119,8 @@ namespace WineManager.Contexts
                 Family = "Wayne",
                 Brand = "Acme",
                 Temperature = 12,
+                NbMaxDrawer= 8,
+                NbMaxBottlePerDrawer= 6,
                 UserId = 1
             };
             var c2 = new Cave
@@ -123,6 +130,8 @@ namespace WineManager.Contexts
                 Family = "Wayne",
                 Brand = "Acme",
                 Temperature = 12,
+                NbMaxDrawer = 8,
+                NbMaxBottlePerDrawer = 6,
                 UserId = 2
             };
             modelBuilder.Entity<User>().HasData(new List<User> { u1, u2, u3, u4 });

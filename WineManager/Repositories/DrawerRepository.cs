@@ -43,7 +43,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<DrawerDtoGet> GetDrawerWithCaveAsync(int id)
         {
-            var drawerWithCave = await WineManagerContext.Drawers.Include(p => p.Cave).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new CaveDtoLight(p.Cave))).FirstOrDefaultAsync();
+            var drawerWithCave = await WineManagerContext.Drawers.Include(p => p.Cave).Where(p => p.DrawerId == id && p.CaveId!=null).Select(p => new DrawerDtoGet(p.DrawerId, new CaveDtoLight(p.Cave))).FirstOrDefaultAsync();
             if (drawerWithCave == null)
             {
                 logger?.LogError("Item not found");

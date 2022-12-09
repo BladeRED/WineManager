@@ -20,19 +20,6 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get all bottles.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<List<Bottle>>> GetAllBottles()
-        {
-            var bottles = await bottleRepository.GetAllBottlesAsync();
-
-            return Ok(bottles);
-        }
-
-        /// <summary>
         /// Get bottle from Id.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
@@ -59,79 +46,17 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get bottle from Id with his user.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Bottle>> GetBottleWithUser(int id)
-        {
-            var bottle = await bottleRepository.GetBottleWithUserAsync(id);
-            if (bottle == null)
-            {
-                return NotFound("No bottle found");
-            }
-            return Ok(bottle);
-        }
-
-        /// <summary>
-        /// Get bottle from Id with his article.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Bottle>> GetBottleWithDrawer(int id)
-        {
-            var bottle = await bottleRepository.GetBottleWithDrawerAsync(id);
-            if (bottle == null)
-            {
-                return NotFound("No bottle found");
-            }
-            return Ok(bottle);
-        }
-
-        /// <summary>
         /// Add a new bottle.
         /// </summary>
         /// <param name="bottle"></param>
         /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<Bottle>> AddBottle([FromForm] BottleDto bottleDto)
-        {
-            //var identity = User?.Identity as ClaimsIdentity;
-            //var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            //if (idCurrentUser == null)
-            //    return Problem("You must log before create an article ! Check/ User / Login");
-            //bottle.UserId = Int32.Parse(idCurrentUser.Value);
-            var newBottle = new Bottle()
-            {
-                Name = bottleDto.Name,
-                Vintage = bottleDto.Vintage,
-                StartKeepingYear = bottleDto.StartKeepingYear,
-                EndKeepingYear = bottleDto.EndKeepingYear,
-                Color = bottleDto.Color,
-                Designation = bottleDto.Designation,
-            };
-            var bottleCreated = await bottleRepository.AddBottleAsync(newBottle);
-
-            if (bottleCreated != null)
-                return Ok(bottleCreated);
-            else
-                return Problem("Bottle non créé, cf log");
-        }
         [HttpPost]
         public async Task<ActionResult<Bottle>> AddNewBottleToUser([FromForm] BottleDto bottleDto)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
-                return Problem("You must log in order to see your drawers ! Check/ User / Login");
+                return Problem("You must log in order to add bottles ! Check/ User / Login");
 
             var newBottle = new Bottle()
             {

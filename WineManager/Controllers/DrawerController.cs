@@ -25,19 +25,6 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get all drawers
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(200)]
-        public async Task<ActionResult<List<Drawer>>> GetAllDrawers()
-        {
-            var drawers = await drawerRepository.GetDrawersAsync();
-
-            return Ok(drawers);
-        }
-
-        /// <summary>
         /// Get drawer from Id
         /// </summary>
         /// <param name="id">Id drawer</param>
@@ -61,107 +48,10 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get drawer from Id with bottles
-        /// </summary>
-        /// <param name="id">Id Drawer</param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetDrawerWithBottles(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var drawer = await drawerRepository.GetDrawerWithBottlesAsync(id);
-            if (drawer == null)
-            {
-                return NotFound("No drawer found");
-            }
-            return Ok(drawer);
-        }
-
-        /// <summary>
-        /// Get drawer from Id with cave
-        /// </summary>
-        /// <param name="id">Id Drawer</param>
-        /// <returns></returns>
-        /// 
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetDrawerWithCave(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var drawer = await drawerRepository.GetDrawerWithCaveAsync(id);
-            if (drawer == null)
-            {
-                return NotFound("No drawer found");
-            }
-            return Ok(drawer);
-        }
-
-        /// <summary>
-        /// Get drawer from Id with user
-        /// </summary>
-        /// <param name="id">Id Drawer</param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetDrawerWithUser(int id)
-        {
-            if (id < 1)
-            {
-                return BadRequest("No valuable id found in the request");
-            }
-            var drawer = await drawerRepository.GetDrawerWithUserAsync(id);
-            if (drawer == null)
-            {
-                return NotFound("No drawer found");
-            }
-            return Ok(drawer);
-        }
-
-        /// <summary>
         /// Add drawer
         /// </summary>
         /// <param name="drawerPostDto">Return a DrawerPostDto object</param>
         /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> AddDrawer([FromForm] DrawerPostDto drawerPostDto)
-        {
-            var NewDrawer = new Drawer()
-            {
-                Level = drawerPostDto.Level,
-                MaxPosition = drawerPostDto.MaxPosition,
-                CaveId = drawerPostDto.CaveId
-
-            };
-            var drawerAdd = await drawerRepository.AddDrawerAsync(NewDrawer);
-
-            if (drawerAdd == null)
-                return Problem("Error when creating drawer, see log.");
-
-            //if (!string.IsNullOrEmpty(drawer.Picture?.FileType) && drawer.Picture.FileType.Length > 0)
-
-            //{// service IWebHostEnvironment
-            //    var path = Path.Combine(environment.WebRootPath, "Pictures/", drawer.Picture.FileType);
-            //    using (FileStream stream = new FileStream(path, FileMode.Add)) { await drawer.Picture.CopyToAsync(stream); stream.Close(); }
-            //}
-
-            return Ok(drawerAdd);
-        }
-
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]

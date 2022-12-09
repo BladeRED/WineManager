@@ -23,7 +23,7 @@ namespace WineManager.Repositories.Tests
 
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            CaveRepository CaveTest = new CaveRepository(context,null);
+            CaveRepository CaveTest = new CaveRepository(context, null);
 
             // creation of the object to add //
 
@@ -82,7 +82,7 @@ namespace WineManager.Repositories.Tests
             MajCave.Family = "Random2";
             MajCave.Temperature = 14;
 
-            var MyUpdateTest= await CaveTest2.UpdateCaveAsync(MajCave);
+            var MyUpdateTest = await CaveTest2.UpdateCaveAsync(MajCave);
 
             Assert.AreNotSame(MyAddTest, MyUpdateTest);
         }
