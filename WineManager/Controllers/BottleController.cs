@@ -190,7 +190,7 @@ namespace WineManager.Controllers
             if (idCurrentUser == null)
                 return Problem("You must log in order to delete your bottles ! Check/ User / Login");
 
-            var bottleDeleted = await bottleRepository.DeleteBottleAsync(id,int.Parse(idCurrentUser.Value));
+            var bottleDeleted = await bottleRepository.DeleteBottleAsync(id, int.Parse(idCurrentUser.Value));
 
             if (bottleDeleted != null)
                 return Ok(bottleDeleted);

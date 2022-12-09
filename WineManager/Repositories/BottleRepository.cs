@@ -75,7 +75,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<BottleDtoGet> GetBottleWithDrawerAsync(int id)
         {
-            var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id && p.DrawerId!=null).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDtoLight(p.Drawer))).FirstOrDefaultAsync();
+            var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id && p.DrawerId != null).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDtoLight(p.Drawer))).FirstOrDefaultAsync();
             if (bottleWithDrawer == null)
             {
                 logger?.LogError("Item not found");
@@ -209,11 +209,11 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="bottleId"></param>
         /// <returns></returns>
-        public async Task<Bottle> DeleteBottleAsync(int bottleId,int userId)
+        public async Task<Bottle> DeleteBottleAsync(int bottleId, int userId)
         {
             try
             {
-                var bottle = await context.Bottles.FirstOrDefaultAsync(b=>b.BottleId == bottleId && b.UserId == userId);
+                var bottle = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleId && b.UserId == userId);
                 if (bottle == null)
                 {
                     logger?.LogError("Item not found. Check the bottle ID.");

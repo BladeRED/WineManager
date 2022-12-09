@@ -146,7 +146,7 @@ namespace WineManager.Repositories
                 logger?.LogError("Item not found. Check the cave ID.");
                 return null;
             }
-            foreach(var drawer in caveToDelete.Drawers)
+            foreach (var drawer in caveToDelete.Drawers)
             {
                 drawer.CaveId = null;
             }

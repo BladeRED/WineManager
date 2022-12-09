@@ -119,8 +119,8 @@ namespace WineManager.Contexts
                 Family = "Wayne",
                 Brand = "Acme",
                 Temperature = 12,
-                NbMaxDrawer= 8,
-                NbMaxBottlePerDrawer= 6,
+                NbMaxDrawer = 8,
+                NbMaxBottlePerDrawer = 6,
                 UserId = 1
             };
             var c2 = new Cave
