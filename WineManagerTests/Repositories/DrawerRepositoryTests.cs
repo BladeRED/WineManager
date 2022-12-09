@@ -80,5 +80,28 @@ namespace WineManager.Repositories.Tests
 
             Assert.AreNotSame(MyAddTest, MyUpdateTest);
         }
+
+        [TestMethod()]
+        public async Task StockDrawerAsyncTest()
+        {
+            // creation of the temp database and its context //
+
+            //var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            //var context = new WineManagerContext(builder.Options);
+            //DrawerRepository DrawerTest = new DrawerRepository(context, null);
+
+            //// Add a Drawer in context
+            //Drawer drawer = new Drawer()
+            //{
+            //    UserId= 1,
+            //    MaxPosition = 10
+            //};
+            //context.Drawers.Add(drawer);
+
+            //// DrawerId
+            //var drawerid = await context
+
+            Assert.Fail();
+        }
     }
 }

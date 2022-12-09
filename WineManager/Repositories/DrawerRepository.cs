@@ -30,6 +30,7 @@ namespace WineManager.Repositories
             if (drawers == null)
             {
                 logger?.LogError("Item not found");
+
                 return null;
             }
             return drawers;
@@ -149,6 +150,43 @@ namespace WineManager.Repositories
 
             return drawerToUpdate;
         }
+
+        /// <summary>
+        /// Range a Drawer into a Cave
+        /// </summary>
+        /// <param name="drawerId"></param>
+        /// <param name="caveId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<Drawer?> StockDrawerAsync(int drawerId, int caveId, int userId, int caveLevel)
+        {
+            var drawerToPut = await WineManagerContext.Drawers.Where(d => d.UserId == userId && d.DrawerId == drawerId).FirstOrDefaultAsync();
+            if (drawerToPut == null || !(drawerToPut.CaveId == caveId))
+            {
+                logger?.LogError("Drawer not found, check if the Drawer and the Cave belong to the connected User.");
+
+                return null;
+            }
+            var getCave = await WineManagerContext.Caves.Include(c => c.Drawers).Where(c => c.CaveId == caveId).FirstOrDefaultAsync();
+
+            foreach (var item in getCave.Drawers)
+            {
+                //comparer cavelevel
+                if (caveLevel == item.Level)
+                {
+                    logger?.LogError("Impossible to place your drawer in a location already taken.");
+
+                    return null;
+                }
+            }
+            drawerToPut.Level= caveLevel;
+            drawerToPut.CaveId = caveId;
+
+            await WineManagerContext.SaveChangesAsync();
+
+            return drawerToPut;
+        }
+
 
         /// <summary>
         /// Delete a Drawer

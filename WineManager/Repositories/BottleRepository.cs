@@ -162,6 +162,45 @@ namespace WineManager.Repositories
 
         }
 
+        public async Task<Bottle> StockBottleAsync(BottleDtoStock bottleDtoStock, int userId)
+        {
+            try
+            {
+                var bottleToStock = await context.Bottles.Where(b => b.UserId == userId && b.BottleId == bottleDtoStock.BottleId).FirstOrDefaultAsync();
+
+                if (bottleToStock == null)
+                {
+                    logger?.LogError("Bottle not found, check if the items belong to the connected User.");
+
+                    return null;
+                }
+                if (bottleDtoStock.DrawerId == null)
+                {
+                    bottleToStock.DrawerId = null;
+                    bottleToStock.DrawerPosition = null;
+                    await context.SaveChangesAsync();
+
+
+                    return bottleToStock;
+                }
+                bottleToStock.DrawerId = bottleDtoStock.DrawerId;
+                bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;
+
+                var drawerToStock = await context.Drawers.FirstOrDefaultAsync(d => d.DrawerId == bottleDtoStock.DrawerId);
+                drawerToStock.CaveId = bottleDtoStock.CaveId;
+                drawerToStock.Level = bottleDtoStock.CaveLevel;
+
+
+                await context.SaveChangesAsync();
+                return bottleToStock;
+            }
+            catch (Exception e)
+            {
+                logger?.LogError(e?.InnerException?.ToString());
+                return null;
+            }
+        }
+
         /// <summary>
         /// Delete bottle from Id.
         /// </summary>
