@@ -209,11 +209,11 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="bottleId"></param>
         /// <returns></returns>
-        public async Task<Bottle> DeleteBottleAsync(int bottleId)
+        public async Task<Bottle> DeleteBottleAsync(int bottleId,int userId)
         {
             try
             {
-                var bottle = await context.Bottles.FindAsync(bottleId);
+                var bottle = await context.Bottles.FirstOrDefaultAsync(b=>b.BottleId == bottleId && b.UserId == userId);
                 if (bottle == null)
                 {
                     logger?.LogError("Item not found. Check the bottle ID.");

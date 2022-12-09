@@ -185,12 +185,17 @@ namespace WineManager.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Bottle>> DeleteBottle(int id)
         {
-            var bottleDeleted = await bottleRepository.DeleteBottleAsync(id);
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log in order to delete your bottles ! Check/ User / Login");
+
+            var bottleDeleted = await bottleRepository.DeleteBottleAsync(id,int.Parse(idCurrentUser.Value));
 
             if (bottleDeleted != null)
                 return Ok(bottleDeleted);
             else
-                return NotFound("Bottle non trouvé");
+                return NotFound("Bottle not found");
         }
     }
 }

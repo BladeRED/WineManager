@@ -68,7 +68,7 @@ namespace WineManager.IRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Bottle> DeleteBottleAsync(int id);
+        Task<Bottle> DeleteBottleAsync(int id,int userId);
     }
 }
 
