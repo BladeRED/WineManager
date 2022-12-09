@@ -39,7 +39,7 @@ namespace WineManager.Controllers
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
             {
-                return Problem("You must log in order to see your Bottle ! Check/ User / Login");
+                return Problem("You must log in order to see your Cave ! Check/ User / Login");
             }
             var currentUserId = Int32.Parse(idCurrentUser.Value);
 
