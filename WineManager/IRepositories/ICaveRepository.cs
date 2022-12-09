@@ -37,9 +37,10 @@ namespace WineManager.IRepositories
         /// <summary>
         /// Get cave from Id cave
         /// </summary>
-        /// <param name="idCave">Id Cave</param>
+        /// <param name="caveId">Cave's Id</param>
+        /// <param name="userId">User's Id</param>
         /// <returns></returns>
-        Task<Cave?> GetByIdAsync(int idCave);
+        Task<Cave?> GetCaveAsync(int caveId, int userId);
 
         /// <summary>
         /// Add a Cave

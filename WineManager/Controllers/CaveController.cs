@@ -27,19 +27,23 @@ namespace WineManager.Controllers
         /// <summary>
         /// Get cave from with Id
         /// </summary>
-        /// <param name="id">Id cave</param>
+        /// <param name="caveId">Id cave</param>
         /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Cave>> GetCave(int id)
+        public async Task<ActionResult<Cave>> GetCave(int caveId)
         {
-            if (id < 1)
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
             {
-                return BadRequest("No valuable id found in the request");
+                return Problem("You must log in order to see your Bottle ! Check/ User / Login");
             }
-            var cave = await caveRepository.GetByIdAsync(id);
+            var currentUserId = Int32.Parse(idCurrentUser.Value);
+
+            var cave = await caveRepository.GetCaveAsync(caveId, currentUserId);
             if (cave == null)
             {
                 return NotFound("No cave found");
