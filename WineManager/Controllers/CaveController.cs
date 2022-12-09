@@ -29,7 +29,7 @@ namespace WineManager.Controllers
         /// </summary>
         /// <param name="caveId">Id cave</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{caveId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
