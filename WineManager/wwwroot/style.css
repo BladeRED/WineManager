@@ -1,0 +1,58 @@
+﻿body {
+    background-color: rgb(43, 42, 51);
+    color: darkgray;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fb {
+    display: flex;
+}
+
+.m-il-5 {
+    margin-inline: 5px;
+}
+
+.m-bk-5 {
+    margin-block: 5px;
+}
+
+.m-a {
+    margin: auto;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: sienna
+}
+
+.container {
+    display: flex;
+    margin-inline: 12px;
+}
+
+.box {
+    min-width: 420px;
+    border: solid black 2px;
+    margin: auto;
+    padding: 18px;
+    border-radius: 6px;
+    background-color: rgb(54, 53, 59);
+    box-shadow: 3px 3px black, -1em 0 .4em rgb(60, 39, 39);
+}
+
+input {
+    background-color: darkgray;
+    min-width: 200px;
+}
+
+tr:nth-child(even) {
+    background-color: rgb(60, 39, 39);
+}
+
+th:nth-child(even), td:nth-child(even) {
+    background-color: rgb(98, 49, 49);
+}

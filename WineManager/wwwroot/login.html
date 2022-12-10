@@ -26,17 +26,25 @@
             </ul>
             <hr />
         </nav>
-        <p>> Home</p>
+        <p>> Login</p>
     </div>
     <!-- Page -->
     <div class="container">
         <div class="box">
-            <h1>Welcome to Wine Manager</h1>
+            <h1>Login</h1>
             <hr />
             <p>You must log in please</p>
-            <div class="m-bk-5"><a href="https://localhost:7041/login.html">Login</a></div>
+            <label for="email">Email</label>
+            <div class="input m-bk-5"><input id="input_login_email" type="email" name="email"></div>
+            <label for="password">Password</label>
+            <div class="input m-bk-5"><input id="input_login_pw" type="password" name="password"></div>
+            <button class="m-bk-5" id="submit_login_btn">Submit</button>
+
+            <div class="m-bk-5"><a href="#">Log out</a></div>
             <div class="m-bk-5"><a href="https://localhost:7041/account.html">Create a new account</a></div>
         </div>
     </div>
+    <ul id="user"></ul>
+
 </body>
 </html>

@@ -26,17 +26,28 @@
             </ul>
             <hr />
         </nav>
-        <p>> Home</p>
+        <p>> Account</p>
     </div>
     <!-- Page -->
     <div class="container">
         <div class="box">
-            <h1>Welcome to Wine Manager</h1>
+            <h1>Account</h1>
             <hr />
-            <p>You must log in please</p>
-            <div class="m-bk-5"><a href="https://localhost:7041/login.html">Login</a></div>
-            <div class="m-bk-5"><a href="https://localhost:7041/account.html">Create a new account</a></div>
+            <p>Create a new account</p>
+            <label for="name">Name</label>
+            <div class="input m-bk-5"><input id="input_account_name" type="text" name="name"></div>
+            <label for="birthday">Birthday</label>
+            <div class="input m-bk-5"><input id="input_account_birthday" type="date" name="birthday"></div>
+            <label for="email">Email</label>
+            <div class="input m-bk-5"><input id="input_login_email" type="email" name="email"></div>
+            <label for="password">Password</label>
+            <div class="input m-bk-5"><input id="input_user_id" type="password" name="password"></div>
+            <button class="m-bk-5" id="submit-login">Submit</button>
+
+            <div class="m-bk-5"><a href="#">Create a new account</a></div>
         </div>
     </div>
+    <ul id="user"></ul>
+
 </body>
 </html>

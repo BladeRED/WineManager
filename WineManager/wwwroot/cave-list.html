@@ -26,17 +26,32 @@
             </ul>
             <hr />
         </nav>
-        <p>> Home</p>
+        <p>> Cave list</p>
     </div>
     <!-- Page -->
     <div class="container">
-        <div class="box">
-            <h1>Welcome to Wine Manager</h1>
-            <hr />
-            <p>You must log in please</p>
-            <div class="m-bk-5"><a href="https://localhost:7041/login.html">Login</a></div>
-            <div class="m-bk-5"><a href="https://localhost:7041/account.html">Create a new account</a></div>
-        </div>
+        <table class="m-a">
+            <thead>
+                <tr>
+                    <th colspan="5">Cave list</th>
+                </tr>
+                <tr>
+                    <td>Cave label</td><!--exemple "Cave de la cuisine"-->
+                    <td>Family</td><!--cave de service, cave de garde, cave sous-terraine, autres…-->
+                    <td>Brand</td><!--Liebherr, Climadiff, La Sommelière, Haier, etc.-->
+                    <td>Temperature</td><!--exemple : 16°C-->
+                    <td>Max capacity</td>
+                </tr>
+            </thead>
+            <tbody id="bottles">
+                <!--
+                <tr>Ligne
+                    <td>Case<</td>
+                </tr>
+                -->
+            </tbody>
+        </table>
+
     </div>
 </body>
 </html>
