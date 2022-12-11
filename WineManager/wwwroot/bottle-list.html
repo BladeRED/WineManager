@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <title>Wine Manager</title>
     <link href="./style.css" rel="stylesheet" type="text/css">
-    <script src="script.js" defer></script>
+    <script src="bottle-list-script.js" defer></script>
 </head>
 <body>
     <!-- Navigation -->
     <div>
         <nav>
-            <ul class="fb">
+            <ul class="df">
                 <li class="m-il-5">
                     <a href="https://localhost:7041/index.html">Home</a>
                 </li>
@@ -29,13 +29,67 @@
         <p>> Bottle list</p>
     </div>
     <!-- Page -->
+    <!--Search bar-->
+    <div class="container">
+        <div class="box">
+            <h1>Search bottle</h1>
+            <hr />
+            <div class="df">
+                <div>
+                    <label for="name">Name</label>
+                    <div class="input m-bk-5"><input id="input_search_name" type="text" name="name"></div>
+                </div>
+                <div>
+                    <label for="designation">Designation</label>
+                    <div class="input m-bk-5"><input id="input_search_designation" type="text" name="designation"></div>
+                </div>
+                <div>
+                    <label for="color">Color</label>
+                    <div class="input m-bk-5"><input id="input_search_color" type="text" name="color"></div>
+                </div>
+                <div>
+                    <label for="vintage">Vintage</label>
+                    <div class="input m-bk-5"><input id="input_search_vintage" type="number" name="vintage"></div>
+                </div>
+                <div>
+                    <label for="apogee-status">Apogee Status</label>
+                    <div class="input m-bk-5"><input id="input_search_apogee-status" type="text" name="apogee-status"></div>
+                </div>
+            </div>
+            <div class="df">
+                <div>
+                    <label for="cave-label">Cave label</label>
+                    <div class="input m-bk-5"><input id="input_search_cave-label" type="text" name="cave-label"></div>
+                </div>
+                <div>
+                    <label for="drawer-label">Drawer label</label>
+                    <div class="input m-bk-5"><input id="input_search_drawer-label" type="text" name="drawer-label"></div>
+                </div>
+                <div>
+                    <label for="level">Level</label>
+                    <div class="input m-bk-5"><input id="input_search_level" type="number" name="level"></div>
+                </div>
+                <div>
+                    <label for="Position">Position</label>
+                    <div class="input m-bk-5"><input id="input_search_Position" type="text" name="Position"></div>
+                </div>
+                <button class="m-a p-5" id="submit_search_btn">Submit</button>
+            </div>
+
+            <p id="search_res"></p>
+
+
+        </div>
+    </div>
+
+    <!--Table-->
     <div class="container">
         <table class="m-a">
             <thead>
                 <tr>
-                    <th colspan="11">Bottle list</th>
+                    <th colspan="11"><h1>Bottle list</h1></th>
                 </tr>
-                <tr>
+                <tr class="">
                     <td>Name</td>
                     <td>Designation</td>
                     <td>Color</td>

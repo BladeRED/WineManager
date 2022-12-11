@@ -152,7 +152,7 @@ namespace WineManager.Controllers
         /// <param name="login"></param>
         /// <param name="pwd"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{login}/{pwd}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> LoginUser([DefaultValue("test@test.com")] string login, [DefaultValue("test")] string pwd)
