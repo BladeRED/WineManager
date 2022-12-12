@@ -197,7 +197,7 @@ namespace WineManager.Repositories
         public async Task<Bottle> UpdateBottleAsync(BottleDtoPut bottleDtoPut, int userId)
         {
             try
-            {
+            { 
                 var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId && b.UserId == userId);
 
                 if (bottleDtoPut.StartKeepingYear != null)
