@@ -94,7 +94,7 @@ namespace WineManager.Repositories
         {
             try
             {
-                if (bottleDto.DrawerId != null && bottleDto.DrawerPosition != null )
+                if (bottleDto.DrawerId != null && bottleDto.DrawerPosition != null)
                 {
                     var drawer = context.Drawers.Include(d => d.Bottles).Where(d => d.DrawerId == bottleDto.DrawerId).FirstOrDefault();
                     if (drawer == null)
@@ -191,8 +191,8 @@ namespace WineManager.Repositories
         /// <summary>
         /// Update bottle from Id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="bottle"></param>
+        /// <param name="bottleDtoPut"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         public async Task<Bottle> UpdateBottleAsync(BottleDtoPut bottleDtoPut, int userId)
         {
@@ -200,16 +200,32 @@ namespace WineManager.Repositories
             {
                 var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId && b.UserId == userId);
 
-                if (bottleDtoPut.Name != null)
-                    bottleToUpdate.Name = bottleDtoPut.Name;
-                if (bottleDtoPut.Vintage != null)
-                    bottleToUpdate.Vintage = bottleDtoPut.Vintage;
                 if (bottleDtoPut.StartKeepingYear != null)
                     bottleToUpdate.StartKeepingYear = bottleDtoPut.StartKeepingYear;
                 if (bottleDtoPut.EndKeepingYear != null)
                     bottleToUpdate.EndKeepingYear = bottleDtoPut.EndKeepingYear;
+
+                if (bottleToUpdate.StartKeepingYear == null || bottleToUpdate.EndKeepingYear == null)
+                {
+                    logger?.LogError("Please give both StartKeepingYear and EndKeepingYear or don't give both values.");
+
+                    return null;
+                }
+                if (bottleToUpdate.StartKeepingYear > bottleToUpdate.EndKeepingYear)
+                {
+                    logger?.LogError("StartKeepingYear must be smaller than EndKeepingYear.");
+
+                    return null;
+                }
+
+                if (bottleDtoPut.Name != null)
+                    bottleToUpdate.Name = bottleDtoPut.Name;
+                if (bottleDtoPut.Vintage != null)
+                    bottleToUpdate.Vintage = bottleDtoPut.Vintage;
                 if (bottleDtoPut.Color != null)
                     bottleToUpdate.Color = bottleDtoPut.Color;
+                if (bottleDtoPut.Designation != null)
+                    bottleToUpdate.Designation = bottleDtoPut.Designation;
 
                 await context.SaveChangesAsync();
                 return bottleToUpdate;
@@ -217,9 +233,9 @@ namespace WineManager.Repositories
             catch (Exception e)
             {
                 logger?.LogError(e?.InnerException?.ToString());
+
                 return null;
             }
-
         }
 
         public async Task<Bottle> StockBottleAsync(BottleDtoStock bottleDtoStock, int userId)
