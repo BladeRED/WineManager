@@ -259,11 +259,6 @@ namespace WineManager.Controllers
                 {
                     var str = await formFile.ReadAsStringAsync();
                     var fileJson = JsonSerializer.Deserialize<ListDTO>(str);
-                    var bottles = fileJson.Bottles;
-                    foreach (var item in bottles)
-                    {
-                        await bottleRepository.AddBottleAsync(item, id);
-                    }
                     var caves = fileJson.Caves;
                     Dictionary<int, int> keyValuePairsCave = new Dictionary<int, int>();
                     foreach (var item in caves)
@@ -291,14 +286,14 @@ namespace WineManager.Controllers
                     var bottles = fileJson.Bottles;
                     foreach (var item in bottles)
                     {
-                        var b = new Bottle(item, id);
-                        if (b.DrawerId != null)
+                      
+                        if (item.DrawerId != null)
                         {
-                            b.DrawerId = keyValuePairsDrawer[(int)b.DrawerId];
+                            item.DrawerId = keyValuePairsDrawer[(int)item.DrawerId];
                         }
                         else
-                            b.DrawerId = null;
-                        await bottleRepository.AddBottleAsync(b);
+                            item.DrawerId = null;
+                        await bottleRepository.AddBottleAsync(item, id);
                     }
                     return Ok("This is ok");
                 }

@@ -31,9 +31,9 @@ namespace WineManager.Repositories.Tests
 
             // creation of the object to add //
 
-            Bottle TestBottle = new Bottle()
+            BottleDto TestBottle = new BottleDto()
             {
-                BottleId = 1,
+              
                 Name = "Test",
                 Color = "Rouge",
                 Vintage = 2020,
@@ -46,8 +46,9 @@ namespace WineManager.Repositories.Tests
 
             // simulating the add method //
 
-            var MyAddTest = await BottleTest.AddBottleAsync(TestBottle);
-            context.Bottles.Add(TestBottle);
+            var MyAddTest = await BottleTest.AddBottleAsync(TestBottle, 1);
+            var b = new Bottle(TestBottle, 1);
+            context.Bottles.Add(b);
 
             var MyList = await BottleTest.GetAllBottlesAsync();
 
@@ -92,8 +93,8 @@ namespace WineManager.Repositories.Tests
             };
 
             // simulating the add method //
-
-            var MyAddTest = await BottleTest.AddBottleAsync(MajBottle1);
+            var b = new BottleDto(MajBottle1);
+            var MyAddTest = await BottleTest.AddBottleAsync(b, 1);
             context.Bottles.Add(MajBottle1);
 
             var context2 = new WineManagerContext(builder.Options);
