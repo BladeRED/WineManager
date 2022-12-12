@@ -82,37 +82,6 @@ namespace WineManager.Controllers
             return Ok(drawerAdded);
         }
 
-
-        /// <summary>
-        /// Update a drawer
-        /// </summary>
-        /// <param name="drawerDto">Maj a DrawerDto object</param>
-        /// <returns></returns>
-        [HttpPut]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> UpdateDrawer([FromForm] DrawerPutDto drawerDto)
-        {
-            var identity = User?.Identity as ClaimsIdentity;
-            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (idCurrentUser == null)
-                return Problem("You must log before updating a drawer! Check/ User / Login");
-            int userId = Int32.Parse(idCurrentUser.Value);
-
-            var MajDrawer = new Drawer()
-            {
-                DrawerId = drawerDto.DrawerId,
-                Level = drawerDto.Level
-            };
-
-            var drawerUpdated = await drawerRepository.UpdateDrawerAsync(MajDrawer, userId);
-
-            if (drawerUpdated != null)
-                return Ok(drawerUpdated);
-            else
-                return Problem("Drawer was not updated, see log for details");
-        }
-
         /// <summary>
         /// Range a Drawer into a Cave
         /// The Drawer and the Cave must belong to the connected user
