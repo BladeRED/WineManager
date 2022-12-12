@@ -132,6 +132,41 @@ namespace WineManager.Repositories
         {
             try
             {
+                if ((drawer.CaveId != null && drawer.Level == null) || (drawer.CaveId == null && drawer.Level != null))
+                {
+                    logger?.LogError("CaveId can't have a value when level doesn't and vice versa.");
+                    return null;
+                }
+                else if (drawer.CaveId != null && drawer.Level != null)
+                {
+                    var cave = await WineManagerContext.Caves.Include(c => c.Drawers).Where(c => c.UserId == drawer.UserId && c.CaveId == drawer.CaveId).FirstOrDefaultAsync();
+                    if (cave == null)
+                    {
+                        logger?.LogError("There isn't a cave belonging to you with this CaveId.");
+                        return null;
+                    }
+                    else if (cave.NbMaxDrawer < drawer.Level)
+                    {
+                        logger?.LogError("There isn't a cave that have such Level with the caveId you provided.");
+                        return null;
+                    }
+                    else if (cave.NbMaxBottlePerDrawer != drawer.MaxPosition)
+                    {
+                        logger?.LogError("Your drawer doesn't fit into this cave.");
+                        return null;
+                    }
+                    else if (cave.Drawers != null)
+                    {
+                        foreach (var d in cave.Drawers)
+                        {
+                            if (d.Level == drawer.Level)
+                            {
+                                logger?.LogError("The drawer can't fit in an occupied level.");
+                                return null;
+                            }
+                        }
+                    }
+                }
                 WineManagerContext.Drawers.Add(drawer);
                 await WineManagerContext.SaveChangesAsync();
             }
@@ -174,30 +209,54 @@ namespace WineManager.Repositories
         public async Task<Drawer?> StockDrawerAsync(int drawerId, int caveId, int userId, int caveLevel)
         {
             var drawerToPut = await WineManagerContext.Drawers.Where(d => d.UserId == userId && d.DrawerId == drawerId).FirstOrDefaultAsync();
-            if (drawerToPut == null || !(drawerToPut.CaveId == caveId))
+            if ((caveId != null && caveLevel == null) || (caveId == null && caveLevel != null))
             {
-                logger?.LogError("Drawer not found, check if the Drawer and the Cave belong to the connected User.");
-
+                logger?.LogError("CaveId can't have a value when level doesn't and vice versa.");
                 return null;
             }
-            var getCave = await WineManagerContext.Caves.Include(c => c.Drawers).Where(c => c.CaveId == caveId).FirstOrDefaultAsync();
-
-            foreach (var item in getCave.Drawers)
+            else if (caveId != null && caveLevel != null)
             {
-                //comparer cavelevel
-                if (caveLevel == item.Level)
+                if (drawerToPut == null)
                 {
-                    logger?.LogError("Impossible to place your drawer in a location already taken.");
+                    logger?.LogError("Drawer not found, check if the Drawer belong to the connected User.");
 
                     return null;
+                }
+                var getCave = await WineManagerContext.Caves.Include(c => c.Drawers).Where(c => c.CaveId == caveId & c.UserId == userId).FirstOrDefaultAsync();
+                if (getCave == null)
+                {
+                    logger?.LogError("Cave not found, check if the Cave belong to the connected User.");
+                    return null;
+                }
+                else if (getCave.NbMaxDrawer < drawerToPut.Level)
+                {
+                    logger?.LogError("There isn't a cave that have such Level with the caveId you provided.");
+                    return null;
+                }
+                else if (getCave.NbMaxBottlePerDrawer != drawerToPut.MaxPosition)
+                {
+                    logger?.LogError("Your drawer doesn't fit into this cave.");
+                    return null;
+                }
+                else if (getCave.Drawers != null)
+                {
+                    foreach (var item in getCave.Drawers)
+                    {
+                        //comparer cavelevel
+                        if (caveLevel == item.Level)
+                        {
+                            logger?.LogError("Impossible to place your drawer in a location already taken.");
+                            return null;
+                        }
+                    }
                 }
             }
             drawerToPut.Level = caveLevel;
             drawerToPut.CaveId = caveId;
-
             await WineManagerContext.SaveChangesAsync();
-
             return drawerToPut;
+
+
         }
 
 

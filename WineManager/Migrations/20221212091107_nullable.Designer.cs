@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WineManager.Contexts;
 
@@ -11,9 +12,11 @@ using WineManager.Contexts;
 namespace WineManager.Migrations
 {
     [DbContext(typeof(WineManagerContext))]
-    partial class WineManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20221212091107_nullable")]
+    partial class nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,14 +47,14 @@ namespace WineManager.Migrations
                     b.Property<string>("DrawerPosition")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EndKeepingYear")
+                    b.Property<int>("EndKeepingYear")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StartKeepingYear")
+                    b.Property<int>("StartKeepingYear")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -278,7 +281,7 @@ namespace WineManager.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2022, 12, 12, 12, 34, 16, 778, DateTimeKind.Local).AddTicks(6963),
+                            BirthDate = new DateTime(2022, 12, 12, 10, 11, 7, 660, DateTimeKind.Local).AddTicks(517),
                             Email = "Jerry.Seinfeld@aol.com",
                             Name = "Jerry Seinfeld",
                             Password = "password"

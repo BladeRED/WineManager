@@ -265,16 +265,40 @@ namespace WineManager.Controllers
                         await bottleRepository.AddBottleAsync(item, id);
                     }
                     var caves = fileJson.Caves;
+                    Dictionary<int, int> keyValuePairsCave = new Dictionary<int, int>();
                     foreach (var item in caves)
                     {
                         var c = new Cave(item, id);
-                        await caveRepository.AddCaveAsync(c);
+                        int oldId = item.CaveId;
+                        var cAdded = await caveRepository.AddCaveAsync(c);
+                        keyValuePairsCave.Add(oldId, cAdded.CaveId);
                     }
                     var drawers = fileJson.Drawers;
+                    Dictionary<int, int> keyValuePairsDrawer = new Dictionary<int, int>();
                     foreach (var item in drawers)
                     {
-                        var c = new Drawer(item, id);
-                        await drawerRepository.AddDrawerAsync(c);
+                        var d = new Drawer(item, id);
+                        int oldId = item.DrawerId;
+                        if (d.CaveId != null)
+                        {
+                            d.CaveId = keyValuePairsCave[(int)d.CaveId];
+                        }
+                        else
+                            d.CaveId = null;
+                        var dAdded = await drawerRepository.AddDrawerAsync(d);
+                        keyValuePairsDrawer.Add(oldId, (int)dAdded.DrawerId);
+                    }
+                    var bottles = fileJson.Bottles;
+                    foreach (var item in bottles)
+                    {
+                        var b = new Bottle(item, id);
+                        if (b.DrawerId != null)
+                        {
+                            b.DrawerId = keyValuePairsDrawer[(int)b.DrawerId];
+                        }
+                        else
+                            b.DrawerId = null;
+                        await bottleRepository.AddBottleAsync(b);
                     }
                     return Ok("This is ok");
                 }
