@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Wine Manager</title>
+    <link href="./style.css" rel="stylesheet" type="text/css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div>
+        <nav>
+            <ul class="df">
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/index.html">Home</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/login.html">Login</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/bottle-list.html">My wine list</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/bottle-list.html">My Cave list</a>
+                </li>
+            </ul>
+            <hr />
+        </nav>
+        <p>> Add-bottle</p>
+    </div>
+    <!-- Page -->
+    <div class="container">
+        <div class="box">
+            <h1>Add a bottle</h1>
+            <hr />
+            <p>Create a new bottle</p>
+            <label for="bottle-name">Name</label><!--exemple ""-->
+            <div class="input m-bk-5"><input id="input_add_bottle_name" type="text" name="bottle-name"></div>
+            <label for="bottle-designation">Designation</label><!--exemple ""-->
+            <div class="input m-bk-5"><input id="input_add_bottle_designation" type="text" name="bottle-designation"></div>
+            <label for="bottle-color">Color</label><!--liste déroulant : RED, WHITE, ROSE-->
+            <div class="input m-bk-5"><input id="input_add_bottle_color" type="text" name="bottle-color"></div>
+            <label for="bottle-vintage">Vintage</label>
+            <div class="input m-bk-5"><input id="input_add_bottle_vintage" type="number" name="bottle-vintage"></div>
+            <label for="bottle-start-apogee">Start apogee</label>
+            <div class="input m-bk-5"><input id="input_add_bottle_start_apogee" type="number" name="bottle-start-apogee"></div>
+            <label for="bottle-end-apogee">End apogee</label>
+            <div class="input m-bk-5"><input id="input_add_bottle_end_apogee" type="number" name="bottle-end-apogee"></div>
+            <label for="bottle-cave-label">Cave label</label><!--liste déroulant : -->
+            <div class="input m-bk-5"><input id="input_add_bottle_cave_label" type="text" name="bottle-cave-label"></div>
+            <label for="bottle-drawer-label">Drawer label</label><!--liste déroulant : -->
+            <div class="input m-bk-5"><input id="input_add_bottle_drawer_label" type="text" name="bottle-drawer-label"></div>
+            <label for="bottle-level">Level</label>
+            <div class="input m-bk-5"><input id="input_add_bottle_level" type="number" name="bottle-level"></div>
+            <label for="bottle-position">Position</label>
+            <div class="input m-bk-5"><input id="input_add_bottle_position" type="number" name="bottle-position"></div>
+
+            <button class="m-bk-5" id="submit-add-bottle">Submit</button>
+
+        </div>
+    </div>
+    <ul id="user"></ul>
+
+</body>
+</html>

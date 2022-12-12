@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Wine Manager</title>
+    <link href="./style.css" rel="stylesheet" type="text/css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div>
+        <nav>
+            <ul class="df">
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/index.html">Home</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/login.html">Login</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/bottle-list.html">My wine list</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/cave-list.html">My Cave list</a>
+                </li>
+            </ul>
+            <hr />
+        </nav>
+        <p>> Add-cave</p>
+    </div>
+    <!-- Page -->
+    <div class="container">
+        <div class="box">
+            <h1>Add a cave</h1>
+            <hr />
+            <p>Create a new cave</p>
+            <label for="cave-label">Cave label</label><!--exemple "Cave de la cuisine"-->
+            <div class="input m-bk-5"><input id="input_add_cave_label" type="text" name="cave-label"></div>
+            <label for="cave-family">Family</label><!--cave de service, cave de garde, cave sous-terraine, autres…-->
+            <div class="input m-bk-5"><input id="input_add_cave_family" type="text" name="cave-family"></div>
+            <label for="cave-brand">Brand</label><!--Liebherr, Climadiff, La Sommelière, Haier, etc.-->
+            <div class="input m-bk-5"><input id="input_add_cave_brand" type="text" name="cave-brand"></div>
+            <label for="cave-temperature">Temperature</label>
+            <div class="input m-bk-5"><input id="input_add_cave_temperature" type="number" name="cave-temperature"></div>
+            <label for="cave-nb-drawer">Number drawer</label>
+            <div class="input m-bk-5"><input id="input_add_cave_nb_drawer" type="number" name="cave-nb-drawer"></div>
+            <label for="cave-nb-position">Number position</label>
+            <div class="input m-bk-5"><input id="input_add_cave_nb_position" type="number" name="cave-nb-position"></div>
+
+            <button class="m-bk-5" id="submit-add-cave">Submit</button>
+
+        </div>
+    </div>
+    <ul id="user"></ul>
+
+</body>
+</html>
