@@ -262,8 +262,7 @@ namespace WineManager.Controllers
                     var bottles = fileJson.Bottles;
                     foreach (var item in bottles)
                     {
-                        var b = new Bottle(item, id);
-                        await bottleRepository.AddBottleAsync(b);
+                        await bottleRepository.AddBottleAsync(item, id);
                     }
                     var caves = fileJson.Caves;
                     foreach (var item in caves)

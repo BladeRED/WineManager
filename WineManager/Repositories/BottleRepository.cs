@@ -87,21 +87,79 @@ namespace WineManager.Repositories
         /// <summary>
         /// Add a new bottle.
         /// </summary>
-        /// <param name="bottle"></param>
+        /// <param name="bottleDto"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<Bottle?> AddBottleAsync(Bottle bottle)
+        public async Task<Bottle?> AddBottleAsync(BottleDto bottleDto, int userId)
         {
             try
             {
-                context.Bottles.Add(bottle);
+                if (bottleDto.DrawerId != null && bottleDto.DrawerPosition != null )
+                {
+                    var drawer = context.Drawers.Include(d => d.Bottles).Where(d => d.DrawerId == bottleDto.DrawerId).FirstOrDefault();
+                    if (drawer == null)
+                    {
+                        logger?.LogError("This Drawer is not exist.");
+
+                        return null;
+                    }
+                    else if (drawer.UserId != userId)
+                    {
+                        logger?.LogError("Wrong drawer owner.");
+
+                        return null;
+                    }
+                    else if (drawer.Bottles != null)
+                    {
+                        if (drawer.Bottles.Count == drawer.MaxPosition)
+                        {
+                            logger?.LogError("This Drawer is already full.");
+
+                            return null;
+                        }
+                        foreach (var item in drawer.Bottles)
+                        {
+                            if (item.DrawerPosition == bottleDto.DrawerPosition)
+                            {
+                                logger?.LogError("This position is occuped.");
+
+                                return null;
+                            }
+                        }
+                    }
+                }
+                else if (bottleDto.DrawerId != null || bottleDto.DrawerPosition != null)
+                {
+                    logger?.LogError("DrawerId can't have a value when DrawerPosition doesn't and vice versa..");
+
+                    return null;
+                }
+
+                if (bottleDto.StartKeepingYear != null && bottleDto.EndKeepingYear != null)
+                {
+                    if (bottleDto.StartKeepingYear > bottleDto.EndKeepingYear)
+                    {
+                        logger?.LogError("StartKeepingYear must be smaller than EndKeepingYear");
+
+                        return null;
+                    }
+                }
+                else if (bottleDto.StartKeepingYear == null || bottleDto.EndKeepingYear == null)
+                {
+                    logger?.LogError("Please give both StartKeepingYear and EndKeepingYear or don't give both values.");
+
+                    return null;
+                }
+                var newBottle = new Bottle(bottleDto, userId);
+                context.Bottles.Add(newBottle);
                 await context.SaveChangesAsync();
+                return newBottle;
             }
             catch (Exception e)
             {
                 logger?.LogError(e?.InnerException?.ToString());
                 return null;
             }
-            return bottle;
         }
 
         /// <summary>

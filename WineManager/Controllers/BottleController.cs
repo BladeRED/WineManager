@@ -58,20 +58,14 @@ namespace WineManager.Controllers
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
-                return Problem("You must log in order to add bottles ! Check/ User / Login");
+                return Problem("You must log in order to add bottles ! Check / User / Login");
+            var userId = int.Parse(idCurrentUser.Value);
 
-            var newBottle = new Bottle()
+            var bottleAdded = await bottleRepository.AddBottleAsync(bottleDto, userId);
+            if (bottleAdded == null)
             {
-                Name = bottleDto.Name,
-                Vintage = bottleDto.Vintage,
-                StartKeepingYear = bottleDto.StartKeepingYear,
-                EndKeepingYear = bottleDto.EndKeepingYear,
-                Color = bottleDto.Color,
-                Designation = bottleDto.Designation,
-                UserId = Int32.Parse(idCurrentUser.Value)
-            };
-
-            var bottleAdded = await bottleRepository.AddBottleAsync(newBottle);
+                return Problem("Error : please check log.");
+            }
             return Ok(bottleAdded);
         }
 
@@ -91,6 +85,8 @@ namespace WineManager.Controllers
             if (idCurrentUser == null)
                 return Problem("You must log in order to duplicate bottles ! Check/ User / Login");
             int userId = Int32.Parse(idCurrentUser.Value);
+
+
             List<Bottle> Bottles = new List<Bottle>();
 
             for (int i = 0; i < quantity; i++)
@@ -131,6 +127,7 @@ namespace WineManager.Controllers
             if (idCurrentUser == null)
                 return Problem("You must log before updating a bootle ! Check/ User / Login");
             int userId = Int32.Parse(idCurrentUser.Value);
+
 
             var MajBottle = new BottleDtoPut()
             {

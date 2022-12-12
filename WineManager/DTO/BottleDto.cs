@@ -6,11 +6,12 @@ namespace WineManager.DTO
     {
         public string Name { get; set; }
         public int Vintage { get; set; }
-        public int StartKeepingYear { get; set; }
-        public int EndKeepingYear { get; set; }
+        public int? StartKeepingYear { get; set; }
+        public int? EndKeepingYear { get; set; }
         public string Color { get; set; }
         public string Designation { get; set; }
         public int? DrawerId { get; set; }
+        public string? DrawerPosition { get; set; }
 
         public BottleDto(Bottle bottle)
         {
@@ -21,6 +22,7 @@ namespace WineManager.DTO
             Color = bottle.Color;
             Designation = bottle.Designation;
             DrawerId = bottle.DrawerId;
+            DrawerPosition = bottle.DrawerPosition;
         }
         public BottleDto()
         {
