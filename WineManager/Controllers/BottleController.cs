@@ -185,7 +185,7 @@ namespace WineManager.Controllers
         [HttpDelete]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<Bottle>> DeleteBottle(int id)
+        public async Task<ActionResult<string>> DeleteBottle(int id)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -195,7 +195,8 @@ namespace WineManager.Controllers
             var bottleDeleted = await bottleRepository.DeleteBottleAsync(id, int.Parse(idCurrentUser.Value));
 
             if (bottleDeleted != null)
-                return Ok(bottleDeleted);
+                //return Ok(bottleDeleted);
+                return Ok($"Bottle deleted: {bottleDeleted.BottleId}, {bottleDeleted.Name}, {bottleDeleted.Designation}, {bottleDeleted.Color}.");
             else
                 return NotFound("Bottle not found");
         }
