@@ -16,37 +16,40 @@ namespace WineManager.Repositories.Tests
     [TestClass()]
     public class CaveRepositoryTests
     {
+        /// <summary>
+        /// Testing AddCaveAsyncTest
+        /// with correct parameters
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
         public async Task AddCaveAsyncTest()
         {
-            // creation of the temp database and its context //
-
+            // Creation of the temp database and its context //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            CaveRepository CaveTest = new CaveRepository(context, null);
+            CaveRepository caveRepository = new CaveRepository(context, null);
 
-            // creation of the object to add //
-
-            Cave TestCave = new Cave()
+            // Creation of the object to add //
+            Cave cave = new Cave()
             {
                 CaveId = 1,
-                CaveType = "Cave de test",
-                Brand = "Lambda",
-                Family = "Random",
+                CaveType = "test",
+                Brand = "test",
+                Family = "test",
                 Temperature = 12,
             };
 
-            // simulating the add method //
+            // Simulating the add method //
+            var caveAdded = await caveRepository.AddCaveAsync(cave);
+            context.Caves.Add(cave);
 
-            var MyAddTest = await CaveTest.AddCaveAsync(TestCave);
-            context.Caves.Add(TestCave);
+            var caves = await context.Caves.ToListAsync();
 
-            var MyList = await CaveTest.GetCavesAsync();
+            // Comparing the list of objects to see if there is a new entry in the database //
+            Assert.AreEqual(1, caves.Count);
+            Assert.IsNotNull(caveAdded);
 
-            // comparing the list of objects to see if there is a new entry in the database //
-
-            Assert.AreEqual(1, MyList.Count);
-
+            // Delete BDD //
             context.Database.EnsureDeleted();
 
         }

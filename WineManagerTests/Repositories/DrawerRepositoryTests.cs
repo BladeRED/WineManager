@@ -17,7 +17,7 @@ namespace WineManager.Repositories.Tests
     {
         /// <summary>
         /// Testing AddDrawerAsync
-        /// TO DO : wrong paramaters tests
+        /// with correct parameters
         /// </summary>
         /// <returns></returns>
         [TestMethod()]
@@ -47,6 +47,11 @@ namespace WineManager.Repositories.Tests
             context.Database.EnsureDeleted();
         }
 
+        /// <summary>
+        /// Testing StockDrawerAsync
+        /// with correct parameters
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
         public async Task StockDrawerAsyncTest()
         {
@@ -66,18 +71,25 @@ namespace WineManager.Repositories.Tests
             await context.Caves.AddAsync(cave);
 
             // Creation of drawers to add //
-            Drawer drawer1 = new Drawer()
+            Drawer drawer = new Drawer()
             {
                 UserId = 1,
                 MaxPosition= 2,
             };
-            await context.Drawers.AddAsync(drawer1);
+            await context.Drawers.AddAsync(drawer);
             await context.SaveChangesAsync();
 
             // Process StockDrawerAsync //
-            //var drawerTest = await drawerRepository.StockDrawerAsync();
+            var drawerTest = await drawerRepository.StockDrawerAsync(drawer.DrawerId, cave.CaveId, 1, 1);
 
-            Assert.Fail();
+            // Tests //
+            Assert.IsNotNull(drawerTest);
+            Assert.AreEqual(drawer.DrawerId, drawerTest.DrawerId);
+            Assert.AreEqual(cave.CaveId, drawerTest.CaveId);
+            Assert.AreEqual(1, drawerTest.Level);
+
+            // Delete BDD //
+            context.Database.EnsureDeleted();
         }
     }
 }
