@@ -197,7 +197,7 @@ namespace WineManager.Repositories
         public async Task<Bottle> UpdateBottleAsync(BottleDtoPut bottleDtoPut, int userId)
         {
             try
-            { 
+            {
                 var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId && b.UserId == userId);
 
                 if (bottleDtoPut.StartKeepingYear != null)
@@ -244,12 +244,15 @@ namespace WineManager.Repositories
             {
                 var bottleToStock = await context.Bottles.Where(b => b.UserId == userId && b.BottleId == bottleDtoStock.BottleId).FirstOrDefaultAsync();
 
+                // This bottle exists for this user ?
                 if (bottleToStock == null)
                 {
                     logger?.LogError("Bottle not found, check if the items belong to the connected User.");
 
                     return null;
                 }
+
+                // If no drawer is specified, the bottle is released.
                 if (bottleDtoStock.DrawerId == null)
                 {
                     bottleToStock.DrawerId = null;
@@ -259,9 +262,33 @@ namespace WineManager.Repositories
 
                     return bottleToStock;
                 }
-                bottleToStock.DrawerId = bottleDtoStock.DrawerId;
-                bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;
 
+                // If a DrawerId is specified, it must have a specified DrawerPosition.
+                if (bottleDtoStock.DrawerId != null)
+                {
+                    if (bottleDtoStock.DrawerPosition != null)
+                    {
+                        bottleToStock.DrawerId = bottleDtoStock.DrawerId;
+                        bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;
+                    }
+                    else
+                    {
+                        logger?.LogError("If DrawerId not null, a DrawerId needs a DrawerPosition.");
+
+                        return null;
+                    }
+                }
+
+                // Si un CaveId est spécifié, alors on a besoin d'un Level qui n'est pas déjà affecter.
+                if (bottleDtoStock.CaveId != null)
+                {
+                    if (bottleDtoStock.CaveLevel == null)
+                    {
+                        logger?.LogError("If CaveId not null, a CaveId needs a CaveLevel.");
+
+                        return null;
+                    }
+                }
                 var drawerToStock = await context.Drawers.FirstOrDefaultAsync(d => d.DrawerId == bottleDtoStock.DrawerId);
                 drawerToStock.CaveId = bottleDtoStock.CaveId;
                 drawerToStock.Level = bottleDtoStock.CaveLevel;
