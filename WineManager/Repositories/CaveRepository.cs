@@ -11,7 +11,7 @@ namespace WineManager.Repositories
     public class CaveRepository : ICaveRepository
     {
 
-        readonly WineManagerContext WineManagerContext;
+        public WineManagerContext WineManagerContext;
         ILogger<DrawerRepository> logger;
         public CaveRepository(WineManagerContext WineManagerContext, ILogger<DrawerRepository> logger)
         {
@@ -25,7 +25,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<List<Cave>> GetCavesAsync()
         {
-            var cave = await WineManagerContext.Caves.ToListAsync();
+            var cave = await WineManagerContext.Caves.AsNoTracking().ToListAsync();
             if (cave == null)
             {
                 logger?.LogError("Item not found");
@@ -41,7 +41,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Cave> GetByIdUserAsync(int userId)
         {
-            return await WineManagerContext.Caves.Include(p => p.UserId).FirstOrDefaultAsync(p => p.UserId == userId);
+            return await WineManagerContext.Caves.AsNoTracking().Include(p => p.UserId).FirstOrDefaultAsync(p => p.UserId == userId);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<CaveDtoGet> GetWithDrawerAsync(int caveId)
         {
-            var cave = await WineManagerContext.Caves.Include(p => p.Drawers).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, p.Drawers)).FirstOrDefaultAsync();
+            var cave = await WineManagerContext.Caves.AsNoTracking().Include(p => p.Drawers).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, p.Drawers)).FirstOrDefaultAsync();
             if (cave == null)
             {
                 logger?.LogError("Item not found");
@@ -63,11 +63,11 @@ namespace WineManager.Repositories
         /// <summary>
         /// Get cave from Id user
         /// </summary>
-        /// <param name="userId">Id User</param>
+        /// <param name="caveId">Id User</param>
         /// <returns></returns>
         public async Task<CaveDtoGet> GetWithUserAsync(int caveId)
         {
-            var cave = await WineManagerContext.Caves.Include(p => p.UserId).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
+            var cave = await WineManagerContext.Caves.AsNoTracking().Include(p => p.UserId).Where(p => p.CaveId == caveId).Select(p => new CaveDtoGet(p.CaveId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
             if (cave == null)
             {
                 logger?.LogError("Item not found");
@@ -84,7 +84,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Cave?> GetCaveAsync(int caveId, int userId)
         {
-            var cave = await WineManagerContext.Caves.Where(c => (c.CaveId == caveId) && (c.UserId == userId)).FirstOrDefaultAsync();
+            var cave = await WineManagerContext.Caves.AsNoTracking().Where(c => (c.CaveId == caveId) && (c.UserId == userId)).FirstOrDefaultAsync();
             if (cave == null)
             {
                 logger?.LogError("Item not found. Check the Cave ID.");
@@ -135,7 +135,7 @@ namespace WineManager.Repositories
             if (cave.Temperature != null)
                 caveToUpdate.Temperature = cave.Temperature;
 
-            await WineManagerContext?.SaveChangesAsync();
+            await WineManagerContext.SaveChangesAsync();
 
             return caveToUpdate;
         }
@@ -152,14 +152,17 @@ namespace WineManager.Repositories
                 logger?.LogError("Item not found. Check the cave ID.");
                 return null;
             }
-            foreach (var drawer in caveToDelete.Drawers)
+            if (caveToDelete.Drawers != null)
             {
-                drawer.CaveId = null;
+                foreach (var drawer in caveToDelete.Drawers)
+                {
+                    drawer.CaveId = null;
+                }
             }
 
-            WineManagerContext?.Caves.Remove(caveToDelete);
+            WineManagerContext.Caves.Remove(caveToDelete);
 
-            await WineManagerContext?.SaveChangesAsync();
+            await WineManagerContext.SaveChangesAsync();
 
             return caveToDelete;
         }

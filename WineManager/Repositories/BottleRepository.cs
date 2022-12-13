@@ -24,7 +24,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<List<Bottle>> GetAllBottlesAsync()
         {
-            var bottles = await context.Bottles.ToListAsync();
+            var bottles = await context.Bottles.AsNoTracking().ToListAsync();
             if (bottles == null)
             {
                 logger?.LogError("Item not found");
@@ -41,7 +41,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Bottle> GetBottleAsync(int bottleid, int userId)
         {
-            var bottle = await context.Bottles.Where(b => (b.BottleId == bottleid) && (b.UserId == userId)).FirstOrDefaultAsync();
+            var bottle = await context.Bottles.AsNoTracking().Where(b => (b.BottleId == bottleid) && (b.UserId == userId)).FirstOrDefaultAsync();
             if (bottle == null)
             {
                 logger?.LogError("Item not found. Check the bottle ID.");
@@ -59,7 +59,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<BottleDtoGet> GetBottleWithUserAsync(int id)
         {
-            var bottleWithUser = await context.Bottles.Include(p => p.User).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new UserDTOLight(p.User))).FirstOrDefaultAsync();
+            var bottleWithUser = await context.Bottles.AsNoTracking().Include(p => p.User).Where(p => p.BottleId == id).Select(p => new BottleDtoGet(p.BottleId, p.Name, new UserDTOLight(p.User))).FirstOrDefaultAsync();
             if (bottleWithUser == null)
             {
                 logger?.LogError("Item not found");
@@ -75,7 +75,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<BottleDtoGet> GetBottleWithDrawerAsync(int id)
         {
-            var bottleWithDrawer = await context.Bottles.Include(p => p.Drawer).Where(p => p.BottleId == id && p.DrawerId != null).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDtoLight(p.Drawer))).FirstOrDefaultAsync();
+            var bottleWithDrawer = await context.Bottles.AsNoTracking().Include(p => p.Drawer).Where(p => p.BottleId == id && p.DrawerId != null).Select(p => new BottleDtoGet(p.BottleId, p.Name, new DrawerDtoLight(p.Drawer))).FirstOrDefaultAsync();
             if (bottleWithDrawer == null)
             {
                 logger?.LogError("Item not found");
@@ -165,7 +165,7 @@ namespace WineManager.Repositories
         /// <summary>
         /// Duplicate a new bottle, with a quantity for multiply the add requests.
         /// </summary>
-        /// <param name="bottle"></param>
+        /// <param name="Bottles"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
         public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity)
@@ -197,43 +197,49 @@ namespace WineManager.Repositories
         public async Task<Bottle> UpdateBottleAsync(BottleDtoPut bottleDtoPut, int userId)
         {
             try
-            { 
+            {
                 var bottleToUpdate = await context.Bottles.FirstOrDefaultAsync(b => b.BottleId == bottleDtoPut.BottleId && b.UserId == userId);
-
-                if (bottleDtoPut.StartKeepingYear != null)
-                    bottleToUpdate.StartKeepingYear = bottleDtoPut.StartKeepingYear;
-                if (bottleDtoPut.EndKeepingYear != null)
-                    bottleToUpdate.EndKeepingYear = bottleDtoPut.EndKeepingYear;
-
-                if (bottleToUpdate.StartKeepingYear == null || bottleToUpdate.EndKeepingYear == null)
+                if (bottleToUpdate != null)
                 {
-                    logger?.LogError("Please give both StartKeepingYear and EndKeepingYear or don't give both values.");
+                    if (bottleDtoPut.StartKeepingYear != null && bottleDtoPut.EndKeepingYear != null)
+                    {
+                        bottleToUpdate.StartKeepingYear = (int)bottleDtoPut.StartKeepingYear;
+                        bottleToUpdate.EndKeepingYear = (int)bottleDtoPut.EndKeepingYear;
+                    }
 
-                    return null;
-                }
-                if (bottleToUpdate.StartKeepingYear > bottleToUpdate.EndKeepingYear)
-                {
-                    logger?.LogError("StartKeepingYear must be smaller than EndKeepingYear.");
+                    if (bottleDtoPut.StartKeepingYear == null || bottleDtoPut.EndKeepingYear == null)
+                    {
+                        logger?.LogError("Please give both StartKeepingYear and EndKeepingYear or don't give both values.");
 
-                    return null;
-                }
+                        return null;
+                    }
+                    if (bottleDtoPut.StartKeepingYear > bottleDtoPut.EndKeepingYear)
+                    {
+                        logger?.LogError("StartKeepingYear must be smaller than EndKeepingYear.");
 
-                if (bottleDtoPut.Name != null)
-                    bottleToUpdate.Name = bottleDtoPut.Name;
-                if (bottleDtoPut.Vintage != null)
+                        return null;
+                    }
+
+                    if (bottleDtoPut.Name != null)
+                        bottleToUpdate.Name = bottleDtoPut.Name;
                     bottleToUpdate.Vintage = bottleDtoPut.Vintage;
-                if (bottleDtoPut.Color != null)
-                    bottleToUpdate.Color = bottleDtoPut.Color;
-                if (bottleDtoPut.Designation != null)
-                    bottleToUpdate.Designation = bottleDtoPut.Designation;
+                    if (bottleDtoPut.Color != null)
+                        bottleToUpdate.Color = bottleDtoPut.Color;
+                    if (bottleDtoPut.Designation != null)
+                        bottleToUpdate.Designation = bottleDtoPut.Designation;
 
-                await context.SaveChangesAsync();
-                return bottleToUpdate;
+                    await context.SaveChangesAsync();
+                    return bottleToUpdate;
+                }
+                else
+                {
+                    logger?.LogError("Update not correct.");
+                    return null;
+                }
             }
             catch (Exception e)
             {
                 logger?.LogError(e?.InnerException?.ToString());
-
                 return null;
             }
         }
@@ -263,6 +269,11 @@ namespace WineManager.Repositories
                 bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;
 
                 var drawerToStock = await context.Drawers.FirstOrDefaultAsync(d => d.DrawerId == bottleDtoStock.DrawerId);
+                if (drawerToStock == null)
+                {
+                    logger?.LogError("This drawer doesn't exist");
+                    return null;
+                }
                 drawerToStock.CaveId = bottleDtoStock.CaveId;
                 drawerToStock.Level = bottleDtoStock.CaveLevel;
 
@@ -281,6 +292,7 @@ namespace WineManager.Repositories
         /// Delete bottle from Id.
         /// </summary>
         /// <param name="bottleId"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         public async Task<Bottle> DeleteBottleAsync(int bottleId, int userId)
         {

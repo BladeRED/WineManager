@@ -13,7 +13,6 @@ namespace WineManager.Controllers
     public class BottleController : ControllerBase
     {
         IBottleRepository bottleRepository;
-        IUserRepository userRepository;
         public BottleController(IBottleRepository bottleRepository)
         {
             this.bottleRepository = bottleRepository;
@@ -114,7 +113,6 @@ namespace WineManager.Controllers
         /// <summary>
         /// Update bottle from Id.
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="bottleDtoPut"></param>
         /// <returns></returns>
         [HttpPut]

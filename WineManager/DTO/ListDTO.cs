@@ -13,22 +13,32 @@ namespace WineManager.DTO
         {
 
         }
-        public ListDTO(List<Bottle> bottles, List<Drawer> drawers, List<Cave> caves)
+        public ListDTO(List<Bottle>? bottles, List<Drawer>? drawers, List<Cave>? caves)
         {
-            Bottles = new List<BottleDto>();
-            foreach (var item in bottles)
+            if (bottles != null)
             {
-                Bottles.Add(new BottleDto(item));
+                Bottles = new List<BottleDto>();
+                foreach (var item in bottles)
+                {
+                    Bottles.Add(new BottleDto(item));
+                }
             }
-            Drawers = new List<DrawerDto>();
-            foreach (var item in drawers)
+
+            if (drawers != null)
             {
-                Drawers.Add(new DrawerDto(item));
+                Drawers = new List<DrawerDto>();
+                foreach (var item in drawers)
+                {
+                    Drawers.Add(new DrawerDto(item));
+                }
             }
-            Caves = new List<CaveDto>();
-            foreach (var item in caves)
+            if (caves != null)
             {
-                Caves.Add(new CaveDto(item));
+                Caves = new List<CaveDto>();
+                foreach (var item in caves)
+                {
+                    Caves.Add(new CaveDto(item));
+                }
             }
         }
     }

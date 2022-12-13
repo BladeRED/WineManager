@@ -7,12 +7,13 @@ namespace WineManager.DTO
         public int CaveId { get; set; }
         public string Brand { get; set; }
 
-        public CaveDtoLight(Cave cave)
+        public CaveDtoLight(Cave? cave)
         {
             if (cave != null)
             {
                 CaveId = cave.CaveId;
-                Brand = cave.Brand;
+                if (cave.Brand != null)
+                    Brand = cave.Brand;
             }
         }
     }

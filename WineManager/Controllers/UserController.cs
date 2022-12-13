@@ -259,41 +259,49 @@ namespace WineManager.Controllers
                 {
                     var str = await formFile.ReadAsStringAsync();
                     var fileJson = JsonSerializer.Deserialize<ListDTO>(str);
-                    var caves = fileJson.Caves;
-                    Dictionary<int, int> keyValuePairsCave = new Dictionary<int, int>();
-                    foreach (var item in caves)
+                    if (fileJson != null)
                     {
-                        var c = new Cave(item, id);
-                        int oldId = item.CaveId;
-                        var cAdded = await caveRepository.AddCaveAsync(c);
-                        keyValuePairsCave.Add(oldId, cAdded.CaveId);
-                    }
-                    var drawers = fileJson.Drawers;
-                    Dictionary<int, int> keyValuePairsDrawer = new Dictionary<int, int>();
-                    foreach (var item in drawers)
-                    {
-                        var d = new Drawer(item, id);
-                        int oldId = item.DrawerId;
-                        if (d.CaveId != null)
+                        var caves = fileJson.Caves;
+                        Dictionary<int, int> keyValuePairsCave = new Dictionary<int, int>();
+                        foreach (var item in caves)
                         {
-                            d.CaveId = keyValuePairsCave[(int)d.CaveId];
+                            var c = new Cave(item, id);
+                            int oldId = item.CaveId;
+                            var cAdded = await caveRepository.AddCaveAsync(c);
+                            if (cAdded == null)
+                                return Problem("There is a probleme with one of the imported cave");                            
+                            keyValuePairsCave.Add(oldId, cAdded.CaveId);
                         }
-                        else
-                            d.CaveId = null;
-                        var dAdded = await drawerRepository.AddDrawerAsync(d);
-                        keyValuePairsDrawer.Add(oldId, (int)dAdded.DrawerId);
-                    }
-                    var bottles = fileJson.Bottles;
-                    foreach (var item in bottles)
-                    {
-                      
-                        if (item.DrawerId != null)
+                        var drawers = fileJson.Drawers;
+                        Dictionary<int, int> keyValuePairsDrawer = new Dictionary<int, int>();
+                        foreach (var item in drawers)
                         {
-                            item.DrawerId = keyValuePairsDrawer[(int)item.DrawerId];
+                            var d = new Drawer(item, id);
+                            int oldId = item.DrawerId;
+                            if (d.CaveId != null)
+                            {
+                                d.CaveId = keyValuePairsCave[(int)d.CaveId];
+                            }
+                            else
+                                d.CaveId = null;
+                            var dAdded = await drawerRepository.AddDrawerAsync(d);
+                            if (dAdded == null)
+                                return Problem("There is a probleme with one of the imported drawer");
+                            keyValuePairsDrawer.Add(oldId, (int)dAdded.DrawerId);
                         }
-                        else
-                            item.DrawerId = null;
-                        await bottleRepository.AddBottleAsync(item, id);
+                        var bottles = fileJson.Bottles;
+                        foreach (var item in bottles)
+                        {
+
+                            if (item.DrawerId != null)
+                            {
+                                item.DrawerId = keyValuePairsDrawer[(int)item.DrawerId];
+                            }
+                            else
+                                item.DrawerId = null;
+                            await bottleRepository.AddBottleAsync(item, id);
+                        }
+                        return Problem("No json file found");
                     }
                     return Ok("This is ok");
                 }

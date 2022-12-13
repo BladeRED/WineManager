@@ -82,8 +82,10 @@ namespace WineManager.Controllers
             return Ok(drawerAdded);
         }
 
+
+
         /// <summary>
-        /// Range a Drawer into a Cave
+        /// Place a Drawer into a Cave
         /// The Drawer and the Cave must belong to the connected user
         /// </summary>
         /// <param name="drawerId"></param>
@@ -93,7 +95,7 @@ namespace WineManager.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> StockDrawer(int drawerId, int caveId, int caveLevel)
+        public async Task<ActionResult<Drawer>> StockDrawer(int drawerId, int? caveId, int? caveLevel)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
