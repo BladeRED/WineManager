@@ -154,7 +154,7 @@ namespace WineManager.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Bottle>> StockBottle([FromForm] BottleDtoStock bottleDtoStock)
+        public async Task<ActionResult<Bottle>> StockBottleInDrawer([FromForm] BottleDtoStock bottleDtoStock)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -168,7 +168,7 @@ namespace WineManager.Controllers
             if (bottleStocked != null)
                 return Ok(bottleStocked);
             else
-                return Problem("Bottle non modifié, cf log");
+                return Problem("Bottle not modified, see log");
         }
 
 
