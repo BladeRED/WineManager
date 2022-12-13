@@ -144,9 +144,9 @@ namespace WineManager.Repositories
                         return null;
                     }
                 }
-                else if (bottleDto.StartKeepingYear == null || bottleDto.EndKeepingYear == null)
+                else if ((bottleDto.StartKeepingYear == null && bottleDto.EndKeepingYear != null) || (bottleDto.StartKeepingYear != null && bottleDto.EndKeepingYear == null))
                 {
-                    logger?.LogError("Please give both StartKeepingYear and EndKeepingYear.");
+                    logger?.LogError("Please give both StartKeepingYear and EndKeepingYear or don't give both values.");
 
                     return null;
                 }
@@ -167,14 +167,19 @@ namespace WineManager.Repositories
         /// </summary>
         /// <param name="Bottles"></param>
         /// <param name="quantity"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity)
+        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity,int userId)
         {
             try
             {
                 foreach (Bottle bottle in Bottles)
                 {
-                    context.Bottles.Add(bottle);
+                    if (await AddBottleAsync(new BottleDto(bottle), userId) == null)
+                    {
+                        logger.LogError("Error in duplication");
+                        return null;
+                    }
                     await context.SaveChangesAsync();
                 }
 
