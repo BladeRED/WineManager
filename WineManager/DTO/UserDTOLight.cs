@@ -7,7 +7,7 @@ namespace WineManager.DTO
         public int? UserId { get; set; }
         public string? Name { get; set; }
 
-        public UserDTOLight(User user)
+        public UserDTOLight(User? user)
         {
             if (user != null)
             {

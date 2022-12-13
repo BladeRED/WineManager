@@ -51,8 +51,8 @@ namespace WineManager.IRepositories
         /// <summary>
         /// Update bottle from Id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="bottle"></param>
+        /// <param name="userId"></param>
+        /// <param name="bottlePutDto"></param>
         /// <returns></returns>
         Task<Bottle> UpdateBottleAsync(BottleDtoPut bottlePutDto, int userId);
 
@@ -68,6 +68,7 @@ namespace WineManager.IRepositories
         /// Delete bottle from Id.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         Task<Bottle> DeleteBottleAsync(int id, int userId);
     }

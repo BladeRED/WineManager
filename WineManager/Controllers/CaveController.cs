@@ -1,12 +1,10 @@
 ﻿using WineManager.Entities;
 using WineManager.IRepositories;
-//using WineManager.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using WineManager.IRepositories;
 using WineManager.DTO;
 using WineManager.Repositories;
 

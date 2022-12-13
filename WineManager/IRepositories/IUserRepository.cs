@@ -28,7 +28,6 @@ namespace WineManager.IRepositories
         /// <summary>
         /// Update user from Id.
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="userPutDto"></param>
         /// <returns></returns>
         Task<UserDto?> UpdateUserAsync(UserPutDto userPutDto);

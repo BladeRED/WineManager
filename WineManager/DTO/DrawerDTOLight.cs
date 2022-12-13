@@ -8,7 +8,7 @@ namespace WineManager.DTO
         public int? Level { get; set; }
         public int MaxPosition { get; set; }
 
-        public DrawerDtoLight(Drawer drawer)
+        public DrawerDtoLight(Drawer? drawer)
         {
             if (drawer != null)
             {

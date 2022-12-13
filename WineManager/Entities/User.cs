@@ -26,10 +26,14 @@ namespace WineManager.Entities
 
         public User(UserPutDto userPutDto)
         {
-            Name = userPutDto.NewName;
-            Email = userPutDto.NewEmail;
-            BirthDate = (DateTime)userPutDto.NewBirthDate;
-            Password = userPutDto.NewPassword;
+            if (userPutDto.NewName != null)
+                Name = userPutDto.NewName;
+            if (userPutDto.NewEmail != null)
+                Email = userPutDto.NewEmail;
+            if (userPutDto.NewBirthDate != null)
+                BirthDate = (DateTime)userPutDto.NewBirthDate;
+            if (userPutDto.NewPassword != null)
+                Password = userPutDto.NewPassword;
         }
         public User(UserPostDto userPostDto)
         {
