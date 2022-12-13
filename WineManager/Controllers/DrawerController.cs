@@ -31,8 +31,8 @@ namespace WineManager.Controllers
         /// <returns></returns>
         [HttpGet("{drawerId}")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Drawer>> GetDrawer(int drawerId)
         {
             var identity = User?.Identity as ClaimsIdentity;
