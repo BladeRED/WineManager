@@ -19,7 +19,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get bottle from Id.
+        /// Get bottle from bottleId.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
         /// <returns></returns>
@@ -46,7 +46,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get bottle from Id.
+        /// Get bottle from bottleId.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
         /// <returns></returns>
@@ -75,7 +75,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get bottle from Id.
+        /// Get bottle from bottleId.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
         /// <returns></returns>
@@ -237,21 +237,21 @@ namespace WineManager.Controllers
 
 
         /// <summary>
-        /// Delete bottle from Id.
+        /// Delete bottle from bottleId.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="bottleId"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{bottleId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<string>> DeleteBottle(int id)
+        public async Task<ActionResult<string>> DeleteBottle(int bottleId)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
                 return Problem("You must log in order to delete your bottles ! Check/ User / Login");
 
-            var bottleDeleted = await bottleRepository.DeleteBottleAsync(id, int.Parse(idCurrentUser.Value));
+            var bottleDeleted = await bottleRepository.DeleteBottleAsync(bottleId, int.Parse(idCurrentUser.Value));
 
             if (bottleDeleted != null)
                 //return Ok(bottleDeleted);
