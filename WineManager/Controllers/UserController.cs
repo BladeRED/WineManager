@@ -50,21 +50,21 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get user from Id
+        /// Get user from userId
         /// </summary>
-        /// <param name="id">Id user</param>
+        /// <param name="userId">Id user</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{userId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto?>> GetUser(int id)
+        public async Task<ActionResult<UserDto?>> GetUser(int userId)
         {
-            if (id < 1)
+            if (userId < 1)
             {
                 return BadRequest("No id valuable found in the request");
             }
-            var userDto = await userRepository.GetUserAsync(id);
+            var userDto = await userRepository.GetUserAsync(userId);
             if (userDto == null)
                 return NotFound("User in not found.");
 
@@ -329,16 +329,20 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Delete an User
+        /// Delete the current User
         /// </summary>
-        /// <param name="id">Find a user by its id and delete it</param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete()]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto>> DeleteUser(int id)
+        public async Task<ActionResult<UserDto>> DeleteCurrentUser()
         {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log before import a list ! Check/ User / Login");
+            var id = int.Parse(idCurrentUser.Value);
             var userRemoved = await userRepository.DeleteUserAsync(id);
             if (userRemoved != null)
                 return Ok(userRemoved);

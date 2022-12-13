@@ -23,7 +23,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get cave from with Id
+        /// Get cave from with caveId
         /// </summary>
         /// <param name="caveId">Id cave</param>
         /// <returns></returns>
@@ -50,11 +50,11 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get the cave's capacity from his cave ID.
+        /// Get the cave's capacity from his cave caveId.
         /// </summary>
         /// <param name="caveId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{caveId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -141,21 +141,21 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Delete a cave
+        /// Delete a cave from his caveId
         /// </summary>
-        /// <param name="id">Search a cave with the id and delete it </param>
+        /// <param name="caveId">Search a cave with the id and delete it </param>
         /// <returns></returns>
-        [HttpDelete("id")]
+        [HttpDelete("{caveId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Cave>> DeleteCave(int id)
+        public async Task<ActionResult<Cave>> DeleteCave(int caveId)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
                 return Problem("You must log in order to delete your cave ! Check/ User / Login");
 
-            var caveDeleted = await caveRepository.DeleteCaveAsync(id, int.Parse(idCurrentUser.Value));
+            var caveDeleted = await caveRepository.DeleteCaveAsync(caveId, int.Parse(idCurrentUser.Value));
 
             if (caveDeleted != null)
                 return Ok(caveDeleted);

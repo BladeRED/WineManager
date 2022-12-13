@@ -19,13 +19,14 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get bottle from Id.
+        /// Get bottle from bottleId.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
         /// <returns></returns>
         [HttpGet("{bottleId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Bottle>> GetBottle(int bottleId)
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -42,6 +43,69 @@ namespace WineManager.Controllers
                 return NotFound("No bottle found");
             }
             return Ok(bottle);
+        }
+
+        /// <summary>
+        /// Get bottle from bottleId.
+        /// </summary>
+        /// <param name="bottleId">Bottle's ID.</param>
+        /// <returns></returns>
+        [HttpGet("{bottleId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Bottle>> GetBottlePinnacle(int bottleId)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+            {
+                return Problem("You must log in order to see your Bottle ! Check/ User / Login");
+            }
+            var currentUserId = Int32.Parse(idCurrentUser.Value);
+
+            var bottle = await bottleRepository.GetBottleAsync(bottleId, currentUserId);
+            if (bottle == null)
+            {
+                return NotFound("No bottle found");
+            }
+            var date1 = bottle.Vintage + bottle.StartKeepingYear;
+            var date2 = bottle.Vintage + bottle.EndKeepingYear;
+            return Ok($"This bottle is at his pinnacle between {date1} and {date2}.");
+        }
+
+        /// <summary>
+        /// Get bottle from bottleId.
+        /// </summary>
+        /// <param name="bottleId">Bottle's ID.</param>
+        /// <returns></returns>
+        [HttpGet("{bottleId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Bottle>> GetBottleYearOfKeeping(int bottleId)
+        {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+            {
+                return Problem("You must log in order to see your Bottle ! Check/ User / Login");
+            }
+            var currentUserId = Int32.Parse(idCurrentUser.Value);
+
+            var bottle = await bottleRepository.GetBottleAsync(bottleId, currentUserId);
+            if (bottle == null)
+            {
+                return NotFound("No bottle found");
+            }
+            int dateNow = DateTime.Now.Year;
+            var date1 = bottle.Vintage + bottle.StartKeepingYear;
+            var date2 = bottle.Vintage + bottle.EndKeepingYear;
+            if (date1 < dateNow && date2 > dateNow)
+                return Ok($"This bottle can still be kept for {date2 - dateNow} year(s).");
+            if (date2 < dateNow)
+                return Ok("This bottle is in decline");
+            return Ok($"This bottle needs still to be kept between {date1 - dateNow} year(s) and {date2 - dateNow} year(s).");
         }
 
         /// <summary>
@@ -173,21 +237,21 @@ namespace WineManager.Controllers
 
 
         /// <summary>
-        /// Delete bottle from Id.
+        /// Delete bottle from bottleId.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="bottleId"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{bottleId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<string>> DeleteBottle(int id)
+        public async Task<ActionResult<string>> DeleteBottle(int bottleId)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
                 return Problem("You must log in order to delete your bottles ! Check/ User / Login");
 
-            var bottleDeleted = await bottleRepository.DeleteBottleAsync(id, int.Parse(idCurrentUser.Value));
+            var bottleDeleted = await bottleRepository.DeleteBottleAsync(bottleId, int.Parse(idCurrentUser.Value));
 
             if (bottleDeleted != null)
                 //return Ok(bottleDeleted);

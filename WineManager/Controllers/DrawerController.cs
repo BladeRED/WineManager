@@ -25,14 +25,14 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get drawer from drawer's ID.
+        /// Get drawer from his drawerId.
         /// </summary>
         /// <param name="drawerId">Drawer's ID</param>
         /// <returns></returns>
         [HttpGet("{drawerId}")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Drawer>> GetDrawer(int drawerId)
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -114,21 +114,21 @@ namespace WineManager.Controllers
 
 
         /// <summary>
-        /// Delete drawer
+        /// Delete drawer from his drawerId
         /// </summary>
-        /// <param name="id">Find a drawer by its id and delete it</param>
+        /// <param name="drawerId">Find a drawer by its id and delete it</param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{drawerId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> DeleteDrawer(int id)
+        public async Task<ActionResult<Drawer>> DeleteDrawer(int drawerId)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
                 return Problem("You must log in order to delete your drawer ! Check/ User / Login");
 
-            var drawerDeleted = await drawerRepository.DeleteDrawerAsync(id, int.Parse(idCurrentUser.Value));
+            var drawerDeleted = await drawerRepository.DeleteDrawerAsync(drawerId, int.Parse(idCurrentUser.Value));
 
             if (drawerDeleted != null)
                 return Ok(drawerDeleted);

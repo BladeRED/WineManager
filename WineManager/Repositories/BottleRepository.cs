@@ -146,7 +146,7 @@ namespace WineManager.Repositories
                 }
                 else if (bottleDto.StartKeepingYear == null || bottleDto.EndKeepingYear == null)
                 {
-                    logger?.LogError("Please give both StartKeepingYear and EndKeepingYear or don't give both values.");
+                    logger?.LogError("Please give both StartKeepingYear and EndKeepingYear.");
 
                     return null;
                 }
@@ -203,19 +203,19 @@ namespace WineManager.Repositories
                 {
                     if (bottleDtoPut.StartKeepingYear != null && bottleDtoPut.EndKeepingYear != null)
                     {
+                        if (bottleDtoPut.StartKeepingYear > bottleDtoPut.EndKeepingYear)
+                        {
+                            logger?.LogError("StartKeepingYear must be smaller than EndKeepingYear.");
+
+                            return null;
+                        }
                         bottleToUpdate.StartKeepingYear = (int)bottleDtoPut.StartKeepingYear;
                         bottleToUpdate.EndKeepingYear = (int)bottleDtoPut.EndKeepingYear;
                     }
 
-                    if (bottleDtoPut.StartKeepingYear == null || bottleDtoPut.EndKeepingYear == null)
+                    else if ((bottleDtoPut.StartKeepingYear == null && bottleDtoPut.EndKeepingYear != null) || (bottleDtoPut.StartKeepingYear != null && bottleDtoPut.EndKeepingYear == null))
                     {
                         logger?.LogError("Please give both StartKeepingYear and EndKeepingYear or don't give both values.");
-
-                        return null;
-                    }
-                    if (bottleDtoPut.StartKeepingYear > bottleDtoPut.EndKeepingYear)
-                    {
-                        logger?.LogError("StartKeepingYear must be smaller than EndKeepingYear.");
 
                         return null;
                     }
