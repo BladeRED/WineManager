@@ -145,6 +145,16 @@ namespace WineManager.Repositories
                         logger?.LogError("There isn't a cave belonging to you with this CaveId.");
                         return null;
                     }
+                    else if (drawer.Level < 0)
+                    {
+                        logger?.LogError("Level must be positive.");
+                        return null;
+                    }
+                    else if (cave.Drawers.Count == cave.NbMaxDrawer)
+                    {
+                        logger?.LogError("This drawer is already full.");
+                        return null;
+                    }
                     else if (cave.NbMaxDrawer < drawer.Level)
                     {
                         logger?.LogError("There isn't a cave that have such Level with the caveId you provided.");
@@ -227,6 +237,16 @@ namespace WineManager.Repositories
                 if (getCave == null)
                 {
                     logger?.LogError("Cave not found, check if the Cave belong to the connected User.");
+                    return null;
+                }
+                else if (drawerToPut.Level < 0)
+                {
+                    logger?.LogError("Level must be positive.");
+                    return null;
+                }
+                else if (getCave.Drawers.Count == getCave.NbMaxDrawer)
+                {
+                    logger?.LogError("This drawer is already full.");
                     return null;
                 }
                 else if (getCave.NbMaxDrawer < drawerToPut.Level)

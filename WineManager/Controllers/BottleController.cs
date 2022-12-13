@@ -167,7 +167,7 @@ namespace WineManager.Controllers
 
                 Bottles.Add(ListBottle);
             }
-            var bottleCreated = await bottleRepository.DuplicateBottleAsync(Bottles, quantity);
+            var bottleCreated = await bottleRepository.DuplicateBottleAsync(Bottles, quantity,userId);
             if (bottleCreated != null)
                 return Ok(bottleCreated);
             else
