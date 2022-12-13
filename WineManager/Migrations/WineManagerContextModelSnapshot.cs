@@ -79,7 +79,7 @@ namespace WineManager.Migrations
                             EndKeepingYear = 8,
                             Name = "Chateau Pape Clement",
                             StartKeepingYear = 5,
-                            UserId = 2,
+                            UserId = 1,
                             Vintage = 2007
                         },
                         new
@@ -234,7 +234,7 @@ namespace WineManager.Migrations
                             DrawerId = 1,
                             CaveId = 2,
                             Level = 1,
-                            MaxPosition = 10,
+                            MaxPosition = 6,
                             UserId = 2
                         },
                         new
