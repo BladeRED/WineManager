@@ -253,9 +253,10 @@ namespace WineManager.Repositories
         {
             try
             {
+                // Search for the bottle to be stored
                 var bottleToStock = await context.Bottles.Where(b => b.UserId == userId && b.BottleId == bottleDtoStock.BottleId).FirstOrDefaultAsync();
 
-                // This bottle exists for this user ?
+                // The bottle exists for this user ?
                 if (bottleToStock == null)
                 {
                     logger?.LogError("Bottle not found, check if the items belong to the connected User.");
@@ -268,51 +269,64 @@ namespace WineManager.Repositories
                 {
                     bottleToStock.DrawerId = null;
                     bottleToStock.DrawerPosition = null;
-                    await context.SaveChangesAsync();
 
+                    await context.SaveChangesAsync();
 
                     return bottleToStock;
                 }
 
-                // If a DrawerId is specified, it must have a specified DrawerPosition.
+                // If a DrawerId is specified.
                 if (bottleDtoStock.DrawerId != null)
                 {
-                    if (bottleDtoStock.DrawerPosition != null)
+                    // Verification that the Drawer to store exists.
+                    var drawerForStock = await context.Drawers.FirstOrDefaultAsync(d => d.DrawerId == bottleDtoStock.DrawerId);
+                    if (drawerForStock == null)
                     {
-                        bottleToStock.DrawerId = bottleDtoStock.DrawerId;
-                        bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;
+                        logger?.LogError("This drawer doesn't exist");
+
+                        return null;
                     }
                     else
                     {
-                        logger?.LogError("If DrawerId not null, a DrawerId needs a DrawerPosition.");
+                        // DrawerPosition Default
+                        if (bottleDtoStock.DrawerPosition == null)
+                        {
+                            bottleDtoStock.DrawerPosition = "Default";
+                        }
 
-                        return null;
+                        // If we proceed in the same Drawer we change only DrawerPosition.
+                        if (bottleToStock.DrawerId == bottleDtoStock.DrawerId)
+                        {
+                            bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;
+
+                            await context.SaveChangesAsync();
+
+                            return bottleToStock;
+                        }
+
+                        // If you proceed in another drawer, check that the drawer has a free space.
+                        var bottlesCount = await context.Bottles.Where(b => b.DrawerId == bottleDtoStock.DrawerId).CountAsync();
+                        if (bottlesCount == drawerForStock.MaxPosition)
+                        {
+                            logger?.LogError("This drawer is full");
+
+                            return null;
+                        }
+                        else 
+                        {
+                            bottleToStock.DrawerId = bottleDtoStock.DrawerId;
+                            bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;
+
+                            await context.SaveChangesAsync();
+
+                            return bottleToStock;
+                        }
                     }
                 }
-
-                // Si un CaveId est spécifié, alors on a besoin d'un Level qui n'est pas déjà affecter.
-                if (bottleDtoStock.CaveId != null)
-                {
-                    if (bottleDtoStock.CaveLevel == null)
-                    {
-                        logger?.LogError("If CaveId not null, a CaveId needs a CaveLevel.");
-
-                        return null;
-                    }
-                }
-                var drawerToStock = await context.Drawers.FirstOrDefaultAsync(d => d.DrawerId == bottleDtoStock.DrawerId);
-                if (drawerToStock == null)
-                {
-                    logger?.LogError("This drawer doesn't exist");
-                    return null;
-                }
-                drawerToStock.CaveId = bottleDtoStock.CaveId;
-                drawerToStock.Level = bottleDtoStock.CaveLevel;
-
-
                 await context.SaveChangesAsync();
                 return bottleToStock;
             }
+
             catch (Exception e)
             {
                 logger?.LogError(e?.InnerException?.ToString());
