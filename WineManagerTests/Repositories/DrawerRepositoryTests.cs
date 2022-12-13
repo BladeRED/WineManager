@@ -46,5 +46,38 @@ namespace WineManager.Repositories.Tests
             // Delete BDD //
             context.Database.EnsureDeleted();
         }
+
+        [TestMethod()]
+        public async Task StockDrawerAsyncTest()
+        {
+            // Creation of the temp database and its context //
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            DrawerRepository drawerRepository = new DrawerRepository(context, null);
+
+            // Creation of cave //
+            Cave cave = new Cave()
+            {
+                UserId= 1,
+                NbMaxBottlePerDrawer = 2,
+                NbMaxDrawer = 2,
+                CaveType = "Testing cave"
+            };
+            await context.Caves.AddAsync(cave);
+
+            // Creation of drawers to add //
+            Drawer drawer1 = new Drawer()
+            {
+                UserId = 1,
+                MaxPosition= 2,
+            };
+            await context.Drawers.AddAsync(drawer1);
+            await context.SaveChangesAsync();
+
+            // Process StockDrawerAsync //
+            //var drawerTest = await drawerRepository.StockDrawerAsync();
+
+            Assert.Fail();
+        }
     }
 }
