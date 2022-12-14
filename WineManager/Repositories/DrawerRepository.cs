@@ -150,7 +150,7 @@ namespace WineManager.Repositories
                         logger?.LogError("Level must be positive.");
                         return null;
                     }
-                    else if (cave.Drawers.Count == cave.NbMaxDrawer)
+                    else if (cave.Drawers !=null && cave.Drawers.Count == cave.NbMaxDrawer)
                     {
                         logger?.LogError("This drawer is already full.");
                         return null;
@@ -244,7 +244,7 @@ namespace WineManager.Repositories
                     logger?.LogError("Level must be positive.");
                     return null;
                 }
-                else if (getCave.Drawers.Count == getCave.NbMaxDrawer)
+                else if (getCave.Drawers != null && getCave.Drawers.Count == getCave.NbMaxDrawer)
                 {
                     logger?.LogError("This drawer is already full.");
                     return null;
