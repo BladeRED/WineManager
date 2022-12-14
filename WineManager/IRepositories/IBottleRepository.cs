@@ -47,7 +47,7 @@ namespace WineManager.IRepositories
         /// <param name="quantity"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity,int userId);
+        Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity, int userId);
 
         /// <summary>
         /// Update bottle from Id.

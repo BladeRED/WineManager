@@ -63,7 +63,7 @@ namespace WineManager.Repositories.Tests
             // Creation of cave //
             Cave cave = new Cave()
             {
-                UserId= 1,
+                UserId = 1,
                 NbMaxBottlePerDrawer = 2,
                 NbMaxDrawer = 2,
                 CaveType = "Testing cave"
@@ -74,7 +74,7 @@ namespace WineManager.Repositories.Tests
             Drawer drawer = new Drawer()
             {
                 UserId = 1,
-                MaxPosition= 2,
+                MaxPosition = 2,
             };
             await context.Drawers.AddAsync(drawer);
             await context.SaveChangesAsync();

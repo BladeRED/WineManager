@@ -127,7 +127,7 @@ namespace WineManager.Repositories.Tests
             Assert.AreEqual(new DateTime(2002, 02, 02), userToUpdate.BirthDate);
             Assert.AreEqual("newtest", userToUpdate.Password);
 
-           
+
 
             // Delete BDD //
             context.Database.EnsureDeleted();
