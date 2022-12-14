@@ -46,7 +46,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get bottle from bottleId.
+        /// Get bottle's pinnacle from bottleId.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
         /// <returns></returns>
@@ -75,7 +75,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get bottle from bottleId.
+        /// Get bottle's year of keeping from bottleId.
         /// </summary>
         /// <param name="bottleId">Bottle's ID.</param>
         /// <returns></returns>
