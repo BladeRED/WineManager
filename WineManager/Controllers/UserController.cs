@@ -97,7 +97,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get all caves of current logged user.
+        /// Get all drawers of current logged user.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -122,7 +122,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get all caves of current logged user.
+        /// Get all bottles of current logged user.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
