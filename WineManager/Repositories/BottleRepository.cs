@@ -169,7 +169,7 @@ namespace WineManager.Repositories
         /// <param name="quantity"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity,int userId)
+        public async Task<List<Bottle>> DuplicateBottleAsync(List<Bottle> Bottles, int quantity, int userId)
         {
             try
             {
@@ -312,7 +312,7 @@ namespace WineManager.Repositories
 
                             return null;
                         }
-                        else 
+                        else
                         {
                             bottleToStock.DrawerId = bottleDtoStock.DrawerId;
                             bottleToStock.DrawerPosition = bottleDtoStock.DrawerPosition;

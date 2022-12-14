@@ -232,7 +232,7 @@ namespace WineManager.Repositories
         public async Task<ListDTO> ExportListUserAsync(int id)
         {
             var userList = await context.Users.AsNoTracking().Include(u => u.Caves).Include(u => u.Drawers).Include(u => u.Bottles).Where(c => c.UserId == id).FirstOrDefaultAsync();
-            if(userList == null)
+            if (userList == null)
             {
                 logger?.LogError("User not found");
                 return null;
