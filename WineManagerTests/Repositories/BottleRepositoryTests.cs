@@ -38,7 +38,7 @@ namespace WineManager.Repositories.Tests
             var drawer = new Drawer()
             {
                 MaxPosition = 2,
-                UserId= 1,
+                UserId = 1,
             };
             context.Add(drawer);
             context.SaveChanges();
@@ -52,7 +52,7 @@ namespace WineManager.Repositories.Tests
                 EndKeepingYear = 8,
                 Color = "color",
                 Designation = "Designation",
-                DrawerId= drawer.DrawerId,
+                DrawerId = drawer.DrawerId,
                 DrawerPosition = "Position"
             };
 
@@ -206,7 +206,7 @@ namespace WineManager.Repositories.Tests
                 Designation = "test",
                 DrawerId = drawer.DrawerId,
                 DrawerPosition = "B1",
-                UserId= drawer.UserId,
+                UserId = drawer.UserId,
             };
             context.Add(bottleToUpdate);
             context.SaveChanges();
