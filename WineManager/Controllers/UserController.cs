@@ -50,21 +50,21 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get user from Id
+        /// Get user from userId
         /// </summary>
-        /// <param name="id">Id user</param>
+        /// <param name="userId">Id user</param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{userId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto?>> GetUser(int id)
+        public async Task<ActionResult<UserDto?>> GetUser(int userId)
         {
-            if (id < 1)
+            if (userId < 1)
             {
                 return BadRequest("No id valuable found in the request");
             }
-            var userDto = await userRepository.GetUserAsync(id);
+            var userDto = await userRepository.GetUserAsync(userId);
             if (userDto == null)
                 return NotFound("User in not found.");
 
@@ -97,7 +97,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get all caves of current logged user.
+        /// Get all drawers of current logged user.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -122,7 +122,7 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get all caves of current logged user.
+        /// Get all bottles of current logged user.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -152,7 +152,7 @@ namespace WineManager.Controllers
         /// <param name="login"></param>
         /// <param name="pwd"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{login}/{pwd}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> LoginUser([DefaultValue("test@test.com")] string login, [DefaultValue("test")] string pwd)
@@ -259,23 +259,49 @@ namespace WineManager.Controllers
                 {
                     var str = await formFile.ReadAsStringAsync();
                     var fileJson = JsonSerializer.Deserialize<ListDTO>(str);
-                    var bottles = fileJson.Bottles;
-                    foreach (var item in bottles)
+                    if (fileJson != null)
                     {
-                        var b = new Bottle(item, id);
-                        await bottleRepository.AddBottleAsync(b);
-                    }
-                    var caves = fileJson.Caves;
-                    foreach (var item in caves)
-                    {
-                        var c = new Cave(item, id);
-                        await caveRepository.AddCaveAsync(c);
-                    }
-                    var drawers = fileJson.Drawers;
-                    foreach (var item in drawers)
-                    {
-                        var c = new Drawer(item, id);
-                        await drawerRepository.AddDrawerAsync(c);
+                        var caves = fileJson.Caves;
+                        Dictionary<int, int> keyValuePairsCave = new Dictionary<int, int>();
+                        foreach (var item in caves)
+                        {
+                            var c = new Cave(item, id);
+                            int oldId = item.CaveId;
+                            var cAdded = await caveRepository.AddCaveAsync(c);
+                            if (cAdded == null)
+                                return Problem("There is a probleme with one of the imported cave");
+                            keyValuePairsCave.Add(oldId, cAdded.CaveId);
+                        }
+                        var drawers = fileJson.Drawers;
+                        Dictionary<int, int> keyValuePairsDrawer = new Dictionary<int, int>();
+                        foreach (var item in drawers)
+                        {
+                            var d = new Drawer(item, id);
+                            int oldId = item.DrawerId;
+                            if (d.CaveId != null)
+                            {
+                                d.CaveId = keyValuePairsCave[(int)d.CaveId];
+                            }
+                            else
+                                d.CaveId = null;
+                            var dAdded = await drawerRepository.AddDrawerAsync(d);
+                            if (dAdded == null)
+                                return Problem("There is a probleme with one of the imported drawer");
+                            keyValuePairsDrawer.Add(oldId, (int)dAdded.DrawerId);
+                        }
+                        var bottles = fileJson.Bottles;
+                        foreach (var item in bottles)
+                        {
+
+                            if (item.DrawerId != null)
+                            {
+                                item.DrawerId = keyValuePairsDrawer[(int)item.DrawerId];
+                            }
+                            else
+                                item.DrawerId = null;
+                            await bottleRepository.AddBottleAsync(item, id);
+                        }
+                        return Problem("No json file found");
                     }
                     return Ok("This is ok");
                 }
@@ -303,16 +329,20 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Delete an User
+        /// Delete the current User
         /// </summary>
-        /// <param name="id">Find a user by its id and delete it</param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete()]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<UserDto>> DeleteUser(int id)
+        public async Task<ActionResult<UserDto>> DeleteCurrentUser()
         {
+            var identity = User?.Identity as ClaimsIdentity;
+            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (idCurrentUser == null)
+                return Problem("You must log before import a list ! Check/ User / Login");
+            var id = int.Parse(idCurrentUser.Value);
             var userRemoved = await userRepository.DeleteUserAsync(id);
             if (userRemoved != null)
                 return Ok(userRemoved);

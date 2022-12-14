@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Wine Manager</title>
+    <link href="./style.css" rel="stylesheet" type="text/css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div>
+        <nav>
+            <ul class="df">
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/index.html">Home</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/login.html">Login</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/bottle-list.html">My wine list</a>
+                </li>
+                <li class="m-il-5">
+                    <a href="https://localhost:7041/bottle-list.html">My Cave list</a>
+                </li>
+            </ul>
+            <hr />
+        </nav>
+        <p>> stock-bottle</p>
+    </div>
+    <!-- Page -->
+    <div class="container">
+        <div class="box">
+            <h1>Stock a bottle</h1>
+            <hr />
+            <h3>This bottle</h3>
+            <h4>Name</h4>
+            <div id="wine_name">example</div>
+            <h4>Designation</h4>
+            <div id="wine_designation">example</div>
+            <h4>Color</h4>
+            <div id="wine_color">example</div>
+            <h4>Vintage</h4>
+            <div id="wine_vintage">example</div>
+            <hr />
+
+            <h3>From</h3>
+            <h4>Cave label</h4>
+            <div id="bottle_from_cave_label">example</div>
+            <h4>Level</h4>
+            <div id="bottle_from_cave_level">example</div>
+            <h4>Drawer label</h4>
+            <div id="bottle_from_drawer_level">example</div>
+            <h4>Position</h4>
+            <div id="bottle_from_drawer_position">example</div>
+            <hr />
+
+            <h3>Into</h3>
+            <label for="bottle-cave-label">Cave label</label><!--liste déroulant : -->
+            <div class="input m-bk-5"><input id="input_add_bottle_cave_label" type="text" name="bottle-cave-label"></div>
+            <label for="bottle-drawer-label">Drawer label</label><!--liste déroulant : -->
+            <div class="input m-bk-5"><input id="input_add_bottle_drawer_label" type="text" name="bottle-drawer-label"></div>
+            <label for="bottle-position">Position</label>
+            <div class="input m-bk-5"><input id="input_add_bottle_position" type="number" name="bottle-position"></div>
+
+            <button class="m-bk-5" id="submit-add-bottle">Submit</button>
+
+        </div>
+    </div>
+    <ul id="user"></ul>
+
+</body>
+</html>

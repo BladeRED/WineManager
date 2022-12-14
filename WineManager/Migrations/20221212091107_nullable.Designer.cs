@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WineManager.Contexts;
 
@@ -11,9 +12,11 @@ using WineManager.Contexts;
 namespace WineManager.Migrations
 {
     [DbContext(typeof(WineManagerContext))]
-    partial class WineManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20221212091107_nullable")]
+    partial class nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,12 +77,12 @@ namespace WineManager.Migrations
                             BottleId = 1,
                             Color = "red",
                             Designation = "Pessac-Leognan",
-                            DrawerId = 1,
-                            DrawerPosition = "A1",
+                            DrawerId = 2,
+                            DrawerPosition = "1",
                             EndKeepingYear = 8,
                             Name = "Chateau Pape Clement",
                             StartKeepingYear = 5,
-                            UserId = 1,
+                            UserId = 2,
                             Vintage = 2007
                         },
                         new
@@ -87,8 +90,6 @@ namespace WineManager.Migrations
                             BottleId = 2,
                             Color = "red",
                             Designation = "Pessac-Leognan",
-                            DrawerId = 1,
-                            DrawerPosition = "A2",
                             EndKeepingYear = 8,
                             Name = "Chateau Pape Clement",
                             StartKeepingYear = 5,
@@ -100,12 +101,10 @@ namespace WineManager.Migrations
                             BottleId = 3,
                             Color = "red",
                             Designation = "Pessac-Leognan",
-                            DrawerId = 1,
-                            DrawerPosition = "A3",
                             EndKeepingYear = 8,
                             Name = "Chateau Pape Clement",
                             StartKeepingYear = 5,
-                            UserId = 1,
+                            UserId = 3,
                             Vintage = 2007
                         },
                         new
@@ -113,8 +112,6 @@ namespace WineManager.Migrations
                             BottleId = 4,
                             Color = "White",
                             Designation = "Riesling",
-                            DrawerId = 1,
-                            DrawerPosition = "A4",
                             EndKeepingYear = 8,
                             Name = "Krick Vin D'Alsace",
                             StartKeepingYear = 5,
@@ -126,84 +123,6 @@ namespace WineManager.Migrations
                             BottleId = 5,
                             Color = "White",
                             Designation = "Riesling",
-                            DrawerId = 2,
-                            DrawerPosition = "B1",
-                            EndKeepingYear = 8,
-                            Name = "Krick Vin D'Alsace",
-                            StartKeepingYear = 5,
-                            UserId = 1,
-                            Vintage = 2017
-                        },
-                        new
-                        {
-                            BottleId = 6,
-                            Color = "White",
-                            Designation = "Riesling",
-                            DrawerId = 2,
-                            DrawerPosition = "B2",
-                            EndKeepingYear = 8,
-                            Name = "Krick Vin D'Alsace",
-                            StartKeepingYear = 5,
-                            UserId = 1,
-                            Vintage = 2017
-                        },
-                        new
-                        {
-                            BottleId = 7,
-                            Color = "red",
-                            Designation = "Pessac-Leognan",
-                            DrawerId = 2,
-                            DrawerPosition = "B3",
-                            EndKeepingYear = 8,
-                            Name = "Chateau Pape Clement",
-                            StartKeepingYear = 5,
-                            UserId = 1,
-                            Vintage = 2007
-                        },
-                        new
-                        {
-                            BottleId = 8,
-                            Color = "red",
-                            Designation = "Pessac-Leognan",
-                            DrawerId = 2,
-                            DrawerPosition = "B4",
-                            EndKeepingYear = 8,
-                            Name = "Chateau Pape Clement",
-                            StartKeepingYear = 5,
-                            UserId = 1,
-                            Vintage = 2007
-                        },
-                        new
-                        {
-                            BottleId = 9,
-                            Color = "red",
-                            Designation = "Pessac-Leognan",
-                            DrawerId = 2,
-                            DrawerPosition = "B5",
-                            EndKeepingYear = 8,
-                            Name = "Chateau Pape Clement",
-                            StartKeepingYear = 5,
-                            UserId = 1,
-                            Vintage = 2007
-                        },
-                        new
-                        {
-                            BottleId = 10,
-                            Color = "White",
-                            Designation = "Riesling",
-                            DrawerId = 2,
-                            DrawerPosition = "B6",
-                            EndKeepingYear = 8,
-                            Name = "Krick Vin D'Alsace",
-                            StartKeepingYear = 5,
-                            UserId = 1,
-                            Vintage = 2017
-                        },
-                        new
-                        {
-                            BottleId = 11,
-                            Color = "White",
-                            Designation = "Riesling",
                             EndKeepingYear = 8,
                             Name = "Krick Vin D'Alsace",
                             StartKeepingYear = 5,
@@ -212,7 +131,7 @@ namespace WineManager.Migrations
                         },
                         new
                         {
-                            BottleId = 12,
+                            BottleId = 6,
                             Color = "White",
                             Designation = "Riesling",
                             EndKeepingYear = 8,
@@ -263,24 +182,24 @@ namespace WineManager.Migrations
                         new
                         {
                             CaveId = 1,
-                            Brand = "Liebherr",
-                            CaveType = "Cellar of the kitchen",
-                            Family = "Service cellar",
+                            Brand = "Acme",
+                            CaveType = "Batman",
+                            Family = "Wayne",
                             NbMaxBottlePerDrawer = 6,
-                            NbMaxDrawer = 6,
-                            Temperature = 16,
+                            NbMaxDrawer = 8,
+                            Temperature = 12,
                             UserId = 1
                         },
                         new
                         {
                             CaveId = 2,
-                            Brand = "La Sommelière",
-                            CaveType = "Garage cellar",
-                            Family = "Cellar of guard",
+                            Brand = "Acme",
+                            CaveType = "Batman",
+                            Family = "Wayne",
                             NbMaxBottlePerDrawer = 6,
-                            NbMaxDrawer = 6,
-                            Temperature = 14,
-                            UserId = 1
+                            NbMaxDrawer = 8,
+                            Temperature = 12,
+                            UserId = 2
                         });
                 });
 
@@ -316,96 +235,16 @@ namespace WineManager.Migrations
                         new
                         {
                             DrawerId = 1,
-                            CaveId = 1,
+                            CaveId = 2,
                             Level = 1,
-                            MaxPosition = 6,
-                            UserId = 1
+                            MaxPosition = 10,
+                            UserId = 2
                         },
                         new
                         {
                             DrawerId = 2,
                             CaveId = 1,
                             Level = 2,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 3,
-                            CaveId = 1,
-                            Level = 3,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 4,
-                            CaveId = 1,
-                            Level = 4,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 5,
-                            CaveId = 1,
-                            Level = 5,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 6,
-                            CaveId = 1,
-                            Level = 6,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 7,
-                            CaveId = 2,
-                            Level = 1,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 8,
-                            CaveId = 2,
-                            Level = 2,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 9,
-                            CaveId = 2,
-                            Level = 3,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 10,
-                            CaveId = 2,
-                            Level = 4,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 11,
-                            CaveId = 2,
-                            Level = 5,
-                            MaxPosition = 6,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            DrawerId = 12,
-                            CaveId = 2,
-                            Level = 6,
                             MaxPosition = 6,
                             UserId = 1
                         });
@@ -442,10 +281,10 @@ namespace WineManager.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2022, 12, 14, 14, 49, 25, 345, DateTimeKind.Local).AddTicks(4298),
-                            Email = "jerry@aol.com",
+                            BirthDate = new DateTime(2022, 12, 12, 10, 11, 7, 660, DateTimeKind.Local).AddTicks(517),
+                            Email = "Jerry.Seinfeld@aol.com",
                             Name = "Jerry Seinfeld",
-                            Password = "pwd"
+                            Password = "password"
                         },
                         new
                         {

@@ -75,8 +75,9 @@ namespace WineManager.IRepositories
         /// <param name="drawerId"></param>
         /// <param name="caveId"></param>
         /// <param name="userId"></param>
+        /// <param name="caveLevel"></param>
         /// <returns></returns>
-        Task<Drawer?> StockDrawerAsync(int drawerId, int caveId, int userId, int caveLevel);
+        Task<Drawer?> StockDrawerAsync(int drawerId, int? caveId, int userId, int? caveLevel);
 
         /// <summary>
         /// Delete a Drawer

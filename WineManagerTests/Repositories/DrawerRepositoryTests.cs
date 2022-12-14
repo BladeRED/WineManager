@@ -15,72 +15,81 @@ namespace WineManager.Repositories.Tests
     [TestClass()]
     public class DrawerRepositoryTests
     {
+        /// <summary>
+        /// Testing AddDrawerAsync
+        /// with correct parameters
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
         public async Task AddDrawerAsyncTest()
         {
-            // creation of the temp database and its context //
-
+            // Creation of the temp database and its context //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            DrawerRepository DrawerTest = new DrawerRepository(context, null);
+            DrawerRepository drawerRepository = new DrawerRepository(context, null);
 
-            // creation of the object to add //
-
-            Drawer TestDrawer = new Drawer()
+            // Creation of the drawer to add //
+            Drawer drawer = new Drawer()
             {
-                DrawerId = 1,
-                Level = 1,
-                MaxPosition = 1,
+                UserId = 1,
             };
 
-            // simulating the add method //
+            // Creation drawer list //
+            var drawers = await context.Drawers.ToListAsync();
+            Assert.AreEqual(0, drawers.Count);
 
-            var MyAddTest = await DrawerTest.AddDrawerAsync(TestDrawer);
-            context.Drawers.Add(TestDrawer);
+            // Process the AddDrawerAsync //
+            var MyAddTest = await drawerRepository.AddDrawerAsync(drawer);
+            drawers = await context.Drawers.ToListAsync();
+            Assert.AreEqual(1, drawers.Count);
 
-            var MyList = await DrawerTest.GetDrawersAsync();
-
-            // comparing the list of objects to see if there is a new entry in the database //
-
-            Assert.AreEqual(1, MyList.Count);
-
+            // Delete BDD //
             context.Database.EnsureDeleted();
-
         }
 
+        /// <summary>
+        /// Testing StockDrawerAsync
+        /// with correct parameters
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
-        public async Task UpdateDrawerAsyncTest()
+        public async Task StockDrawerAsyncTest()
         {
-            // creation of the temp database and its context //
-
+            // Creation of the temp database and its context //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            DrawerRepository DrawerTest = new DrawerRepository(context, null);
+            DrawerRepository drawerRepository = new DrawerRepository(context, null);
 
-            Drawer MajDrawer = new Drawer()
+            // Creation of cave //
+            Cave cave = new Cave()
             {
-                DrawerId = 2,
-                Level = 2,
-                MaxPosition = 2,
-                UserId= 1
+                UserId = 1,
+                NbMaxBottlePerDrawer = 2,
+                NbMaxDrawer = 2,
+                CaveType = "Testing cave"
             };
+            await context.Caves.AddAsync(cave);
 
-            // simulating the add method //
+            // Creation of drawers to add //
+            Drawer drawer = new Drawer()
+            {
+                UserId = 1,
+                MaxPosition = 2,
+            };
+            await context.Drawers.AddAsync(drawer);
+            await context.SaveChangesAsync();
 
-            var MyAddTest = await DrawerTest.AddDrawerAsync(MajDrawer);
-            context.Drawers.Add(MajDrawer);
+            // Process StockDrawerAsync //
+            var drawerTest = await drawerRepository.StockDrawerAsync(drawer.DrawerId, cave.CaveId, 1, 1);
 
-            var context2 = new WineManagerContext(builder.Options);
-            DrawerRepository DrawerTest2 = new DrawerRepository(context2, null);
+            // Tests //
+            Assert.IsNotNull(drawerTest);
+            Assert.AreEqual(drawer.DrawerId, drawerTest.DrawerId);
+            Assert.AreEqual(cave.CaveId, drawerTest.CaveId);
+            Assert.AreEqual(1, drawerTest.Level);
 
-            MajDrawer.DrawerId = 2;
-            MajDrawer.Level = 5;
-            MajDrawer.MaxPosition = 5;
-
-            var MyUpdateTest = await DrawerTest2.UpdateDrawerAsync(MajDrawer, 1);
-
-            Assert.AreNotSame(MyAddTest, MyUpdateTest);
+            // Delete BDD //
+            context.Database.EnsureDeleted();
         }
-
     }
 }

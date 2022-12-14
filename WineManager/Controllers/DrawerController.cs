@@ -25,14 +25,14 @@ namespace WineManager.Controllers
         }
 
         /// <summary>
-        /// Get drawer from drawer's ID.
+        /// Get drawer from his drawerId.
         /// </summary>
         /// <param name="drawerId">Drawer's ID</param>
         /// <returns></returns>
         [HttpGet("{drawerId}")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Drawer>> GetDrawer(int drawerId)
         {
             var identity = User?.Identity as ClaimsIdentity;
@@ -83,38 +83,9 @@ namespace WineManager.Controllers
         }
 
 
-        /// <summary>
-        /// Update a drawer
-        /// </summary>
-        /// <param name="drawerDto">Maj a DrawerDto object</param>
-        /// <returns></returns>
-        [HttpPut]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> UpdateDrawer([FromForm] DrawerPutDto drawerDto)
-        {
-            var identity = User?.Identity as ClaimsIdentity;
-            var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
-            if (idCurrentUser == null)
-                return Problem("You must log before updating a drawer! Check/ User / Login");
-            int userId = Int32.Parse(idCurrentUser.Value);
-
-            var MajDrawer = new Drawer()
-            {
-                DrawerId = drawerDto.DrawerId,
-                Level = drawerDto.Level
-            };
-
-            var drawerUpdated = await drawerRepository.UpdateDrawerAsync(MajDrawer, userId);
-
-            if (drawerUpdated != null)
-                return Ok(drawerUpdated);
-            else
-                return Problem("Drawer was not updated, see log for details");
-        }
 
         /// <summary>
-        /// Range a Drawer into a Cave
+        /// Place a Drawer into a Cave
         /// The Drawer and the Cave must belong to the connected user
         /// </summary>
         /// <param name="drawerId"></param>
@@ -124,7 +95,7 @@ namespace WineManager.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> StockDrawer(int drawerId, int caveId, int caveLevel)
+        public async Task<ActionResult<Drawer>> StockDrawer(int drawerId, int? caveId, int? caveLevel)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -143,21 +114,21 @@ namespace WineManager.Controllers
 
 
         /// <summary>
-        /// Delete drawer
+        /// Delete drawer from his drawerId
         /// </summary>
-        /// <param name="id">Find a drawer by its id and delete it</param>
+        /// <param name="drawerId">Find a drawer by its id and delete it</param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{drawerId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Drawer>> DeleteDrawer(int id)
+        public async Task<ActionResult<Drawer>> DeleteDrawer(int drawerId)
         {
             var identity = User?.Identity as ClaimsIdentity;
             var idCurrentUser = identity?.FindFirst(ClaimTypes.NameIdentifier);
             if (idCurrentUser == null)
                 return Problem("You must log in order to delete your drawer ! Check/ User / Login");
 
-            var drawerDeleted = await drawerRepository.DeleteDrawerAsync(id, int.Parse(idCurrentUser.Value));
+            var drawerDeleted = await drawerRepository.DeleteDrawerAsync(drawerId, int.Parse(idCurrentUser.Value));
 
             if (drawerDeleted != null)
                 return Ok(drawerDeleted);

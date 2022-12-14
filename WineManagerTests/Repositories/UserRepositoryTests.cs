@@ -19,6 +19,10 @@ namespace WineManager.Repositories.Tests
     [TestClass()]
     public class UserRepositoryTests
     {
+        /// <summary>
+        /// Testing GetAllUsersAsync
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
         public async Task GetAllUsersAsyncTest()
         {
@@ -27,10 +31,10 @@ namespace WineManager.Repositories.Tests
 
             // Context
             var context = new WineManagerContext(builder.Options);
-            UserRepository testContext = new UserRepository(context, null);
+            UserRepository userRepository = new UserRepository(context, null);
 
-            // List
-            var myList = await testContext.GetAllUsersAsync();
+            // Process GetAllUsersAsync //
+            var myList = await userRepository.GetAllUsersAsync();
 
             // Test
             Assert.AreEqual(0, myList.Count);
@@ -39,17 +43,21 @@ namespace WineManager.Repositories.Tests
             context.Database.EnsureDeleted();
         }
 
+        /// <summary>
+        /// Testing AddUserAsync
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
         public async Task AddUserAsyncTest()
         {
-            // Bdd create
+            // Bdd create //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
 
-            // Context
+            // Context //
             var context = new WineManagerContext(builder.Options);
-            UserRepository testContext = new UserRepository(context, null);
+            UserRepository userRepository = new UserRepository(context, null);
 
-            // Object to inject
+            // UserPostDto //
             var myUserPostDto = new UserPostDto()
             {
                 Name = "test",
@@ -58,37 +66,48 @@ namespace WineManager.Repositories.Tests
                 Password = "test"
             };
 
-
-            var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
-            var myList = await testContext.GetAllUsersAsync();
+            // Process AddUserAsync //
+            var myUserAdded = await userRepository.AddUserAsync(myUserPostDto);
+            var users = await context.Users.ToListAsync();
 
             // Tests 
-            Assert.AreEqual(1, myList.Count);
+            Assert.AreEqual(1, users.Count);
             Assert.AreEqual("test", myUserAdded.Name);
 
             // Db delete
             context.Database.EnsureDeleted();
         }
 
+        /// <summary>
+        /// Testing UpdateUserAsync
+        /// with correct settings
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
-        public async Task UpdateUserAsyncTest()
+        public async Task UpdateUserAsyncTest1()
         {
+            // Create BDD //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+
+            // Create context //
             var context = new WineManagerContext(builder.Options);
-            UserRepository testContext = new UserRepository(context, null);
+            UserRepository userRepository = new UserRepository(context, null);
 
-
-            var myUserPostDto = new UserPostDto()
+            // Create User //
+            var userToUpdate = new User()
             {
                 Name = "test",
                 Email = "test",
                 BirthDate = new DateTime(2001, 01, 01),
                 Password = "test"
             };
-            var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
-            var userFinded = await context.Users.FirstAsync(u => u.Email == "test");
-            Assert.AreEqual("test", userFinded.Name);
-            var myUserUploaded = await testContext.UpdateUserAsync(new UserPutDto
+
+            // Add user to the context //
+            context.Add(userToUpdate);
+            await context.SaveChangesAsync();
+
+            // Process UpdateUserAsync //
+            var UserDtoUploaded = await userRepository.UpdateUserAsync(new UserPutDto
             {
                 CurrentEmail = "test",
                 CurrentPassword = "test",
@@ -97,76 +116,221 @@ namespace WineManager.Repositories.Tests
                 NewBirthDate = new DateTime(2002, 02, 02),
                 NewPassword = "newtest"
             });
-            Assert.AreSame("newtest", userFinded.Name);
-            Assert.AreEqual("newtest", userFinded.Email);
-            Assert.AreEqual(new DateTime(2002, 02, 02), userFinded.BirthDate);
-            Assert.AreEqual("newtest", userFinded.Password);
 
-            var myUserBabRequest = await testContext.UpdateUserAsync(new UserPutDto
-            {
-                CurrentEmail = "BadRequest",
-                CurrentPassword = "newtest",
-                NewName = "BRtest",
-                NewEmail = "BRtest",
-                NewBirthDate = new DateTime(2003, 03, 03),
-                NewPassword = "BRtest"
-            });
-            Assert.AreNotEqual("BRtest", userFinded.Name);
-            Assert.AreNotEqual("BRtest", userFinded.Email);
-            Assert.AreNotEqual(new DateTime(2003, 03, 03), userFinded.BirthDate);
-            Assert.AreNotEqual("BRtest", userFinded.Password);
+            // Testing with correct settings //
+            Assert.AreEqual("newtest", UserDtoUploaded.Name);
+            Assert.AreEqual("newtest", UserDtoUploaded.Email);
+            Assert.AreEqual(new DateTime(2002, 02, 02), UserDtoUploaded.BirthDate);
 
-            myUserBabRequest = await testContext.UpdateUserAsync(new UserPutDto
-            {
-                CurrentEmail = "newtest",
-                CurrentPassword = "BadRequest",
-                NewName = "BRtest",
-                NewEmail = "BRtest",
-                NewBirthDate = new DateTime(2003, 03, 03),
-                NewPassword = "BRtest"
-            });
-            Assert.AreNotEqual("BRtest", userFinded.Name);
-            Assert.AreNotEqual("BRtest", userFinded.Email);
-            Assert.AreNotEqual(new DateTime(2003, 03, 03), userFinded.BirthDate);
-            Assert.AreNotEqual("BRtest", userFinded.Password);
+            Assert.AreEqual("newtest", userToUpdate.Name);
+            Assert.AreEqual("newtest", userToUpdate.Email);
+            Assert.AreEqual(new DateTime(2002, 02, 02), userToUpdate.BirthDate);
+            Assert.AreEqual("newtest", userToUpdate.Password);
 
+
+
+            // Delete BDD //
             context.Database.EnsureDeleted();
         }
 
+        /// <summary>
+        /// Testing UpdateUserAsync
+        /// with wrong email.
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
-        public async Task DeleteUserAsyncTest()
+        public async Task UpdateUserAsyncTest2()
         {
+            // Create BDD //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
-            var context = new WineManagerContext(builder.Options);
-            UserRepository testContext = new UserRepository(context, null);
 
-            var myUserPostDto = new UserPostDto()
+            // Create context //
+            var context = new WineManagerContext(builder.Options);
+            UserRepository userRepository = new UserRepository(context, null);
+
+            // Create User //
+            var userToUpdate = new User()
             {
                 Name = "test",
                 Email = "test",
-                BirthDate = new DateTime(2000, 01, 01),
+                BirthDate = new DateTime(2001, 01, 01),
                 Password = "test"
             };
 
-            var myUserAdded = await testContext.AddUserAsync(myUserPostDto);
-            var myList = await testContext.GetAllUsersAsync();
+            // Add user to the context //
+            context.Add(userToUpdate);
+            await context.SaveChangesAsync();
 
-            Assert.AreEqual(1, myList.Count);
+            // Process UpdateUserAsync //
+            var UserDtoUploaded = await userRepository.UpdateUserAsync(new UserPutDto
+            {
+                CurrentEmail = "wrong",
+                CurrentPassword = "test",
+                NewName = "newtest",
+                NewEmail = "newtest",
+                NewBirthDate = new DateTime(2002, 02, 02),
+                NewPassword = "newtest"
+            });
 
-            var userBadRequest = await testContext.DeleteUserAsync(-1);
-            myList = await testContext.GetAllUsersAsync();
+            // Test with wrong email //
+            Assert.IsNull(UserDtoUploaded);
 
-            Assert.IsNull(userBadRequest);
-            Assert.AreEqual(1, myList.Count);
+            Assert.AreEqual("test", userToUpdate.Name);
+            Assert.AreEqual("test", userToUpdate.Email);
+            Assert.AreEqual(new DateTime(2001, 01, 01), userToUpdate.BirthDate);
+            Assert.AreEqual("test", userToUpdate.Password);
 
-            var id = (await context.Users.FirstAsync(u => u.Email == "test")).UserId;
-            var UserDeleted = await testContext.DeleteUserAsync(id);
-            myList = await testContext.GetAllUsersAsync();
-
-            Assert.IsNotNull(UserDeleted);
-            Assert.AreEqual(0, myList.Count);
-
+            // Delete BDD //
             context.Database.EnsureDeleted();
         }
+
+        /// <summary>
+        /// Testing UpdateUserAsync
+        /// with wrong password.
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod()]
+        public async Task UpdateUserAsyncTest3()
+        {
+            // Create BDD //
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+
+            // Create context //
+            var context = new WineManagerContext(builder.Options);
+            UserRepository userRepository = new UserRepository(context, null);
+
+            // Create User //
+            var userToUpdate = new User()
+            {
+                Name = "test",
+                Email = "test",
+                BirthDate = new DateTime(2001, 01, 01),
+                Password = "test"
+            };
+
+            // Add user to the context //
+            context.Add(userToUpdate);
+            await context.SaveChangesAsync();
+
+            // Process UpdateUserAsync //
+            var UserDtoUploaded = await userRepository.UpdateUserAsync(new UserPutDto
+            {
+                CurrentEmail = "test",
+                CurrentPassword = "wrong",
+                NewName = "newtest",
+                NewEmail = "newtest",
+                NewBirthDate = new DateTime(2002, 02, 02),
+                NewPassword = "newtest"
+            });
+
+            // Test with wrong password //
+            Assert.IsNull(UserDtoUploaded);
+
+            Assert.AreEqual("test", userToUpdate.Name);
+            Assert.AreEqual("test", userToUpdate.Email);
+            Assert.AreEqual(new DateTime(2001, 01, 01), userToUpdate.BirthDate);
+            Assert.AreEqual("test", userToUpdate.Password);
+
+            // Delete BDD //
+            context.Database.EnsureDeleted();
+        }
+
+        /// <summary>
+        /// Testing DeleteUserAsync
+        /// with a correct userId
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod()]
+        public async Task DeleteUserAsyncTest1()
+        {
+            // Create BDD //
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+
+            // Create context //
+            var context = new WineManagerContext(builder.Options);
+
+            // Repository //
+            UserRepository userRepository = new UserRepository(context, null);
+
+            // Create User //
+            var userToDelete = new User()
+            {
+                Name = "test",
+                Email = "test",
+                BirthDate = new DateTime(2001, 01, 01),
+                Password = "test"
+            };
+
+            // Add user to the context //
+            context.Add(userToDelete);
+            await context.SaveChangesAsync();
+
+            // User list //
+            var users = context.Users.ToList();
+
+            // Test user list count //
+            Assert.AreEqual(1, users.Count);
+
+            // Process DeleteUserAsync with correct user ID //
+            var userCorrectRequest = await userRepository.DeleteUserAsync(userToDelete.UserId);
+            users = context.Users.ToList();
+
+            // Tests with correct user ID //
+            Assert.IsNotNull(userCorrectRequest);
+            Assert.AreEqual(0, users.Count);
+
+            // Delete BDD //
+            context.Database.EnsureDeleted();
+        }
+
+        /// <summary>
+        /// Testing DeleteUserAsync
+        /// with a wrong userId
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod()]
+        public async Task DeleteUserAsyncTest2()
+        {
+            // Create BDD //
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+
+            // Create context //
+            var context = new WineManagerContext(builder.Options);
+
+            // Repository //
+            UserRepository userRepository = new UserRepository(context, null);
+
+            // Create User //
+            var userToDelete = new User()
+            {
+                Name = "test",
+                Email = "test",
+                BirthDate = new DateTime(2001, 01, 01),
+                Password = "test"
+            };
+
+            // Add user to the context //
+            context.Add(userToDelete);
+            await context.SaveChangesAsync();
+
+            // User list //
+            var users = context.Users.ToList();
+
+            // Test user list count //
+            Assert.AreEqual(1, users.Count);
+
+            // Process DeleteUserAsync with wrong user ID //
+            var userBadRequest = await userRepository.DeleteUserAsync(userToDelete.UserId + 1);
+            users = context.Users.ToList();
+
+            // Tests with wrong user ID //
+            Assert.IsNull(userBadRequest);
+            Assert.AreEqual(1, users.Count);
+
+            // Delete BDD //
+            context.Database.EnsureDeleted();
+        }
+
     }
+
 }

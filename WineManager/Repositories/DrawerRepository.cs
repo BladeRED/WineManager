@@ -23,10 +23,10 @@ namespace WineManager.Repositories
         /// <summary>
         /// Get all drawers
         /// </summary>
-        /// <returns></returns
+        /// <returns></returns>
         public async Task<List<Drawer>> GetDrawersAsync()
         {
-            var drawers = await WineManagerContext.Drawers.ToListAsync();
+            var drawers = await WineManagerContext.Drawers.AsNoTracking().ToListAsync();
             if (drawers == null)
             {
                 logger?.LogError("Item not found");
@@ -43,7 +43,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<DrawerDtoGet> GetDrawerWithCaveAsync(int id)
         {
-            var drawerWithCave = await WineManagerContext.Drawers.Include(p => p.Cave).Where(p => p.DrawerId == id && p.CaveId != null).Select(p => new DrawerDtoGet(p.DrawerId, new CaveDtoLight(p.Cave))).FirstOrDefaultAsync();
+            var drawerWithCave = await WineManagerContext.Drawers.AsNoTracking().Include(p => p.Cave).Where(p => p.DrawerId == id && p.CaveId != null).Select(p => new DrawerDtoGet(p.DrawerId, new CaveDtoLight(p.Cave))).FirstOrDefaultAsync();
             if (drawerWithCave == null)
             {
                 logger?.LogError("Item not found");
@@ -59,7 +59,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<DrawerDtoGet> GetDrawerWithUserAsync(int id)
         {
-            var drawerWithUser = await WineManagerContext.Drawers.Include(p => p.User).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
+            var drawerWithUser = await WineManagerContext.Drawers.AsNoTracking().Include(p => p.User).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, new UserDTOLight(p.User))).FirstOrDefaultAsync();
             if (drawerWithUser == null)
             {
                 logger?.LogError("Item not found");
@@ -75,7 +75,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<DrawerDtoGet> GetDrawerWithBottlesAsync(int id)
         {
-            var drawerWithBottles = await WineManagerContext.Drawers.Include(p => p.Bottles).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, p.Bottles)).FirstOrDefaultAsync();
+            var drawerWithBottles = await WineManagerContext.Drawers.AsNoTracking().Include(p => p.Bottles).Where(p => p.DrawerId == id).Select(p => new DrawerDtoGet(p.DrawerId, p.Bottles)).FirstOrDefaultAsync();
             if (drawerWithBottles == null)
             {
                 logger?.LogError("Item not found");
@@ -91,7 +91,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Drawer> GetByIdUserAsync(int userId)
         {
-            return await WineManagerContext.Drawers.Include(p => p.UserId).FirstOrDefaultAsync(p => p.UserId == userId);
+            return await WineManagerContext.Drawers.AsNoTracking().Include(p => p.UserId).FirstOrDefaultAsync(p => p.UserId == userId);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Drawer?> GetDrawerAsync(int drawerId, int userId)
         {
-            var drawer = await WineManagerContext.Drawers.Where(d => (d.DrawerId == drawerId) && (d.UserId == userId)).FirstOrDefaultAsync();
+            var drawer = await WineManagerContext.Drawers.AsNoTracking().Where(d => (d.DrawerId == drawerId) && (d.UserId == userId)).FirstOrDefaultAsync();
             if (drawer == null)
             {
                 logger?.LogError("Item not found. Check the drawer ID.");
@@ -121,7 +121,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<Drawer?> GetByIdCaveAsync(int idCave)
         {
-            return await WineManagerContext.Drawers.FirstOrDefaultAsync(p => p.CaveId == idCave);
+            return await WineManagerContext.Drawers.AsNoTracking().FirstOrDefaultAsync(p => p.CaveId == idCave);
         }
 
         /// <summary>
@@ -132,6 +132,51 @@ namespace WineManager.Repositories
         {
             try
             {
+                if ((drawer.CaveId != null && drawer.Level == null) || (drawer.CaveId == null && drawer.Level != null))
+                {
+                    logger?.LogError("CaveId can't have a value when level doesn't and vice versa.");
+                    return null;
+                }
+                else if (drawer.CaveId != null && drawer.Level != null)
+                {
+                    var cave = await WineManagerContext.Caves.AsNoTracking().Include(c => c.Drawers).Where(c => c.UserId == drawer.UserId && c.CaveId == drawer.CaveId).FirstOrDefaultAsync();
+                    if (cave == null)
+                    {
+                        logger?.LogError("There isn't a cave belonging to you with this CaveId.");
+                        return null;
+                    }
+                    else if (drawer.Level < 0)
+                    {
+                        logger?.LogError("Level must be positive.");
+                        return null;
+                    }
+                    else if (cave.Drawers != null && cave.Drawers.Count == cave.NbMaxDrawer)
+                    {
+                        logger?.LogError("This drawer is already full.");
+                        return null;
+                    }
+                    else if (cave.NbMaxDrawer < drawer.Level)
+                    {
+                        logger?.LogError("There isn't a cave that have such Level with the caveId you provided.");
+                        return null;
+                    }
+                    else if (cave.NbMaxBottlePerDrawer != drawer.MaxPosition)
+                    {
+                        logger?.LogError("Your drawer doesn't fit into this cave.");
+                        return null;
+                    }
+                    else if (cave.Drawers != null)
+                    {
+                        foreach (var d in cave.Drawers)
+                        {
+                            if (d.Level == drawer.Level)
+                            {
+                                logger?.LogError("The drawer can't fit in an occupied level.");
+                                return null;
+                            }
+                        }
+                    }
+                }
                 WineManagerContext.Drawers.Add(drawer);
                 await WineManagerContext.SaveChangesAsync();
             }
@@ -170,34 +215,75 @@ namespace WineManager.Repositories
         /// <param name="drawerId"></param>
         /// <param name="caveId"></param>
         /// <param name="userId"></param>
+        /// <param name="caveLevel"></param>
         /// <returns></returns>
-        public async Task<Drawer?> StockDrawerAsync(int drawerId, int caveId, int userId, int caveLevel)
+        public async Task<Drawer?> StockDrawerAsync(int drawerId, int? caveId, int userId, int? caveLevel)
         {
             var drawerToPut = await WineManagerContext.Drawers.Where(d => d.UserId == userId && d.DrawerId == drawerId).FirstOrDefaultAsync();
-            if (drawerToPut == null || !(drawerToPut.CaveId == caveId))
+            if ((caveId != null && caveLevel == null) || (caveId == null && caveLevel != null))
             {
-                logger?.LogError("Drawer not found, check if the Drawer and the Cave belong to the connected User.");
-
+                logger?.LogError("CaveId can't have a value when level doesn't and vice versa.");
                 return null;
             }
-            var getCave = await WineManagerContext.Caves.Include(c => c.Drawers).Where(c => c.CaveId == caveId).FirstOrDefaultAsync();
-
-            foreach (var item in getCave.Drawers)
+            else if (caveId != null && caveLevel != null)
             {
-                //comparer cavelevel
-                if (caveLevel == item.Level)
+                if (drawerToPut == null)
                 {
-                    logger?.LogError("Impossible to place your drawer in a location already taken.");
+                    logger?.LogError("Drawer not found, check if the Drawer belong to the connected User.");
 
                     return null;
                 }
+                var getCave = await WineManagerContext.Caves.AsNoTracking().Include(c => c.Drawers).Where(c => c.CaveId == caveId & c.UserId == userId).FirstOrDefaultAsync();
+                if (getCave == null)
+                {
+                    logger?.LogError("Cave not found, check if the Cave belong to the connected User.");
+                    return null;
+                }
+                else if (drawerToPut.Level < 0)
+                {
+                    logger?.LogError("Level must be positive.");
+                    return null;
+                }
+                else if (getCave.Drawers != null && getCave.Drawers.Count == getCave.NbMaxDrawer)
+                {
+                    logger?.LogError("This drawer is already full.");
+                    return null;
+                }
+                else if (getCave.NbMaxDrawer < drawerToPut.Level)
+                {
+                    logger?.LogError("There isn't a cave that have such Level with the caveId you provided.");
+                    return null;
+                }
+                else if (getCave.NbMaxBottlePerDrawer != drawerToPut.MaxPosition)
+                {
+                    logger?.LogError("Your drawer doesn't fit into this cave.");
+                    return null;
+                }
+                else if (getCave.Drawers != null)
+                {
+                    foreach (var item in getCave.Drawers)
+                    {
+                        //comparer cavelevel
+                        if (caveLevel == item.Level)
+                        {
+                            logger?.LogError("Impossible to place your drawer in a location already taken.");
+                            return null;
+                        }
+                    }
+                }
+            }
+            if (drawerToPut == null)
+            {
+                logger?.LogError("Drawer not found, check if the Drawer belong to the connected User.");
+
+                return null;
             }
             drawerToPut.Level = caveLevel;
             drawerToPut.CaveId = caveId;
-
             await WineManagerContext.SaveChangesAsync();
-
             return drawerToPut;
+
+
         }
 
 
@@ -213,13 +299,16 @@ namespace WineManager.Repositories
                 logger?.LogError("Item not found. Check the drawer ID.");
                 return null;
             }
-            foreach (var bottle in drawerToDelete.Bottles)
+            if (drawerToDelete.Bottles != null)
             {
-                bottle.DrawerId = null;
+                foreach (var bottle in drawerToDelete.Bottles)
+                {
+                    bottle.DrawerId = null;
+                }
             }
             WineManagerContext?.Drawers.Remove(drawerToDelete);
 
-            await WineManagerContext.SaveChangesAsync();
+            await WineManagerContext!.SaveChangesAsync();
 
             return drawerToDelete;
         }

@@ -17,12 +17,18 @@ namespace WineManager.DTO
         {
             CaveId = cave.CaveId;
             CaveType = cave.CaveType;
-            Family = cave.Family;
-            Brand = cave.Brand;
+            if (cave.Family != null)
+            {
+                Family = cave.Family;
+            }
+            if (cave.Brand != null)
+            {
+                Brand = cave.Brand;
+            }
             Temperature = cave.Temperature;
             NbMaxDrawer = cave.NbMaxDrawer;
             NbMaxBottlePerDrawer = cave.NbMaxBottlePerDrawer;
-            if (cave.UserId != null)
+            if (cave.UserId > 0)
             {
                 UserId = cave.UserId;
             }

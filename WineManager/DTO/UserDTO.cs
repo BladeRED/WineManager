@@ -32,9 +32,13 @@ namespace WineManager.DTO
         }
         public UserDto(UserPutDto userPutDto)
         {
-            Name = userPutDto.NewName;
-            Email = userPutDto.NewEmail;
-            BirthDate = (DateTime)userPutDto.NewBirthDate;
+
+            if (userPutDto.NewName != null)
+                Name = userPutDto.NewName;
+            if (userPutDto.NewEmail != null)
+                Email = userPutDto.NewEmail;
+            if (userPutDto.NewBirthDate != null)
+                BirthDate = (DateTime)userPutDto.NewBirthDate;
         }
     }
 }

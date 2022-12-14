@@ -13,7 +13,7 @@ namespace WineManager.DTO
             CaveId = id;
             User = userDTOLight;
         }
-        public CaveDtoGet(int id, List<Drawer> drawers)
+        public CaveDtoGet(int id, List<Drawer>? drawers)
         {
             CaveId = id;
             if (drawers != null)

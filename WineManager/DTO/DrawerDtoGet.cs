@@ -15,7 +15,7 @@ namespace WineManager.DTO
             User = userDTOLight;
         }
 
-        public DrawerDtoGet(int id, List<Bottle> bottles)
+        public DrawerDtoGet(int id, List<Bottle>? bottles)
         {
             DrawerId = id;
             if (bottles != null)

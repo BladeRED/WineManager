@@ -20,97 +20,288 @@ namespace WineManager.Repositories.Tests
     {
         private readonly ILogger<BottleRepository>? logger;
 
+        /// <summary>
+        /// Testing AddBottleAsync
+        /// with full correct BottleDTO
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
-        public async Task AddBottleAsyncTest()
+        public async Task AddBottleAsyncTest1()
         {
-            // creation of the temp database and its context //
-
+            // Creation of the temp database and its context //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            BottleRepository BottleTest = new BottleRepository(context, null);
+            var bottleRepository = new BottleRepository(context, null);
 
-            // creation of the object to add //
 
-            Bottle TestBottle = new Bottle()
+            // Empty Drawer //
+            var drawer = new Drawer()
             {
-                BottleId = 1,
-                Name = "Test",
-                Color = "Rouge",
-                Vintage = 2020,
-                Designation = "Domaine de Test",
-                StartKeepingYear = 2022,
-                EndKeepingYear = 2024,
+                MaxPosition = 2,
+                UserId = 1,
+            };
+            context.Add(drawer);
+            context.SaveChanges();
 
-
+            // Creation of a bottleDTO to add //
+            var bottleDto = new BottleDto()
+            {
+                Name = "name",
+                Vintage = 2000,
+                StartKeepingYear = 5,
+                EndKeepingYear = 8,
+                Color = "color",
+                Designation = "Designation",
+                DrawerId = drawer.DrawerId,
+                DrawerPosition = "Position"
             };
 
-            // simulating the add method //
+            // Process AddBottleAsync //
+            var bottleAdded = await bottleRepository.AddBottleAsync(bottleDto, 1);
+            var bottles = await context.Bottles.ToListAsync();
 
-            var MyAddTest = await BottleTest.AddBottleAsync(TestBottle);
-            context.Bottles.Add(TestBottle);
-
-            var MyList = await BottleTest.GetAllBottlesAsync();
-
-            // comparing the list of objects to see if there is a new entry in the database //
-
-            Assert.AreEqual(1, MyList.Count);
+            // Testing a correct BottleDTO //
+            Assert.AreEqual(1, bottles.Count);
+            Assert.IsNotNull(bottleAdded);
+            Assert.AreEqual("name", bottleAdded.Name);
+            Assert.AreEqual(2000, bottleAdded.Vintage);
+            Assert.AreEqual(5, bottleAdded.StartKeepingYear);
+            Assert.AreEqual(8, bottleAdded.EndKeepingYear);
+            Assert.AreEqual("color", bottleAdded.Color);
+            Assert.AreEqual("Designation", bottleAdded.Designation);
+            Assert.AreEqual(drawer.DrawerId, bottleAdded.DrawerId);
+            Assert.AreEqual("Position", bottleAdded.DrawerPosition);
 
             context.Database.EnsureDeleted();
-
         }
 
+        /// <summary>
+        /// Testing AddBottleAsync
+        /// with StartKeepingYear > EndKeepingYear
+        /// </summary>
+        /// <returns></returns>
         [TestMethod()]
-        public async Task UpdateBottleAsyncTest()
+        public async Task AddBottleAsyncTest2()
         {
-            // creation of the temp database and its context //
-
+            // Creation of the temp database and its context //
             var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
             var context = new WineManagerContext(builder.Options);
-            BottleRepository BottleTest = new BottleRepository(context, null);
+            var bottleRepository = new BottleRepository(context, null);
 
-            Bottle MajBottle1 = new Bottle()
+            // Empty Drawer //
+            var drawer = new Drawer()
             {
-                BottleId = 2,
-                Name = "Test",
-                Color = "Rouge",
-                Vintage = 2020,
-                Designation = "Domaine de Test",
-                StartKeepingYear = 2022,
-                EndKeepingYear = 2024,
-                UserId = 1
+                MaxPosition = 2,
+                UserId = 1,
+            };
+            context.Add(drawer);
+            context.SaveChanges();
+
+            // Creation of a bottleDTO to add //
+            var bottleDto = new BottleDto()
+            {
+                Name = "test",
+                Vintage = 2000,
+                StartKeepingYear = 8,
+                EndKeepingYear = 5,
+                Color = "Red",
+                Designation = "test",
+                DrawerId = drawer.DrawerId,
+                DrawerPosition = "B1"
             };
 
-            BottleDtoPut MajBottle = new BottleDtoPut()
+            // Process AddBottleAsync with bad DTO : StartKeepingYear > EndKeepingYear //
+            var badBottle = await bottleRepository.AddBottleAsync(bottleDto, 1);
+            var bottles = await context.Bottles.ToListAsync();
+
+            // Testing bottle list count and the null return //
+            Assert.AreEqual(0, bottles.Count);
+            Assert.IsNull(badBottle);
+
+            context.Database.EnsureDeleted();
+        }
+
+        /// <summary>
+        /// Testing AddBottleAsync
+        /// with a full Drawer
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod()]
+        public async Task AddBottleAsyncTest3()
+        {
+            // Creation of the temp database and its context //
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            var bottleRepository = new BottleRepository(context, null);
+
+            // Empty Drawer //
+            var drawer = new Drawer()
             {
-                BottleId = 2,
-                Name = "Test",
-                Color = "Rouge",
-                Vintage = 2020,
-                Designation = "Domaine de Test",
-                StartKeepingYear = 2022,
-                EndKeepingYear = 2024,
+                MaxPosition = 2,
+                UserId = 1,
+            };
+            context.Add(drawer);
+            context.SaveChanges();
+
+            // Creation of a bottleDTO to add //
+            var bottleDto = new BottleDto()
+            {
+                Name = "test",
+                Vintage = 2000,
+                StartKeepingYear = 5,
+                EndKeepingYear = 8,
+                Color = "Red",
+                Designation = "test",
+                DrawerId = drawer.DrawerId,
+                DrawerPosition = "B1"
             };
 
-            // simulating the add method //
+            // Process AddBottleAsync with a full Drawer //
+            var bottle1 = await bottleRepository.AddBottleAsync(bottleDto, 1);
+            bottleDto.DrawerPosition = "B2";
+            var bottle2 = await bottleRepository.AddBottleAsync(bottleDto, 1);
+            bottleDto.DrawerPosition = "B3";
+            var bottle3 = await bottleRepository.AddBottleAsync(bottleDto, 1);
+            var bottles = await context.Bottles.ToListAsync();
 
-            var MyAddTest = await BottleTest.AddBottleAsync(MajBottle1);
-            context.Bottles.Add(MajBottle1);
+            // Testing bottle list count and the null return //
+            Assert.AreEqual(2, bottles.Count);
+            Assert.IsNotNull(bottle1);
+            Assert.IsNotNull(bottle2);
+            Assert.IsNull(bottle3);
 
-            var context2 = new WineManagerContext(builder.Options);
-            BottleRepository BottleTest2 = new BottleRepository(context2, null);
+            context.Database.EnsureDeleted();
+        }
 
-            MajBottle.BottleId = 2;
-            MajBottle.Name = "Test";
-            MajBottle.Color = "Rouge";
-            MajBottle.Vintage = 2020;
-            MajBottle.Designation = "Domaine de Test";
-            MajBottle.StartKeepingYear = 2022;
-            MajBottle.EndKeepingYear = 2024;
+        /// <summary>
+        /// Testing UpdateBottle
+        /// with correct setting
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod()]
+        public async Task UpdateBottleAsyncTest1()
+        {
+            // Creation of the temp database and its context //
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            BottleRepository bottleRepository = new BottleRepository(context, null);
 
-            var MyUpdateTest = await BottleTest2.UpdateBottleAsync(MajBottle, 1);
+            // Empty Drawer //
+            var drawer = new Drawer()
+            {
+                MaxPosition = 2,
+                UserId = 1,
+            };
+            context.Add(drawer);
+            context.SaveChanges();
 
-            Assert.AreNotSame(MyAddTest, MyUpdateTest);
-            // Ne test pas bien la fonction.
+            // Creation of a Bottle //
+            Bottle bottleToUpdate = new Bottle()
+            {
+                Name = "test",
+                Vintage = 2000,
+                StartKeepingYear = 5,
+                EndKeepingYear = 8,
+                Color = "Red",
+                Designation = "test",
+                DrawerId = drawer.DrawerId,
+                DrawerPosition = "B1",
+                UserId = drawer.UserId,
+            };
+            context.Add(bottleToUpdate);
+            context.SaveChanges();
+            Assert.IsNotNull(bottleToUpdate.BottleId);
+
+            // Creation of a BottleDotPut for process //
+            BottleDtoPut bottleDtoPut = new BottleDtoPut()
+            {
+                BottleId = bottleToUpdate.BottleId,
+                Name = "test2",
+                Vintage = 2001,
+                StartKeepingYear = 6,
+                EndKeepingYear = 9,
+                Color = "White",
+                Designation = "test2",
+            };
+
+            // Process UpdateBottleAsync //
+            var bottleUpdated = await bottleRepository.UpdateBottleAsync(bottleDtoPut, 1);
+
+            // Tests : normal run //
+            Assert.AreEqual(1, bottleUpdated.BottleId);
+            Assert.AreEqual("test2", bottleUpdated.Name);
+            Assert.AreEqual(2001, bottleUpdated.Vintage);
+            Assert.AreEqual(6, bottleUpdated.StartKeepingYear);
+            Assert.AreEqual(9, bottleUpdated.EndKeepingYear);
+            Assert.AreEqual("White", bottleUpdated.Color);
+            Assert.AreEqual("test2", bottleUpdated.Designation);
+
+            // Delete BDD //
+            context.Database.EnsureDeleted();
+        }
+
+        /// <summary>
+        /// Testing UpdateBottle
+        /// with
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod()]
+        public async Task UpdateBottleAsyncTest2()
+        {
+            // Creation of the temp database and its context //
+            var builder = new DbContextOptionsBuilder<WineManagerContext>().UseInMemoryDatabase("WineManagerTest");
+            var context = new WineManagerContext(builder.Options);
+            BottleRepository bottleRepository = new BottleRepository(context, null);
+
+            // Empty Drawer //
+            var drawer = new Drawer()
+            {
+                MaxPosition = 2,
+                UserId = 1,
+            };
+            context.Add(drawer);
+            context.SaveChanges();
+
+            // Creation of a Bottle //
+            Bottle bottleToUpdate = new Bottle()
+            {
+                Name = "test",
+                Vintage = 2000,
+                StartKeepingYear = 5,
+                EndKeepingYear = 8,
+                Color = "Red",
+                Designation = "test",
+                DrawerId = drawer.DrawerId,
+                DrawerPosition = "B1",
+                UserId = drawer.UserId,
+            };
+            context.Add(bottleToUpdate);
+            context.SaveChanges();
+            Assert.IsNotNull(bottleToUpdate.BottleId);
+
+            // Creation of a BottleDotPut for process //
+            BottleDtoPut bottleDtoPut = new BottleDtoPut()
+            {
+                BottleId = bottleToUpdate.BottleId,
+                Name = "test2",
+                Vintage = 2001,
+                StartKeepingYear = 8,
+                EndKeepingYear = 5,
+                Color = "White",
+                Designation = "test2",
+            };
+
+            // Process UpdateBottleAsync : StartKeepingYear > EndKeepingYear //
+
+            var bottleUpdated = await bottleRepository.UpdateBottleAsync(bottleDtoPut, 1);
+            var bottles = await context.Bottles.ToListAsync();
+
+            // Tests : bad keeping years //
+            Assert.AreEqual(1, bottles.Count());
+            Assert.IsNull(bottleUpdated);
+
+            // Delete BDD //
+            context.Database.EnsureDeleted();
         }
     }
 }

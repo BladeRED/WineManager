@@ -25,12 +25,19 @@ namespace WineManager.Entities
         {
             Name = bottleDto.Name;
             Vintage = bottleDto.Vintage;
-            StartKeepingYear = bottleDto.StartKeepingYear;
-            EndKeepingYear = bottleDto.EndKeepingYear;
+            if (bottleDto.StartKeepingYear != null)
+                StartKeepingYear = (int)bottleDto.StartKeepingYear;
+            else 
+                bottleDto.StartKeepingYear = 5;
+            if (bottleDto.EndKeepingYear != null)
+                EndKeepingYear = (int)bottleDto.EndKeepingYear;
+            else
+                bottleDto.EndKeepingYear = 8;
             Color = bottleDto.Color;
             Designation = bottleDto.Designation;
             DrawerId = bottleDto.DrawerId;
             UserId = userId;
+            DrawerPosition = bottleDto.DrawerPosition;
         }
         public Bottle()
         {

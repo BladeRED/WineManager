@@ -26,7 +26,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<List<UserDto>> GetAllUsersAsync()
         {
-            List<User> users = await context.Users.ToListAsync();
+            List<User> users = await context.Users.AsNoTracking().ToListAsync();
             if (users == null)
             {
                 logger.LogError("Item not found");
@@ -182,7 +182,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<UserDtoGet?> GetUserWithBottlesAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Bottles).Where(b => b.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
+            var user = await context.Users.AsNoTracking().Include(u => u.Bottles).Where(b => b.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
@@ -198,7 +198,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<UserDtoGet?> GetUserWithDrawersAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Drawers).Where(d => d.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
+            var user = await context.Users.AsNoTracking().Include(u => u.Drawers).Where(d => d.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
@@ -214,7 +214,7 @@ namespace WineManager.Repositories
         /// <returns></returns>
         public async Task<UserDtoGet?> GetUserWithCavesAsync(int id)
         {
-            var user = await context.Users.Include(u => u.Caves).Where(c => c.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
+            var user = await context.Users.AsNoTracking().Include(u => u.Caves).Where(c => c.UserId == id).Select(u => new UserDtoGet(u)).FirstOrDefaultAsync();
             if (user == null)
             {
                 logger?.LogError("Item not found");
@@ -225,13 +225,18 @@ namespace WineManager.Repositories
 
         public async Task<User> LoginUserAsync(string login, string pwd)
         {
-            var user = await context.Users.FirstOrDefaultAsync(p => p.Email == login && p.Password == pwd);
+            var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(p => p.Email == login && p.Password == pwd);
             return user;
         }
 
         public async Task<ListDTO> ExportListUserAsync(int id)
         {
-            var userList = await context.Users.Include(u => u.Caves).Include(u => u.Drawers).Include(u => u.Bottles).Where(c => c.UserId == id).FirstOrDefaultAsync();
+            var userList = await context.Users.AsNoTracking().Include(u => u.Caves).Include(u => u.Drawers).Include(u => u.Bottles).Where(c => c.UserId == id).FirstOrDefaultAsync();
+            if (userList == null)
+            {
+                logger?.LogError("User not found");
+                return null;
+            }
             var list = new ListDTO(userList.Bottles, userList.Drawers, userList.Caves);
 
             return list;
