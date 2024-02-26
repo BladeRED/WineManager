@@ -15,3 +15,7 @@ ___
 ## TECH INFORMATIONS 
 The app is developed on the IDE Visual Studio using the C# language. It's a .NET Core Web API based application based on the .NET 6.0 because it's a long support version.
 We used OpenAPI/Swagger for having a nice front rendering for the requests execution. No front development is scheduled for this version.
+___
+## SWAGGER
+
+https://localhost:7041/swagger/index.html
